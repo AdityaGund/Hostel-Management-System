@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="../static/login.css">
+</head>
+<body>
+    <div class="outer-container">
+        <div class="image-container">
+            <img src="../static/images/hostel.jpg" alt="Your Image">
+        </div>
+        <div class="form-container">
+            <div class="container">
+                <div class="header">
+                    <div class="text">Login Here</div>
+                    <div class="underline"></div>
+                </div>
+                <form method="post">
+                    {% csrf_token %} 
+                    <div class="inputs">
+                        <div class="input">
+                            <img src="../static/images/person.png" alt="User Icon">
+                            <input type="text" placeholder="Enter Username" id="username" name="username">
+                        </div>
+                        <div class="input">
+                            <img src="../static/images/password.png" alt="Password Icon">
+                            <input type="password" placeholder="Password" id="password" name="password">
+                        </div>
+                    </div>
+                    <div class="create-account">
+                        <a href="{% url 'signup' %}" >Create an account</a>
+                    </div>
+                </form>
+                <div class="submit-container">
+                    <div class="submit">Submit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
