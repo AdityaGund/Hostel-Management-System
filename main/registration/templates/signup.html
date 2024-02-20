@@ -3,8 +3,15 @@
 <head>
     <title>Login Page</title>
     <link rel="stylesheet" type="text/css" href="../static/signup.css">
+    <style>
+        .error-message {
+            color: red;
+            display: none; /* Hide error messages by default */
+        }
+    </style>
 </head>
 <body>
+
     <div class="outer-container">
         <div class="image-container">
             <img src="../static/images/hostel.jpg" alt="Your Image">
@@ -15,7 +22,15 @@
                     <div class="text">Sign Up</div>
                     <div class="underline"></div>
                 </div>
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li class="error-message">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                {% endif %}
                 <form method="post">
+
                     {% csrf_token %} 
                     <div class="inputs">
                         <div class="input">
@@ -45,5 +60,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Function to show error messages like JavaScript alerts
+        window.onload = function() {
+            var errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(function(message) {
+                alert(message.textContent); // Display error messages as alerts
+            });
+        };
+    </script>
 </body>
 </html>
