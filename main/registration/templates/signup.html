@@ -28,22 +28,20 @@
                         </div>
                         <div class="input">
                             <img src="../static/images/password.png" alt="Password Icon">
-                            <input type="password" placeholder="Password" id="password" name="password">
+                            <input type="password" placeholder="Password" id="password" name="password1">
                         </div>
                         <div class="input">
                             <img src="../static/images/password.png" alt="Password Icon">
-                            <input type="password" placeholder="Confirm Password" id="confirm_password" name="confirm_password">
+                            <input type="password" placeholder="Confirm Password" id="confirm_password" name="password2">
                         </div>
                         <div class="login">
                             <a id="logintext" href="{% url 'login' %}">    Already have an account? Sign in</a>
                         </div>
                     </div>
-                    
-                    
+                    <div class="submit-container">
+                        <button class="submit" type="submit">Signup</button>
+                    </div>
                 </form>
-                <div class="submit-container">
-                    <div class="submit">Submit</div>
-                </div>
             </div>
         </div>
     </div>
