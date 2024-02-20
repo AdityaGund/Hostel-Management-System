@@ -62,6 +62,7 @@ def SignupPage(request):
 
 
 
+
 def LoginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -71,8 +72,10 @@ def LoginPage(request):
             login(request, user)
             return redirect('home')
         else:
-            return HttpResponse("Invalid credentials")
+            alert_message = "Invalid credentials. Please try again."
+            return render(request, 'login.html', {'alert_message': alert_message})
     return render(request, 'login.html')
+
 
 def LogoutPage(request):
     logout(request)
