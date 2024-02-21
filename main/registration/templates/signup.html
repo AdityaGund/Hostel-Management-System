@@ -3,12 +3,6 @@
 <head>
     <title>Login Page</title>
     <link rel="stylesheet" type="text/css" href="../static/signup.css">
-    <style>
-        .error-message {
-            color: red;
-            display: none; /* Hide error messages by default */
-        }
-    </style>
 </head>
 <body>
 
@@ -28,7 +22,7 @@
                                 <li class="error-message">{{ message }}</li>
                             {% endfor %}
                         </ul>
-                {% endif %}
+                    {% endif %}
                 <form method="post">
 
                     {% csrf_token %} 

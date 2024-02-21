@@ -13,14 +13,12 @@ def HomePage(request):
 
 def SignupPage(request):
     if request.method == 'POST':
-        # Check if all required fields are present in the POST data
         if all(field in request.POST for field in ['username', 'email', 'password1', 'password2']):
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password1']
             re_password = request.POST['password2']
             if not (username and email and password and re_password):
-                print("all fields are required")
                 messages.error(request, "All fields are required!")
                 return redirect('signup')  
             try:
@@ -61,19 +59,20 @@ def SignupPage(request):
 
 
 
-
-
 def LoginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('pass')
+        if not (username and password):
+                messages.error(request, "All fields are required!")
+                return redirect('login')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            alert_message = "Invalid credentials. Please try again."
-            return render(request, 'login.html', {'alert_message': alert_message})
+            messages.error(request, "invalid credentials!")
+            return redirect('login')
     return render(request, 'login.html')
 
 

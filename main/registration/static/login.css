@@ -4,6 +4,11 @@ body {
     margin: 0;
 }
 
+.error-message {
+    color: red;
+    display: none;
+}
+
 .container {
     display: 'flex';
     flex-direction: column;
