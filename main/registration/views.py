@@ -7,7 +7,7 @@ from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def HomePage(request):
     return render(request, 'home.html')
 

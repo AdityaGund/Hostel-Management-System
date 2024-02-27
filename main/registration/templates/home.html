@@ -1,23 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <title>Home Page</title>
-  </head>
-  <body>
-    <h1>Home Page</h1>
-    <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand|Roboto&display=swap">
+  <link rel="stylesheet" type="text/css" href="../static/home.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-title">Hostel</div>
+    <button class="navbar-button">Apply</button>
+  </div>
+  <div class="container">
+    <div class="content">
+      <h2>Welcome to Our Hostel Allotment Process</h2>
+      <p>
+        At our institution, we've streamlined the journey to your new home, ensuring a smooth and efficient experience for all students. Begin by registering on our user-friendly website from [Registration Date Range]. Following this, check the website on [Eligibility Announcement Date] to see if you've made the cut – the list of eligible students will be proudly displayed. Once eligible, personalize your stay by filling out roommate and room number preferences from [Preferences Date Range]. The moment of truth arrives on [Hostel Allotment Date] when the final allotment list is unveiled, revealing where you'll be residing for the upcoming academic term. Congratulations to those allotted! Complete the process by attending Offline Document Verification from [Verification Date Range], ensuring a hassle-free and secure transition to your new hostel life. We look forward to welcoming you to your home away from home!
+      </p>
+    </div>
+    <div class="image">
+      <img src="../static/images/homepage.jpg" alt="Hostel Image">
+    </div>
+  </div>
+  <ul>
+      <li style="--accent-color:#780000">
+          <div class="date">25 May - 27 May</div>
+          <div class="title">Registration</div>
+          <div class="descr">Begin your hostel journey by registering on the website. Secure your spot in the upcoming hostel allotment process by completing the online registration.</div>
+      </li>
+      <li style="--accent-color:#4CADAD">
+          <div class="date">28 May</div>
+          <div class="title">List Of Eligible Students</div>
+          <div class="descr">Check the website to see if you've made the cut! The list of eligible students for hostel allotment will be declared, so keep an eye out for your name.</div>
+      </li>
+      <li style="--accent-color:#29128e">
+          <div class="date">29 May - 31 May</div>
+          <div class="title">Fill Out Preferences</div>
+          <div class="descr">Now that you're eligible, it's time to make it personal. Choose your preferences for roommates and specific room numbers. Ensure your living experience aligns with your preferences</div>
+      </li>
+      <li style="--accent-color:#780000">
+          <div class="date">1 June</div>
+          <div class="title">Hostel Allotment List</div>
+          <div class="descr">The moment of truth! The final hostel allotment list will be displayed on the website. Find out where you'll be calling home for the upcoming academic term.</div>
+      </li>
+      <li style="--accent-color:#4CADAD">
+          <div class="date">2 June - 5 June</div>
+          <div class="title">Offline Document Verification</div>
+          <div class="descr">Congratulations on your hostel allotment! Head for offline document verification on the specified date to finalize your stay. Bring the required documents for authentication and enjoy hassle-free hostel living.</div>
+      </li>
+  </ul>
+</body>
 </html>
