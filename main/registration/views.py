@@ -8,10 +8,21 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
 
 @login_required(login_url='login')
+
+
+
 def HomePage(request):
     return render(request, 'home.html')
 
-def SignupPage(request):
+
+
+
+def LandingPage(request):
+    return render(request,'landing.html')
+
+
+
+def SignupPage(request ):
     if request.method == 'POST':
         # Check if all required fields are present in the POST data
         if all(field in request.POST for field in ['username', 'email', 'password1', 'password2']):
@@ -20,7 +31,6 @@ def SignupPage(request):
             password = request.POST['password1']
             re_password = request.POST['password2']
             if not (username and email and password and re_password):
-                print("all fields are required")
                 messages.error(request, "All fields are required!")
                 return redirect('signup')  
             try:
