@@ -12,13 +12,8 @@ from django.shortcuts import render
 def HomePage(request):
     return render(request, 'home.html')
 
-
-
-
 def LandingPage(request):
     return render(request,'landing.html')
-
-
 
 def SignupPage(request ):
     if request.method == 'POST':
@@ -66,8 +61,6 @@ def SignupPage(request ):
     else:
         return render(request, 'signup.html')
 
-
-
 def LoginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -84,9 +77,6 @@ def LoginPage(request):
             return redirect('login')
     return render(request, 'login.html')
 
-
 def LogoutPage(request):
     logout(request)
     return redirect('login')
-
-
