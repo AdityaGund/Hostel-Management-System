@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
+from django.shortcuts import render
 
 @login_required(login_url='login')
 def HomePage(request):
@@ -87,3 +88,5 @@ def LoginPage(request):
 def LogoutPage(request):
     logout(request)
     return redirect('login')
+
+

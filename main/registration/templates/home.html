@@ -11,7 +11,10 @@
 <body>
   <div class="navbar">
     <div class="navbar-title">Hostel</div>
-    <button class="navbar-button">Apply</button>
+    <div class="navbar-buttons">
+      <button class="navbar-button">Apply</button>
+      <button class="navbar-button"><a href="{% url 'logout' %}" class="anchor">Logout</a></button>
+    </div>
   </div>
   <div class="container">
     <div class="content">
