@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Email Verification</h2>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="{% if message.tags %}alert alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% if request.path == '/send_otp/' %}
+    <form method="post" action="{% url 'send_otp' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Send OTP</button>
+    </form>
+  {% elif request.path == '/verify_otp/' %}
+    <form method="post" action="{% url 'verify_otp' %}">
+      {% csrf_token %}
+      <input type="hidden" name="email" value="{{ request.session.email }}">
+      {{ form.as_p }}
+      <button type="submit">Verify OTP</button>
+    </form>
+  {% endif %}
+{% endblock %}
