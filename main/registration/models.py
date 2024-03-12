@@ -1,6 +1,4 @@
 from django.db import models
-import random
-import string
 
 class CivilEngineering(models.Model):
     id = models.AutoField(primary_key=True)
@@ -8,36 +6,39 @@ class CivilEngineering(models.Model):
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-    verification_status = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
+
 class ElectricalEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-    verification_status = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
+
 class ComputerEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-    verification_status = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
+
 class InstrumentationEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-    verification_status = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
 
 class ManfacturingEngineering(models.Model):
     id = models.AutoField(primary_key=True)
@@ -45,18 +46,19 @@ class ManfacturingEngineering(models.Model):
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-    verification_status = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
+
 class MechanicalEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-    verification_status = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
 
 def creating_table(data):
     for item in data:
