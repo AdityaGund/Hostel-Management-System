@@ -89,12 +89,12 @@ def verify_otp(request):
 
 def generate_pdf(request):
     # Query selected students
-    civil_selected = CivilEngineering.objects.filter(verification_status=True)
-    electrical_selected = ElectricalEngineering.objects.filter(verification_status=True)
-    computer_selected = ComputerEngineering.objects.filter(verification_status=True)
-    instrumentation_selected = InstrumentationEngineering.objects.filter(verification_status=True)
-    manufacturing_selected = ManfacturingEngineering.objects.filter(verification_status=True)
-    mechanical_selected = MechanicalEngineering.objects.filter(verification_status=True)
+    civil_selected = CivilEngineering.objects.filter(selected=True)
+    electrical_selected = ElectricalEngineering.objects.filter(selected=True)
+    computer_selected = ComputerEngineering.objects.filter(selected=True)
+    instrumentation_selected = InstrumentationEngineering.objects.filter(selected=True)
+    manufacturing_selected = ManfacturingEngineering.objects.filter(selected=True)
+    mechanical_selected = MechanicalEngineering.objects.filter(selected=True)
 
     # Generate PDF report
     response = HttpResponse(content_type='application/pdf')

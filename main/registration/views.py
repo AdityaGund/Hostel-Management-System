@@ -13,7 +13,7 @@ import pytz
 
 @login_required(login_url='login')
 def HomePage(request):
-    deadline = datetime(2024, 3, 13, 0, 37, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
+    deadline = datetime(2024, 3, 10, 0, 37, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
     # Get the current time in the same timezone as the deadline
     current_time = timezone.now()
 

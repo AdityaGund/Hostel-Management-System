@@ -60,7 +60,7 @@
           </div>
           <form id="generate-pdf-form" action="{% url 'generate_pdf' %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="download-btn" disabled="true">Generate PDF</button>
+            <button type="submit" id="download-btn" disabled="true">Generate PDF</button>
           </form>
       </div>
   </ul>
@@ -86,6 +86,7 @@
                 if (distance <= 0) {  // Adjusted condition to handle negative distance
                     clearInterval(x);
                     document.getElementById("countdown").innerHTML = "Deadline reached";
+                    console.log("in");
                     document.getElementById("download-btn").disabled = false; // Enable download button
                 }
             }, 1000);
