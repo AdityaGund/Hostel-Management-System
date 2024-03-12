@@ -10,6 +10,7 @@ class CivilEngineering(models.Model):
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
     percentile = models.FloatField()
+    verification_status = models.BooleanField(default=False)
 class ElectricalEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
@@ -18,6 +19,7 @@ class ElectricalEngineering(models.Model):
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
     percentile = models.FloatField()
+    verification_status = models.BooleanField(default=False)
 class ComputerEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
@@ -26,7 +28,7 @@ class ComputerEngineering(models.Model):
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-
+    verification_status = models.BooleanField(default=False)
 class InstrumentationEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
@@ -35,7 +37,7 @@ class InstrumentationEngineering(models.Model):
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-
+    verification_status = models.BooleanField(default=False)
 
 class ManfacturingEngineering(models.Model):
     id = models.AutoField(primary_key=True)
@@ -45,7 +47,7 @@ class ManfacturingEngineering(models.Model):
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-
+    verification_status = models.BooleanField(default=False)
 class MechanicalEngineering(models.Model):
     id = models.AutoField(primary_key=True)
     rank = models.IntegerField()
@@ -54,7 +56,7 @@ class MechanicalEngineering(models.Model):
     name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
     percentile = models.FloatField()
-
+    verification_status = models.BooleanField(default=False)
 
 def creating_table(data):
     for item in data:
