@@ -60,6 +60,17 @@ class MechanicalEngineering(models.Model):
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
 
+# class HostelStudents(models.Model):
+    
+class CheckInOut(models.Model):
+    student_name = models.CharField(max_length=100)
+    mis= models.IntegerField (max_length=100)
+    year = models.CharField(max_length=100)
+    reason = models.CharField(max_length=100)
+    check_in_time = models.DateTimeField('timezone.now')
+    check_out_time = models.DateTimeField('timezone.now')
+
+    
 def creating_table(data):
     for item in data:
         student = CivilEngineering.objects.create(

@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="submit-container">
-                        <button class="submit" type="submit">Signup</button>
+                        <button class="submit" onclick="verify(username,password1,password2,email)" type="submit">Signup</button>
                     </div>
                 </form>
             </div>
@@ -57,6 +57,12 @@
 
     <script>
         // Function to show error messages like JavaScript alerts
+        function verify(username,password1,password2,email){
+
+            // verify 
+
+
+        }
         window.onload = function() {
             var errorMessages = document.querySelectorAll('.error-message');
             errorMessages.forEach(function(message) {
