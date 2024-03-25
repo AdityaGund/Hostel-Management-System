@@ -1,9 +1,9 @@
 # urls.py
 from django.urls import path
-from .views import send_otp, verify_otp,generate_pdf
+from .views import generate_pdf, send_roommate_request, roommate_requests
 
 urlpatterns = [
-    path('send_otp/', send_otp, name='send_otp'),
-    path('verify_otp/', verify_otp, name='verify_otp'),
     path('generate-pdf/', generate_pdf, name='generate_pdf'),
+    path('send_request/', send_roommate_request, name='send_roommate_request'),
+    path('roommate_requests/', roommate_requests, name='roommate_requests'),
 ]

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Login Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
     <link rel="stylesheet" type="text/css" href="../static/signup.css">
 </head>
 <body>
-
     <div class="outer-container">
         <div class="image-container">
             <img src="../static/images/hostel.jpg" alt="Your Image">
@@ -16,15 +17,14 @@
                     <div class="text">Sign Up</div>
                     <div class="underline"></div>
                 </div>
-                    {% if messages %}
-                        <ul>
-                            {% for message in messages %}
-                                <li class="error-message">{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li class="error-message">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <form method="post">
-
                     {% csrf_token %} 
                     <div class="inputs">
                         <div class="input">
@@ -36,6 +36,17 @@
                             <input type="email" placeholder="Enter Email" id="email" name="email">
                         </div>
                         <div class="input">
+                            <select name="branch" id="branch">
+                                <option value="" disabled selected>Select Engineering Branch</option>
+                                <option value="CivilEngineering">Civil</option>
+                                <option value="ElectricalEngineering">Electricl</option>
+                                <option value="ComputerEngineering">Computer</option>
+                                <option value="InstrumentationEngineering">Instrumentation</option>
+                                <option value="ManfacturingEngineering">Manufacturing</option>
+                                <option value="MechanicalEngineering">Mechanical</option>
+                            </select>
+                        </div>
+                        <div class="input">
                             <img src="../static/images/password.png" alt="Password Icon">
                             <input type="password" placeholder="Password" id="password" name="password1">
                         </div>
@@ -44,11 +55,11 @@
                             <input type="password" placeholder="Confirm Password" id="confirm_password" name="password2">
                         </div>
                         <div class="login">
-                            <a id="logintext" href="{% url 'login' %}">    Already have an account? Sign in</a>
+                            <a id="logintext" href="{% url 'login' %}">Already have an account? Sign in</a>
                         </div>
                     </div>
                     <div class="submit-container">
-                        <button class="submit" type="submit">Signup</button>
+                        <button class="submit" type="submit">Sign Up</button>
                     </div>
                 </form>
             </div>

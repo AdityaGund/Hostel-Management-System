@@ -1,9 +1,4 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.core.mail import send_mail
-from .forms import EmailVerificationForm, OTPVerificationForm
 from registration.models import *
-import random
 from django.http import HttpResponse
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
@@ -16,76 +11,10 @@ from reportlab.platypus import Table, TableStyle
 from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
-
-def update_verified_status(application_id):
-    models_to_check = [CivilEngineering, ElectricalEngineering, ComputerEngineering, InstrumentationEngineering, ManfacturingEngineering, MechanicalEngineering]
-
-    for model in models_to_check:
-        try:
-            student = model.objects.get(application_id=application_id)
-            student.verified = True
-            student.save()
-        except model.DoesNotExist:
-            pass
-
-def get_email_from_application_id(application_id):
-    models_to_check = [CivilEngineering, ElectricalEngineering, ComputerEngineering, InstrumentationEngineering, ManfacturingEngineering, MechanicalEngineering]
-
-    for model in models_to_check:
-        try:
-            student = model.objects.get(application_id=application_id)
-            email = student.email
-            return email
-        except model.DoesNotExist:
-            pass
-    return None
-
-def send_verification_email(email, verification_code):
-    subject = 'Verification Code'
-    message = f'Your verification code is: {verification_code}'
-    from_email = 'djangoproject24@gmail.com'
-    recipient_list = [email]
-    send_mail(subject, message, from_email, recipient_list)
-
-def send_otp(request):
-    if request.method == 'POST':
-        form = EmailVerificationForm(request.POST)
-        if form.is_valid():
-            application_id = form.cleaned_data['application_id']
-            email = get_email_from_application_id(application_id)
-            if email is not None:
-                verification_code = ''.join(random.choices('0123456789', k=6))
-                request.session['verification_code'] = verification_code
-                request.session['email'] = email
-                request.session['application_id'] = application_id
-                send_verification_email(email, verification_code)
-                messages.success(request, 'OTP sent successfully. Check your email.')
-                return redirect('verify_otp')
-            else:
-                messages.error(request, 'User with the provided Application ID does not exist. Please try again.')
-    else:
-        form = EmailVerificationForm()
-
-    return render(request, 'email_verification.html', {'form': form})
-
-def verify_otp(request):
-    if request.method == 'POST':
-        form = OTPVerificationForm(request.POST)
-        if form.is_valid():
-            entered_otp = form.cleaned_data['otp']
-            stored_otp = request.session.get('verification_code')
-            email = request.session.get('email')
-            if entered_otp == stored_otp:
-                messages.success(request, 'Verification successful. Your email is verified.')
-                application_id = request.session.get('application_id')
-                update_verified_status(application_id)
-                return HttpResponse("success")
-            else:
-                messages.error(request, 'Invalid OTP. Please try again.')
-    else:
-        form = OTPVerificationForm()
-
-    return render(request, 'otp_verification.html', {'form': form})
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import RoommateRequest, Room
+from django.contrib.auth.decorators import login_required
 
 def generate_pdf(request):
     # Query selected students
@@ -114,9 +43,9 @@ def generate_pdf(request):
         elements.append(Spacer(1, 12))  # Add space below heading
 
         # Add table
-        data = [['Name', 'Rank', 'Application ID', 'Email', 'Gender', 'Percentile']]
+        data = [['Name', 'Rank', 'Application ID', 'Email', 'Percentile']]
         for student in queryset:
-            row = [student.name, str(student.rank), student.application_id, student.email, student.gender, str(student.percentile)]
+            row = [student.name, str(student.rank), student.application_id, student.email, str(student.percentile)]
             data.append(row)
 
         # Generate table as a list of Paragraph objects
@@ -177,3 +106,132 @@ def select_students(request):
     for student in selected_students:
             student.selected = True
             student.save()
+
+@login_required
+def send_roommate_request(request):
+    if request.method == 'POST':
+        sender_application_id = request.user.username
+        receiver_application_id = request.POST.get('receiver_application_id')
+        if sender_application_id == receiver_application_id:
+            messages.error(request, "You cannot send request to yourself!")
+            return redirect('send_roommate_request')
+        if not receiver_application_id:
+            messages.error(request, "Receiver application ID is required.")
+            return redirect('send_roommate_request')
+
+        sender_exists = User.objects.filter(username=sender_application_id).exists()
+        receiver_exists = User.objects.filter(username=receiver_application_id).exists()
+        if not (sender_exists and receiver_exists):
+            messages.error(request, "Sender or receiver does not exist.")
+            return redirect('send_roommate_request')
+
+        if RoommateRequest.objects.filter(sender_application_id=sender_application_id,
+                                           receiver_application_id=receiver_application_id, accepted=False).exists():
+            messages.error(request, "You have already sent a roommate request to this user.")
+            return redirect('send_roommate_request')
+        
+        if RoommateRequest.objects.filter(sender_application_id=receiver_application_id,
+                                           receiver_application_id=sender_application_id).exists():
+            messages.error(request, f"{receiver_application_id} has already sent a roommate request to you.")
+            return redirect('send_roommate_request')
+
+        RoommateRequest.objects.create(sender_application_id=sender_application_id,
+                                       receiver_application_id=receiver_application_id)
+        messages.success(request, f"Roommate request sent to {receiver_application_id}.")
+        return redirect('send_roommate_request')
+    else:
+        return render(request, 'send_roommate_request.html')
+
+@login_required
+def roommate_requests(request):
+    if request.method == 'POST':
+        # Handle form submission for accepting/rejecting requests
+        request_id = request.POST.get('request_id')
+        action = request.POST.get('action')
+        if action == 'accept':
+            # Logic to accept the request
+            roommate_request = RoommateRequest.objects.get(id=request_id)
+            roommate_request.accepted = True
+            roommate_request.save()
+
+            sender = roommate_request.sender_application_id
+            receiver = roommate_request.receiver_application_id
+
+            # Check if a room already exists with the sender and has a vacancy
+            existing_room = None
+            for sender_field in ['student1', 'student2', 'student3', 'student4']:
+                existing_room = Room.objects.filter(**{sender_field: sender}).first()
+                if existing_room:
+                    break
+            if not existing_room:
+                existing_room = Room.objects.create(student1=sender)
+                #delete pending reqeusts received by sender after becoming part of room
+                pending_received_requests = RoommateRequest.objects.filter(receiver_application_id=sender, accepted=False)
+                pending_received_requests.delete()
+
+            for receiver_field in ['student1', 'student2', 'student3', 'student4']:
+                if getattr(existing_room, receiver_field) is None:
+                    # Assign the receiver value to the first null spot
+                    setattr(existing_room, receiver_field, receiver)
+                    #delete pending reqeusts received by receiver after becoming part of room
+                    pending_received_requests = RoommateRequest.objects.filter(receiver_application_id=receiver, accepted=False)
+                    pending_received_requests.delete()
+                    break
+            
+            existing_room.save()
+
+            # Check if the room is now full
+            if all(getattr(existing_room, f'student{i}') is not None for i in range(1, 5)):
+                # Delete all pending requests of four students
+                RoommateRequest.objects.filter(
+                    sender_application_id__in=[existing_room.student1,
+                                                existing_room.student2,
+                                                existing_room.student3,
+                                                existing_room.student4],
+                    accepted=False
+                ).delete()
+                RoommateRequest.objects.filter(
+                    receiver_application_id__in=[existing_room.student1,
+                                                    existing_room.student2,
+                                                    existing_room.student3,
+                                                    existing_room.student4],
+                    accepted=False
+                ).delete()
+
+            # Redirect to the same page
+            return redirect('roommate_requests')
+        elif action == 'reject':
+            # Logic to reject the request
+            RoommateRequest.objects.filter(id=request_id).delete()
+            # Redirect to the same page
+            return redirect('roommate_requests')
+    else:
+        # Retrieve pending and accepted roommate requests
+        user_application_id = request.user.username
+        pending_received_requests = RoommateRequest.objects.filter(receiver_application_id=user_application_id, accepted=False)
+        pending_sent_requests = RoommateRequest.objects.filter(sender_application_id=user_application_id, accepted=False)
+        accepted_sent_requests = RoommateRequest.objects.filter(sender_application_id=user_application_id, accepted=True)
+        accepted_received_requests = RoommateRequest.objects.filter(receiver_application_id=user_application_id, accepted=True)
+
+        # Check if the user is part of any room and get room details if available
+        room_details = None
+        for sender_field in ['student1', 'student2', 'student3', 'student4']:
+            existing_room = Room.objects.filter(**{sender_field: user_application_id}).first()
+            if existing_room:
+                room_details = {
+                    'student1': existing_room.student1,
+                    'student2': existing_room.student2,
+                    'student3': existing_room.student3,
+                    'student4': existing_room.student4
+                }
+                break
+
+            
+
+        return render(request, 'roommate_requests.html', {
+            'pending_received_requests': pending_received_requests,
+            'pending_sent_requests': pending_sent_requests,
+            'accepted_sent_requests': accepted_sent_requests,
+            'accepted_received_requests': accepted_received_requests,
+            'room_details': room_details
+        })

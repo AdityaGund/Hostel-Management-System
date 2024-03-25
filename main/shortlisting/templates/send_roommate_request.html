@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Roommate Request</title>
+</head>
+<body>
+    <h1>Send Roommate Request</h1>
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="receiver_application_id">Receiver Application ID:</label>
+        <input type="text" id="receiver_application_id" name="receiver_application_id" required>
+        <button type="submit">Send Request</button>
+    </form>
+</body>
+</html>
