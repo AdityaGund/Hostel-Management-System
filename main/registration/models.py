@@ -1,7 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class CivilEngineering(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
@@ -12,6 +14,7 @@ class CivilEngineering(models.Model):
 
 class ElectricalEngineering(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
@@ -22,6 +25,7 @@ class ElectricalEngineering(models.Model):
 
 class ComputerEngineering(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
@@ -32,6 +36,7 @@ class ComputerEngineering(models.Model):
 
 class InstrumentationEngineering(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
@@ -42,6 +47,7 @@ class InstrumentationEngineering(models.Model):
 
 class ManfacturingEngineering(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
@@ -52,6 +58,7 @@ class ManfacturingEngineering(models.Model):
 
 class MechanicalEngineering(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
@@ -64,7 +71,7 @@ class MechanicalEngineering(models.Model):
     
 class CheckInOut(models.Model):
     student_name = models.CharField(max_length=100)
-    mis= models.IntegerField (max_length=100)
+    mis= models.IntegerField ()
     year = models.CharField(max_length=100)
     reason = models.CharField(max_length=100)
     check_in_time = models.DateTimeField('timezone.now')

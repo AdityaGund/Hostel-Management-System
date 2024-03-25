@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -81,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'StudentApplication',
         'USER': 'root',
-        'PASSWORD': 'Devgiri@20',
+        'PASSWORD': '2005',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

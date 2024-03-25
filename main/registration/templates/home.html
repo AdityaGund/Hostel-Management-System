@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand|Roboto&display=swap">
   <link rel="stylesheet" type="text/css" href="../static/home.css">
+</body>
 </head>
 <body>
   <div class="navbar">
     <div class="navbar-title">Hostel</div>
     <div class="navbar-buttons">
-      <button class="navbar-button"><a href="{% url 'send_otp' %}" class="anchor">Apply</a></button>
       <button class="navbar-button"><a href="{% url 'logout' %}" class="anchor">Logout</a></button>
     </div>
   </div>
@@ -53,6 +53,44 @@
           <div class="title">Offline Document Verification</div>
           <div class="descr">Congratulations on your hostel allotment! Head for offline document verification on the specified date to finalize your stay. Bring the required documents for authentication and enjoy hassle-free hostel living.</div>
       </li>
+      <div class="deadline">
+          <div>
+            Remaining time for results declaration: <span id="countdown"></span>
+          </div>
+          <form id="generate-pdf-form" action="{% url 'generate_pdf' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" id="download-btn" disabled="true">Generate PDF</button>
+          </form>
+      </div>
   </ul>
+
+
+
+
+
+  <script>
+    // debugger
+        var remainingTime = {{remaining_time}};
+        debugger
+        function updateTimer() {
+            var countDownDate = new Date(Date.now() + (remainingTime * 1000)); // Convert seconds to milliseconds
+            console.log(countDownDate);
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                var hours = Math.floor(distance / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById("countdown").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+                if (distance <= 0) {  // Adjusted condition to handle negative distance
+                    clearInterval(x);
+                    document.getElementById("countdown").innerHTML = "Deadline reached";
+                    console.log("in");
+                    document.getElementById("download-btn").disabled = false; // Enable download button
+                }
+            }, 1000);
+        }
+        updateTimer(); // Call the function to start the countdown
+  </script> 
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roommate Requests</title>
+</head>
+<body>
+    <h1>Pending Roommate Requests</h1>
+    <h2>Received Requests</h2>
+    <ul>
+        {% for request in pending_received_requests %}
+        <li>
+            Request from: {{ request.sender_application_id }}
+            <form action="{% url 'roommate_requests' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="request_id" value="{{ request.id }}">
+                <button type="submit" name="action" value="accept">Accept</button>
+                <button type="submit" name="action" value="reject">Reject</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Sent Requests</h2>
+    <ul>
+        {% for request in pending_sent_requests %}
+        <li>
+            Request to: {{ request.receiver_application_id }}
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <h1>Accepted Roommate Requests</h1>
+    
+    <h2>Received Requests</h2>
+    <ul>
+        {% for request in accepted_received_requests %}
+        <li>
+            Request from: {{ request.sender_application_id }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Sent Requests</h2>
+    <ul>
+        {% for request in accepted_sent_requests %}
+        <li>
+            Request to: {{ request.receiver_application_id }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if room_details %}
+        <h2>Room Details</h2>
+        <p>Room members: {{ room_details.student1 }}, {{ room_details.student2 }}, {{ room_details.student3 }}, {{ room_details.student4 }}</p>
+    {% endif %}
+    
+</body>
+</html>
