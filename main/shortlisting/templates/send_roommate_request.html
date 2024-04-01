@@ -3,22 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Roommate Request</title>
+    <title>Student List</title>
+    <link rel="stylesheet" href="../static/roomate_request.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Send Roommate Request</h1>
-    {% if messages %}
-    <ul class="messages">
-    {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        <label for="receiver_application_id">Receiver Application ID:</label>
-        <input type="text" id="receiver_application_id" name="receiver_application_id" required>
-        <button type="submit">Send Request</button>
-    </form>
+    <div class="container">
+        <div class="branch-list">
+            <h2>Branches</h2>
+            <ul>
+                <li><a href="{% url 'student_list' %}?branch=ComputerEngineering">Computer Science</a></li>
+                <li><a href="{% url 'student_list' %}?branch=MechanicalEngineering">Mechanical Engineering</a></li>
+                <li><a href="{% url 'student_list' %}?branch=ElectricalEngineering">Electrical Engineering</a></li>
+                <li><a href="{% url 'student_list' %}?branch=CivilEngineering">Civil Engineering</a></li>
+                <li><a href="{% url 'student_list' %}?branch=InstrumentationEngineering">Instrumentaion Engineering</a></li>
+                <li><a href="{% url 'student_list' %}?branch=ManfacturingEngineering">Manfacturing Engineering</a></li>
+            </ul>
+        </div>
+        <div class="student-section">
+            <h1>Student List</h1>
+            <div class="selected-branch">
+                <span>Selected Branch:{{selected_branch}}</span>
+            </div>
+            <div class="search-bar">
+                <form method="get" action="{% url 'student_list' %}">
+                    <input type="text" name="q" placeholder="Search students...">
+                    <button type="submit">Search</button>
+                    <input type="hidden" name="branch" value="{{ selected_branch }}">
+                </form>
+            </div>
+            <ul class="student-list">
+                {% for student in students %}
+                    <li>
+                        <span class="serial-number">{{ students.start_index|add:forloop.counter0 }}.</span>
+                        <span class="student-name">{{ student.name }}</span>
+                        <form class="send-request-form" data-url="{% url 'send_roommate_request' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="receiver_application_id" value="{{ student.application_id }}">
+                            <button type="submit" class="send-request-btn">Send Request</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+            
+            
+
+        <script>
+                    $(document).ready(function () {
+                    $('.branch-list a').click(function (e) {
+                        e.preventDefault();
+                        var selectedBranch = $(this).attr('href').split('=')[1];
+                        console.log('Selected branch:', selectedBranch); // Add this line
+
+                        $('.search-bar input[name="branch"]').val(selectedBranch);
+                        $('.search-bar form').submit(); // Submit the form after setting the selected branch
+                    });
+
+                    $('.send-request-form').submit(function (e) {
+                        e.preventDefault();
+                        var form = $(this);
+                        var url = form.data('url');
+                        var formData = form.serialize();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            data: formData,
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success) {
+                                    var button = form.find('.send-request-btn');
+                                    // button.prop('disabled', true).text('Request Sent');
+                                    alert(response.message);
+                                } else {
+                                    alert(response.message);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                if (xhr.status === 400) {
+                                    alert(xhr.responseText);
+                                } 
+                            }
+                        });
+                    });
+                });
+
+        </script>
+            
+            
+            
+            
+            
+
+
+
+
+            <div class="pagination">
+                {% if students.has_previous %}
+                <a href="?branch={{ selected_branch }}&page={{ students.previous_page_number }}" class="prev">Previous</a>
+                {% endif %}
+                {% if students.has_next %}
+                <a href="?branch={{ selected_branch }}&page={{ students.next_page_number }}" class="next">Next</a>
+                {% endif %}
+            </div>
+            
+            
+            
+        </div>
+    </div>
+
 </body>
 </html>
