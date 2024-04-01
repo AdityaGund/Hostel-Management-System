@@ -15,6 +15,18 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import RoommateRequest, Room
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from registration.models import CivilEngineering,ElectricalEngineering,ComputerEngineering,MechanicalEngineering,ManfacturingEngineering,InstrumentationEngineering
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q, Value
+from django.db.models.functions import Length
+from django.db.models import CharField
+from django.contrib.postgres.search import TrigramSimilarity
+from django.shortcuts import get_object_or_404
+from django.contrib.contenttypes.models import ContentType
+from django.http import JsonResponse
+
+
 
 def generate_pdf(request):
     # Query selected students
@@ -107,40 +119,66 @@ def select_students(request):
             student.selected = True
             student.save()
 
+
+
 @login_required
 def send_roommate_request(request):
     if request.method == 'POST':
+
+        print("hello world")
+        selected_branch = request.GET.get('branch', '')
+        print(selected_branch)
+
+
         sender_application_id = request.user.username
         receiver_application_id = request.POST.get('receiver_application_id')
+
         if sender_application_id == receiver_application_id:
-            messages.error(request, "You cannot send request to yourself!")
-            return redirect('send_roommate_request')
+            return JsonResponse({'success': False, 'message': "You cannot send a request to yourself!"}, status=400)
+
         if not receiver_application_id:
-            messages.error(request, "Receiver application ID is required.")
-            return redirect('send_roommate_request')
+            return JsonResponse({'success': False, 'message': "Receiver application ID is required!"}, status=400)
 
         sender_exists = User.objects.filter(username=sender_application_id).exists()
         receiver_exists = User.objects.filter(username=receiver_application_id).exists()
         if not (sender_exists and receiver_exists):
-            messages.error(request, "Sender or receiver does not exist.")
-            return redirect('send_roommate_request')
+            return JsonResponse({'success': False, 'message': "Sender or receiver does not exist!"}, status=400)
 
         if RoommateRequest.objects.filter(sender_application_id=sender_application_id,
                                            receiver_application_id=receiver_application_id, accepted=False).exists():
-            messages.error(request, "You have already sent a roommate request to this user.")
-            return redirect('send_roommate_request')
-        
+            return JsonResponse({'success': False, 'message': "You have already sent a roommate request to this user."})
+
         if RoommateRequest.objects.filter(sender_application_id=receiver_application_id,
                                            receiver_application_id=sender_application_id).exists():
-            messages.error(request, f"{receiver_application_id} has already sent a roommate request to you.")
-            return redirect('send_roommate_request')
+            return JsonResponse({'success': False, 'message': f"{receiver_application_id} has already sent a roommate request to you."})
+
+        selected_branch = request.GET.get('branch', '')
+        if selected_branch == 'CivilEngineering':
+            StudentModel = CivilEngineering
+        elif selected_branch == 'ElectricalEngineering':
+            StudentModel = ElectricalEngineering
+        elif selected_branch == 'ComputerEngineering':
+            StudentModel = ComputerEngineering
+        elif selected_branch == 'MechanicalEngineering':
+            StudentModel = MechanicalEngineering
+        elif selected_branch == 'ManfacturingEngineering':
+            StudentModel = ManfacturingEngineering
+        elif selected_branch == 'InstrumentationEngineering':
+            StudentModel = InstrumentationEngineering
+        else:
+            StudentModel = CivilEngineering
 
         RoommateRequest.objects.create(sender_application_id=sender_application_id,
                                        receiver_application_id=receiver_application_id)
-        messages.success(request, f"Roommate request sent to {receiver_application_id}.")
-        return redirect('send_roommate_request')
+
+        # student = get_object_or_404(StudentModel, application_id=receiver_application_id)
+        # student.request_sent = True
+        # student.save()
+
+        return JsonResponse({'success': True, 'message': f"Roommate request sent to {receiver_application_id}."})
     else:
         return render(request, 'send_roommate_request.html')
+    
 
 @login_required
 def roommate_requests(request):
@@ -226,8 +264,6 @@ def roommate_requests(request):
                 }
                 break
 
-            
-
         return render(request, 'roommate_requests.html', {
             'pending_received_requests': pending_received_requests,
             'pending_sent_requests': pending_sent_requests,
@@ -235,3 +271,55 @@ def roommate_requests(request):
             'accepted_received_requests': accepted_received_requests,
             'room_details': room_details
         })
+
+
+# for passing the student list into the html file 
+
+def student_list(request):
+    selected_branch = request.GET.get('branch', '')
+    search_query = request.GET.get('q', '')
+
+    # Define the queryset based on the selected branch
+    if selected_branch:
+        if selected_branch == 'CivilEngineering':
+            students = CivilEngineering.objects.all()
+        elif selected_branch == 'ElectricalEngineering':
+            students = ElectricalEngineering.objects.all()
+        elif selected_branch == 'MechanicalEngineering':
+            students = MechanicalEngineering.objects.all()
+        elif selected_branch == 'ComputerEngineering':
+            students = ComputerEngineering.objects.all()
+        elif selected_branch == 'InstrumentationEngineering':
+            students = InstrumentationEngineering.objects.all()
+        elif selected_branch == 'ManfacturingEngineering':
+            students = ManfacturingEngineering.objects.all()
+        else:
+            # Default to Computer Engineering if branch is not specified or invalid
+            students = ComputerEngineering.objects.all()
+    else:
+        # Default to Computer Engineering if branch is not specified
+        students = ComputerEngineering.objects.all()
+
+    # Filter students based on search query
+    if search_query:
+        students = students.filter(name__icontains=search_query)
+
+    # Paginate the queryset
+    paginator = Paginator(students, 10)  # Show 10 students per page
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    # students_list = list(students.values())  # or students.values_list()
+
+    # Print students list in console
+    # print(students_list)
+
+
+    context = {
+        'students': page_obj,
+        'selected_branch': selected_branch,
+    }
+    # rint(context[students])
+
+
+    return render(request, 'send_roommate_request.html', context)

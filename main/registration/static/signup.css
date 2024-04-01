@@ -171,3 +171,9 @@ body {
     color: red;
     display: none;
 }
+#branchimg{
+    margin: 0px 30px;
+    height: 20px;
+    margin-left: 25px;
+    margin-right: 35px;
+}
