@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from registration.models import CivilEngineering, ElectricalEngineering, ComputerEngineering, InstrumentationEngineering, ManfacturingEngineering, MechanicalEngineering
 from reportlab.platypus import Paragraph, Spacer, Table, PageTemplate
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
@@ -30,12 +29,14 @@ from django.http import JsonResponse
 
 def generate_pdf(request):
     # Query selected students
-    civil_selected = CivilEngineering.objects.filter(selected=True)
-    electrical_selected = ElectricalEngineering.objects.filter(selected=True)
-    computer_selected = ComputerEngineering.objects.filter(selected=True)
-    instrumentation_selected = InstrumentationEngineering.objects.filter(selected=True)
-    manufacturing_selected = ManfacturingEngineering.objects.filter(selected=True)
-    mechanical_selected = MechanicalEngineering.objects.filter(selected=True)
+    civil_selected = FirstYear.objects.filter(branch="CivilEngineering", selected=True)
+    electrical_selected = FirstYear.objects.filter(branch="ElectricalEngineering", selected=True)
+    computer_selected = FirstYear.objects.filter(branch="ComputerEngineering", selected=True)
+    instrumentation_selected = FirstYear.objects.filter(branch="InstrumentationEngineering", selected=True)
+    manufacturing_selected = FirstYear.objects.filter(branch="ManfacturingEngineering", selected=True)
+    mechanical_selected = FirstYear.objects.filter(branch="MechanicalEngineering", selected=True)
+
+    print(civil_selected)
 
     # Generate PDF report
     response = HttpResponse(content_type='application/pdf')
@@ -90,17 +91,17 @@ def generate_pdf(request):
 def select_students(request):
     selected_students = []
 
-    mech_students = MechanicalEngineering.objects.filter(verified=True).order_by('rank')[:20]
+    mech_students = FirstYear.objects.filter(branch="MechanicalEngineering", verified=True).order_by('rank')[:20]
     selected_students.extend(mech_students)
 
-    comp_students = ComputerEngineering.objects.filter(verified=True).order_by('rank')[:20]
+    comp_students = FirstYear.objects.filter(branch="ComputerEngineering", verified=True).order_by('rank')[:20]
     selected_students.extend(comp_students)
 
     other_students = []
-    branches = [CivilEngineering, ElectricalEngineering, InstrumentationEngineering, ManfacturingEngineering]
+    branches = ["CivilEngineering", "ElectricalEngineering", "InstrumentationEngineering", "ManfacturingEngineering"]
 
     for branch in branches:
-        branch_students = branch.objects.filter(verified=True).order_by('rank')[:10]
+        branch_students = FirstYear.objects.filter(branch=branch, verified=True).order_by('rank')[:10]
         other_students.extend(branch_students)
 
     selected_students.extend(other_students)
@@ -108,10 +109,12 @@ def select_students(request):
     remaining_seats = 80 - len(selected_students)
 
     if remaining_seats > 0:
-        top_verified_students = (CivilEngineering.objects.filter(verified=True) +
-                                 ElectricalEngineering.objects.filter(verified=True) +
-                                 InstrumentationEngineering.objects.filter(verified=True) +
-                                 ManfacturingEngineering.objects.filter(verified=True)).order_by('rank')[:remaining_seats]
+        top_verified_students = (FirstYear.objects.filter(branch="CivilEngineering", verified=True) +
+                                 FirstYear.objects.filter(branch="ElectricalEngineering", verified=True) +
+                                 FirstYear.objects.filter(branch="InstrumentationEngineering", verified=True) +
+                                 FirstYear.objects.filter(branch="ManfacturingEngineering", verified=True) +
+                                 FirstYear.objects.filter(branch="ComputerEngineering", verified=True) +
+                                 FirstYear.objects.filter(branch="MechanicalEngineering", verified=True)).order_by('rank')[:remaining_seats]
 
         selected_students.extend(top_verified_students)
     
@@ -152,21 +155,21 @@ def send_roommate_request(request):
                                            receiver_application_id=sender_application_id).exists():
             return JsonResponse({'success': False, 'message': f"{receiver_application_id} has already sent a roommate request to you."})
 
-        selected_branch = request.GET.get('branch', '')
-        if selected_branch == 'CivilEngineering':
-            StudentModel = CivilEngineering
-        elif selected_branch == 'ElectricalEngineering':
-            StudentModel = ElectricalEngineering
-        elif selected_branch == 'ComputerEngineering':
-            StudentModel = ComputerEngineering
-        elif selected_branch == 'MechanicalEngineering':
-            StudentModel = MechanicalEngineering
-        elif selected_branch == 'ManfacturingEngineering':
-            StudentModel = ManfacturingEngineering
-        elif selected_branch == 'InstrumentationEngineering':
-            StudentModel = InstrumentationEngineering
-        else:
-            StudentModel = CivilEngineering
+        # selected_branch = request.GET.get('branch', '')
+        # if selected_branch == 'CivilEngineering':
+        #     StudentModel = CivilEngineering
+        # elif selected_branch == 'ElectricalEngineering':
+        #     StudentModel = ElectricalEngineering
+        # elif selected_branch == 'ComputerEngineering':
+        #     StudentModel = ComputerEngineering
+        # elif selected_branch == 'MechanicalEngineering':
+        #     StudentModel = MechanicalEngineering
+        # elif selected_branch == 'ManfacturingEngineering':
+        #     StudentModel = ManfacturingEngineering
+        # elif selected_branch == 'InstrumentationEngineering':
+        #     StudentModel = InstrumentationEngineering
+        # else:
+        #     StudentModel = CivilEngineering
 
         RoommateRequest.objects.create(sender_application_id=sender_application_id,
                                        receiver_application_id=receiver_application_id)
@@ -280,26 +283,30 @@ def student_list(request):
     search_query = request.GET.get('q', '')
 
     # Define the queryset based on the selected branch
-    if selected_branch:
-        if selected_branch == 'CivilEngineering':
-            students = CivilEngineering.objects.all()
-        elif selected_branch == 'ElectricalEngineering':
-            students = ElectricalEngineering.objects.all()
-        elif selected_branch == 'MechanicalEngineering':
-            students = MechanicalEngineering.objects.all()
-        elif selected_branch == 'ComputerEngineering':
-            students = ComputerEngineering.objects.all()
-        elif selected_branch == 'InstrumentationEngineering':
-            students = InstrumentationEngineering.objects.all()
-        elif selected_branch == 'ManfacturingEngineering':
-            students = ManfacturingEngineering.objects.all()
-        else:
-            # Default to Computer Engineering if branch is not specified or invalid
-            students = ComputerEngineering.objects.all()
-    else:
-        # Default to Computer Engineering if branch is not specified
-        students = ComputerEngineering.objects.all()
+    # if selected_branch:
+    #     if selected_branch == 'CivilEngineering':
+    #         students = CivilEngineering.objects.all()
+    #     elif selected_branch == 'ElectricalEngineering':
+    #         students = ElectricalEngineering.objects.all()
+    #     elif selected_branch == 'MechanicalEngineering':
+    #         students = MechanicalEngineering.objects.all()
+    #     elif selected_branch == 'ComputerEngineering':
+    #         students = ComputerEngineering.objects.all()
+    #     elif selected_branch == 'InstrumentationEngineering':
+    #         students = InstrumentationEngineering.objects.all()
+    #     elif selected_branch == 'ManfacturingEngineering':
+    #         students = ManfacturingEngineering.objects.all()
+    #     else:
+    #         # Default to Computer Engineering if branch is not specified or invalid
+    #         students = ComputerEngineering.objects.all()
+    # else:
+    #     # Default to Computer Engineering if branch is not specified
+    #     students = ComputerEngineering.objects.all()
 
+    if selected_branch:
+        students = FirstYear.objects.filter(branch=selected_branch, selected=True)
+    else:
+        students = FirstYear.objects.filter(branch=ComputerEngineering, selected=True)
     # Filter students based on search query
     if search_query:
         students = students.filter(name__icontains=search_query)
