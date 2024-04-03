@@ -19,7 +19,6 @@ from django.core.mail import send_mail
 import random
 from django.apps import apps
 
-@login_required(login_url='login')
 def HomePage(request):
     deadline = datetime(2024, 3, 15, 19, 10, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
     # Get the current time in the same timezone as the deadline
@@ -209,7 +208,7 @@ def verify_otp(request):
                 new_user.save()
                 student.user = new_user
                 student.save()
-                return redirect('login')
+                return redirect('home')
             else:
                 messages.error(request, 'Invalid OTP. Please try again.')
     else:
@@ -234,8 +233,12 @@ def LoginPage(request):
                 login(request, user)
                 return redirect('adminHome')
             else:
-                login(request, user)
-                return redirect('home')
+                if FirstYear.objects.filter(application_id=username, selected=True):
+                    login(request, user)
+                    return redirect('studentHome')
+                else:
+                    messages.error(request, "invalid credentials!")
+                    return redirect('login')
         else:
             messages.error(request, "invalid credentials!")
             return redirect('login')

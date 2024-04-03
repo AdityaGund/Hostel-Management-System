@@ -25,7 +25,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
 
-
+def studentHome(request):
+    return render(request, 'studentHome.html')
 
 def generate_pdf(request):
     # Query selected students
@@ -305,8 +306,9 @@ def student_list(request):
 
     if selected_branch:
         students = FirstYear.objects.filter(branch=selected_branch, selected=True)
-    else:
-        students = FirstYear.objects.filter(branch=ComputerEngineering, selected=True)
+    # else:
+    #     students = FirstYear.objects.filter(branch="ComputerEngineering", selected=True)
+    #     selected_branch = ComputerEngineering
     # Filter students based on search query
     if search_query:
         students = students.filter(name__icontains=search_query)
