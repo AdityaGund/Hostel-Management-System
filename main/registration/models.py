@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from registration.databasegeneration import second_year_data
 
 class Second_Year(models.Model):
     mis_no = models.CharField(max_length=20)
@@ -12,6 +11,15 @@ class Second_Year(models.Model):
     branch = models.CharField(max_length=100)
 
 class Third_Year(models.Model):
+    mis_no = models.CharField(max_length=20)
+    email = models.EmailField()
+    name = models.CharField(max_length=100)
+    cgpa = models.DecimalField(max_digits=4, decimal_places=2)
+    verified = models.BooleanField(default=False)
+    selected = models.BooleanField(default=False)
+    branch = models.CharField(max_length=100)
+
+class Fourth_Year(models.Model):
     mis_no = models.CharField(max_length=20)
     email = models.EmailField()
     name = models.CharField(max_length=100)
