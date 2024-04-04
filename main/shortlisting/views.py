@@ -28,13 +28,30 @@ def studentHome(request):
     return render(request, 'studentHome.html')
 
 def generate_pdf(request):
+    current_user = request.user
+    if not current_user.is_authenticated:
+        return HttpResponse("User not authenticated")
+
+    # Get the application_id (username)
+    username = current_user.username
+
+    year_model = None
+    for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+        student = get_object_or_404(model, application_id=username)
+        if student:
+            year_model = model
+            break
+    
+    if not year_model:
+        return HttpResponse("Student not found")
+    
     # Query selected students
-    civil_selected = FirstYear.objects.filter(branch="CivilEngineering", selected=True)
-    electrical_selected = FirstYear.objects.filter(branch="ElectricalEngineering", selected=True)
-    computer_selected = FirstYear.objects.filter(branch="ComputerEngineering", selected=True)
-    instrumentation_selected = FirstYear.objects.filter(branch="InstrumentationEngineering", selected=True)
-    manufacturing_selected = FirstYear.objects.filter(branch="ManfacturingEngineering", selected=True)
-    mechanical_selected = FirstYear.objects.filter(branch="MechanicalEngineering", selected=True)
+    civil_selected = year_model.objects.filter(branch="CivilEngineering", selected=True)
+    electrical_selected = year_model.objects.filter(branch="ElectricalEngineering", selected=True)
+    computer_selected = year_model.objects.filter(branch="ComputerEngineering", selected=True)
+    instrumentation_selected = year_model.objects.filter(branch="InstrumentationEngineering", selected=True)
+    manufacturing_selected = year_model.objects.filter(branch="ManfacturingEngineering", selected=True)
+    mechanical_selected = year_model.objects.filter(branch="MechanicalEngineering", selected=True)
 
     print(civil_selected)
 
@@ -56,9 +73,9 @@ def generate_pdf(request):
         elements.append(Spacer(1, 12))  # Add space below heading
 
         # Add table
-        data = [['Name', 'Rank', 'Application ID', 'Email', 'Percentile']]
+        data = [['Name', 'Rank', 'Application ID', 'Email']]
         for student in queryset:
-            row = [student.name, str(student.rank), student.application_id, student.email, str(student.percentile)]
+            row = [student.name, str(student.rank), student.application_id, student.email]
             data.append(row)
 
         # Generate table as a list of Paragraph objects
@@ -89,19 +106,36 @@ def generate_pdf(request):
     return response
 
 def select_students(request):
+    current_user = request.user
+    if not current_user.is_authenticated:
+        return HttpResponse("User not authenticated")
+
+    # Get the application_id (username)
+    username = current_user.username
+
+    year_model = None
+    for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+        student = get_object_or_404(model, application_id=username)
+        if student:
+            year_model = model
+            break
+    
+    if not year_model:
+        return HttpResponse("Student not found")
+    
     selected_students = []
 
-    mech_students = FirstYear.objects.filter(branch="MechanicalEngineering", verified=True).order_by('rank')[:20]
+    mech_students = year_model.objects.filter(branch="MechanicalEngineering", verified=True).order_by('rank')[:20]
     selected_students.extend(mech_students)
 
-    comp_students = FirstYear.objects.filter(branch="ComputerEngineering", verified=True).order_by('rank')[:20]
+    comp_students = year_model.objects.filter(branch="ComputerEngineering", verified=True).order_by('rank')[:20]
     selected_students.extend(comp_students)
 
     other_students = []
     branches = ["CivilEngineering", "ElectricalEngineering", "InstrumentationEngineering", "ManfacturingEngineering"]
 
     for branch in branches:
-        branch_students = FirstYear.objects.filter(branch=branch, verified=True).order_by('rank')[:10]
+        branch_students = year_model.objects.filter(branch=branch, verified=True).order_by('rank')[:10]
         other_students.extend(branch_students)
 
     selected_students.extend(other_students)
@@ -109,12 +143,12 @@ def select_students(request):
     remaining_seats = 80 - len(selected_students)
 
     if remaining_seats > 0:
-        top_verified_students = (FirstYear.objects.filter(branch="CivilEngineering", verified=True) +
-                                 FirstYear.objects.filter(branch="ElectricalEngineering", verified=True) +
-                                 FirstYear.objects.filter(branch="InstrumentationEngineering", verified=True) +
-                                 FirstYear.objects.filter(branch="ManfacturingEngineering", verified=True) +
-                                 FirstYear.objects.filter(branch="ComputerEngineering", verified=True) +
-                                 FirstYear.objects.filter(branch="MechanicalEngineering", verified=True)).order_by('rank')[:remaining_seats]
+        top_verified_students = (year_model.objects.filter(branch="CivilEngineering", verified=True) +
+                                 year_model.objects.filter(branch="ElectricalEngineering", verified=True) +
+                                 year_model.objects.filter(branch="InstrumentationEngineering", verified=True) +
+                                 year_model.objects.filter(branch="ManfacturingEngineering", verified=True) +
+                                 year_model.objects.filter(branch="ComputerEngineering", verified=True) +
+                                 year_model.objects.filter(branch="MechanicalEngineering", verified=True)).order_by('rank')[:remaining_seats]
 
         selected_students.extend(top_verified_students)
     
@@ -127,11 +161,22 @@ def select_students(request):
 @login_required
 def send_roommate_request(request):
     if request.method == 'POST':
+        current_user = request.user
+        if not current_user.is_authenticated:
+            return HttpResponse("User not authenticated")
 
-        print("hello world")
-        selected_branch = request.GET.get('branch', '')
-        print(selected_branch)
+        # Get the application_id (username)
+        username = current_user.username
 
+        year_model = None
+        for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+            student = get_object_or_404(model, application_id=username)
+            if student:
+                year_model = model
+                break
+        
+        if not year_model:
+            return HttpResponse("Student not found")
 
         sender_application_id = request.user.username
         receiver_application_id = request.POST.get('receiver_application_id')
@@ -155,28 +200,9 @@ def send_roommate_request(request):
                                            receiver_application_id=sender_application_id).exists():
             return JsonResponse({'success': False, 'message': f"{receiver_application_id} has already sent a roommate request to you."})
 
-        # selected_branch = request.GET.get('branch', '')
-        # if selected_branch == 'CivilEngineering':
-        #     StudentModel = CivilEngineering
-        # elif selected_branch == 'ElectricalEngineering':
-        #     StudentModel = ElectricalEngineering
-        # elif selected_branch == 'ComputerEngineering':
-        #     StudentModel = ComputerEngineering
-        # elif selected_branch == 'MechanicalEngineering':
-        #     StudentModel = MechanicalEngineering
-        # elif selected_branch == 'ManfacturingEngineering':
-        #     StudentModel = ManfacturingEngineering
-        # elif selected_branch == 'InstrumentationEngineering':
-        #     StudentModel = InstrumentationEngineering
-        # else:
-        #     StudentModel = CivilEngineering
 
         RoommateRequest.objects.create(sender_application_id=sender_application_id,
-                                       receiver_application_id=receiver_application_id)
-
-        # student = get_object_or_404(StudentModel, application_id=receiver_application_id)
-        # student.request_sent = True
-        # student.save()
+                                       receiver_application_id=receiver_application_id, year=year_model)
 
         return JsonResponse({'success': True, 'message': f"Roommate request sent to {receiver_application_id}."})
     else:
@@ -186,6 +212,22 @@ def send_roommate_request(request):
 @login_required
 def roommate_requests(request):
     if request.method == 'POST':
+        current_user = request.user
+        if not current_user.is_authenticated:
+            return HttpResponse("User not authenticated")
+
+        # Get the application_id (username)
+        username = current_user.username
+
+        year_model = None
+        for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+            student = get_object_or_404(model, application_id=username)
+            if student:
+                year_model = model
+                break
+        
+        if not year_model:
+            return HttpResponse("Student not found")
         # Handle form submission for accepting/rejecting requests
         request_id = request.POST.get('request_id')
         action = request.POST.get('action')
@@ -205,7 +247,7 @@ def roommate_requests(request):
                 if existing_room:
                     break
             if not existing_room:
-                existing_room = Room.objects.create(student1=sender)
+                existing_room = Room.objects.create(student1=sender, year=year_model)
                 #delete pending reqeusts received by sender after becoming part of room
                 pending_received_requests = RoommateRequest.objects.filter(receiver_application_id=sender, accepted=False)
                 pending_received_requests.delete()
@@ -279,36 +321,28 @@ def roommate_requests(request):
 # for passing the student list into the html file 
 
 def student_list(request):
+    current_user = request.user
+    if not current_user.is_authenticated:
+        return HttpResponse("User not authenticated")
+
+    # Get the application_id (username)
+    username = current_user.username
+
+    year_model = None
+    for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+        student = get_object_or_404(model, application_id=username)
+        if student:
+            year_model = model
+            break
+    
+    if not year_model:
+        return HttpResponse("Student not found")
+    
     selected_branch = request.GET.get('branch', '')
     search_query = request.GET.get('q', '')
 
-    # Define the queryset based on the selected branch
-    # if selected_branch:
-    #     if selected_branch == 'CivilEngineering':
-    #         students = CivilEngineering.objects.all()
-    #     elif selected_branch == 'ElectricalEngineering':
-    #         students = ElectricalEngineering.objects.all()
-    #     elif selected_branch == 'MechanicalEngineering':
-    #         students = MechanicalEngineering.objects.all()
-    #     elif selected_branch == 'ComputerEngineering':
-    #         students = ComputerEngineering.objects.all()
-    #     elif selected_branch == 'InstrumentationEngineering':
-    #         students = InstrumentationEngineering.objects.all()
-    #     elif selected_branch == 'ManfacturingEngineering':
-    #         students = ManfacturingEngineering.objects.all()
-    #     else:
-    #         # Default to Computer Engineering if branch is not specified or invalid
-    #         students = ComputerEngineering.objects.all()
-    # else:
-    #     # Default to Computer Engineering if branch is not specified
-    #     students = ComputerEngineering.objects.all()
-
     if selected_branch:
-        students = FirstYear.objects.filter(branch=selected_branch, selected=True)
-    # else:
-    #     students = FirstYear.objects.filter(branch="ComputerEngineering", selected=True)
-    #     selected_branch = ComputerEngineering
-    # Filter students based on search query
+        students = year_model.objects.filter(branch=selected_branch, selected=True)
     if search_query:
         students = students.filter(name__icontains=search_query)
 
@@ -317,17 +351,10 @@ def student_list(request):
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
-    # students_list = list(students.values())  # or students.values_list()
-
-    # Print students list in console
-    # print(students_list)
-
 
     context = {
         'students': page_obj,
         'selected_branch': selected_branch,
     }
-    # rint(context[students])
-
 
     return render(request, 'send_roommate_request.html', context)
