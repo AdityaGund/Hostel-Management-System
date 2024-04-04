@@ -15,7 +15,6 @@ from django.contrib import messages
 from .models import RoommateRequest, Room
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from registration.models import CivilEngineering,ElectricalEngineering,ComputerEngineering,MechanicalEngineering,ManfacturingEngineering,InstrumentationEngineering
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q, Value
 from django.db.models.functions import Length
