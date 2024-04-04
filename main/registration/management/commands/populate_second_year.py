@@ -1,26 +1,26 @@
 from django.core.management.base import BaseCommand
-from registration.models import Second_Year
-from registration.databasegeneration import second_year_data
+from registration.models import SecondYear
+from registration.databasegeneration import secondyear_data
 
 class Command(BaseCommand):
     help = 'Populate second year table with data'
 
     def handle(self, *args, **options):
-        for branch, students in second_year_data.items():
+        for branch, students in secondyear_data.items():
             branch_name = self.get_branch_name(branch)
             branch_students = []
             for student_index, student in enumerate(students, start=1):
                 student_id = self.calculate_student_id(branch, student_index)
                 student_data = {
                     'id': student_id,
-                    'mis_no': student['MIS No'],
+                    'application_id': student['MIS No'],
                     'email': self.generate_email(student_index, branch_name),
                     'name': student['Name'],
-                    'cgpa': float(student['CGPA']),
+                    'rank': float(student['CGPA']),
                     'branch': branch_name
                 }
                 branch_students.append(student_data)
-            Second_Year.objects.bulk_create([Second_Year(**student) for student in branch_students])
+            SecondYear.objects.bulk_create([SecondYear(**student) for student in branch_students])
         self.stdout.write(self.style.SUCCESS('Successfully populated second year'))
 
     def get_branch_name(self, branch_code):

@@ -367,7 +367,7 @@ data3="""
 30 112110028 CHINMAY PRASHANT DESHPANDE 21 15 80 544 4.24 6.33 R HS-20004(BB) MA-20004(DD) ME-20004(FF) ME-20005(FF) ME-20019(BC) ME-20020(AB) ML-20004(PP) MM(IF)-20001(CC) MM-20001(CD) MM-20002(AB) PE-20009(DD) PE-20011(AA
 """
 
-data3="""
+data4="""
 1 111803066 KULAL AKHIL RATNAKAR 7 6 169 1160 6.00 6.82 R CT(DE)-22007(BC) CT(DE)-22015(FF) CT(DE)-22023(DD) CT-22001(CD) CT-22003(DD) CT-22004(DD) CT-22005(CC) IOC-22011(DD) LL-22016(BB) ML-22001(PP)
 2 111803085 NIMISH GAUTAM MORE 11 10 152 944 6.55 5.55 R CT(DE)-22007(BC) CT(DE)-22015(FF) CT(DE)-22023(DD) CT-22001(CD) CT-22003(DD) CT-22004(DD) CT-22005(CC) IOC-22011(DD) LL-22016(BB) ML-22001(PP)
 3 111903029 CHETAN GAJANAN BHANUSE 18 15 151 862 4.33 5.60 R CT(DE)-22007(BC) CT(DE)-22015(FF) CT(DE)-22023(DD) CT-22001(CD) CT-22003(DD) CT-22004(DD) CT-22005(CC) IOC-22011(DD) LL-22016(BB) ML-22001(PP)
@@ -553,13 +553,13 @@ data3="""
 Lines=data3.strip().split('\n')
 
 
-second_year_data={}
-fourth_year_data={}
-fourth_year_data={}
+fourthyear_data={}
+# fourthyear_data={}
+# fourthyear_data={}
 # for i in range(1,7):
 #     var_name=f"data{i}"
 #     data=locals()[var_name]
-lines=data3.strip().split('\n')
+lines=data4.strip().split('\n')
 
 for line in lines:
     columns=line.split()
@@ -573,15 +573,15 @@ for line in lines:
 
     branch_code=mis_no[4:6]
 
-    if branch_code  not in fourth_year_data:
-        fourth_year_data[branch_code]=[]
+    if branch_code  not in fourthyear_data:
+        fourthyear_data[branch_code]=[]
 
-    fourth_year_data[branch_code].append({
+    fourthyear_data[branch_code].append({
         "No":no,
         "MIS No":mis_no,
         "Name":name,
         "CGPA":cgpa
     })
 
-# print(fourth_year_data)
+# print(fourthyear_data)
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalistic Page</title>
+    <link rel="stylesheet" href="../static/studentHome.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h1>My Website</h1>
+            <button><a href="{% url 'logout' %}" class="anchor">Logout</a></button>
+        </div>
+
+        <div class="content">
+            <div class="left-section">
+                <div class="option-container">
+                    <button class="option"><a href="{% url 'send_roommate_request' %}" class="anchor">Choose Roommate</a></button>
+                    <button class="option"><a href="{% url 'roommate_requests' %}" class="anchor">Room Status</a></button>
+                    <button class="option"><a href="{% url 'logout' %}" class="anchor">Logout</a></button>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <div class="rules-container">
+                    <div class="header">
+                        <div class="text">Rules</div>
+                        <div class="underline"></div>
+                    </div>
+                    <p>1. Follow the guidelines and ensure that all requirements are met before submitting your work.</p>
+                    <p>2. Respect others and maintain a professional attitude throughout the process.</p>
+                    <p>3. Be prepared to present your work and defend your decisions if necessary.</p>
+                    <!-- Random Rules -->
+                    <p class="random-rule">4. Always double-check your work for any errors or mistakes.</p>
+                    <p class="random-rule">5. Communicate effectively with your team members to ensure smooth collaboration.</p>
+                    <p class="random-rule">6. Take regular breaks to avoid burnout and maintain productivity.</p> 
+                    <p class="random-rule">7. Seek feedback from peers and mentors to improve your skills.</p>
+                    <p class="random-rule">8. Stay organized by keeping track of deadlines and tasks.</p>
+                    <p class="random-rule">9. Experiment with different techniques and approaches to problem-solving.</p>
+                    <p class="random-rule">10. Stay curious and never stop learning.</p>
+                    <p class="random-rule">11. Embrace challenges as opportunities for growth.</p>
+                    <p class="random-rule">12. Prioritize tasks based on importance and urgency.</p>
+                    <p class="random-rule">13. Foster a positive and supportive environment within your team.</p>
+                    <p class="random-rule">14. Practice active listening and empathy when communicating with others.</p>
+                    <p class="random-rule">15. Take ownership of your work and responsibilities.</p>
+                    <!-- End of Random Rules -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

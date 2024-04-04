@@ -1,117 +1,45 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Second_Year(models.Model):
-    mis_no = models.CharField(max_length=20)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    cgpa = models.DecimalField(max_digits=4, decimal_places=2)
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-    branch = models.CharField(max_length=100)
-
-class Third_Year(models.Model):
-    mis_no = models.CharField(max_length=20)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    cgpa = models.DecimalField(max_digits=4, decimal_places=2)
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-    branch = models.CharField(max_length=100)
-
-class Fourth_Year(models.Model):
-    mis_no = models.CharField(max_length=20)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    cgpa = models.DecimalField(max_digits=4, decimal_places=2)
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-    branch = models.CharField(max_length=100)
-
 class FirstYear(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
     branch = models.CharField(max_length=100)
 
-
-
-
-class CivilEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
+class SecondYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
+    rank = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
+    branch = models.CharField(max_length=100)
 
-class ElectricalEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
+class ThirdYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
+    rank = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
+    branch = models.CharField(max_length=100)
 
-class ComputerEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
+class FinalYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
+    rank = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
-
-class InstrumentationEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
-    application_id = models.CharField(max_length=10)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    percentile = models.FloatField()
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-
-class ManfacturingEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
-    application_id = models.CharField(max_length=10)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    percentile = models.FloatField()
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-
-class MechanicalEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
-    application_id = models.CharField(max_length=10)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    percentile = models.FloatField()
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-
-
-# TRYING TO DO IN SINGLE TABLE FIRST YEAR
-
+    branch = models.CharField(max_length=100)
 
 # class HostelStudents(models.Model):
     
