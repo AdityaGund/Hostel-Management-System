@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OTP Verification</title>
+    <link rel="stylesheet" href="../static/css/otp_verfication.css">
 </head>
 <body>
-    <h2>OTP Verification</h2>
     {% if messages %}
         {% for message in messages %}
             <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
         {% endfor %}
     {% endif %}
-    <form method="post" action="{% url 'verify_otp' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Verify OTP</button>
-    </form>
+    <br>
+    <div class="container">
+        <h1>Enter OTP</h1>
+        <form method="post" action="{% url 'verify_otp' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Verify OTP">
+        </form>
+    </div>
 </body>
 </html>
