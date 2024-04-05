@@ -132,14 +132,15 @@ def send_verification_email(email, verification_code):
 
 def SignupPage(request):
     if request.method == 'POST':
-        if all(field in request.POST for field in ['username', 'email', 'password1', 'password2', 'branch']):
+        if all(field in request.POST for field in ['username', 'email', 'password1', 'password2', 'branch', 'year']):
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password1']
             re_password = request.POST['password2']
             branch = request.POST['branch']
+            year = request.POST['year']
 
-            if not (username and email and password and re_password and branch):
+            if not (username and email and password and re_password and branch and year):
                 messages.error(request, "All fields are required!")
                 return redirect('signup')  
 
@@ -147,31 +148,27 @@ def SignupPage(request):
                 messages.error(request, "Passwords do not match!")
                 return redirect('signup')  
 
-            # branch_model = None
-            # if branch == 'CivilEngineering':
-            #     branch_model = CivilEngineering
-            # elif branch == 'ElectricalEngineering':
-            #     branch_model = ElectricalEngineering
-            # elif branch == 'ComputerEngineering':
-            #     branch_model = ComputerEngineering
-            # elif branch == 'InstrumentationEngineering':
-            #     branch_model = InstrumentationEngineering
-            # elif branch == 'ManfacturingEngineering':
-            #     branch_model = ManfacturingEngineering
-            # elif branch == 'MechanicalEngineering':
-            #     branch_model = MechanicalEngineering
+            year_model = None
+            if year == 'FirstYear':
+                year_model = FirstYear
+            elif branch == 'SecondYear':
+                year_model = SecondYear
+            elif branch == 'ThirdYear':
+                year_model = ThirdYear
+            elif branch == 'FinalYear':
+                year_model = FinalYear
 
-            # if branch_model is None:
-            #     messages.error(request, "Invalid branch selection!")
-            #     return redirect('signup')
+            if year_model is None:
+                messages.error(request, "Invalid year selection!")
+                return redirect('signup')
 
-            if FirstYear.objects.filter(application_id=username, email=email, branch=branch).exists():
+            if year_model.objects.filter(application_id=username, email=email, branch=branch).exists():
                 verification_code = ''.join(random.choices('0123456789', k=6))
                 request.session['verification_code'] = verification_code
                 request.session['email'] = email
                 request.session['application_id'] = username
                 request.session['password'] = password
-                # request.session['branch'] = branch_model.__name__
+                request.session['year'] = year_model.__name__
                 send_verification_email(email, verification_code)
                 messages.success(request, 'OTP sent successfully. Check your email.')
                 return redirect('verify_otp')
@@ -198,9 +195,9 @@ def verify_otp(request):
             if entered_otp == stored_otp:
                 messages.success(request, 'Verification successful. Your can login now.')
                 application_id = request.session.get('application_id')
-                # branch_model_name = request.session.get('branch')
-                # branch_model = apps.get_model('registration', branch_model_name)
-                student = FirstYear.objects.get(application_id=application_id)
+                year_model_name = request.session.get('year')
+                year_model = apps.get_model('registration', year_model_name)
+                student = year_model.objects.get(application_id=application_id)
                 student.verified = True
                 new_user = User.objects.create_user(username=application_id, email=email, password=password)
                 admin_group = Group.objects.get(name='Student')
