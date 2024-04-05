@@ -151,11 +151,11 @@ def SignupPage(request):
             year_model = None
             if year == 'FirstYear':
                 year_model = FirstYear
-            elif branch == 'SecondYear':
+            elif year == 'SecondYear':
                 year_model = SecondYear
-            elif branch == 'ThirdYear':
+            elif year == 'ThirdYear':
                 year_model = ThirdYear
-            elif branch == 'FinalYear':
+            elif year == 'FinalYear':
                 year_model = FinalYear
 
             if year_model is None:
