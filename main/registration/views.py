@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -230,7 +230,17 @@ def LoginPage(request):
                 login(request, user)
                 return redirect('adminHome')
             else:
-                if FirstYear.objects.filter(application_id=username, selected=True):
+                year_model = None
+                for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+                    student_query = model.objects.filter(application_id=username)
+                    if student_query.exists():
+                        year_model = model
+                        student_found = True
+                        break
+                if not student_found:
+                    return HttpResponse("Student not found")
+
+                if year_model.objects.filter(application_id=username, selected=True):
                     login(request, user)
                     return redirect('studentHome')
                 else:
