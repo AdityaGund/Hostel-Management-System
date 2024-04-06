@@ -12,12 +12,15 @@
 .dashboard{
     width: 20%;
     height: 100%;
-    background: linear-gradient(to bottom right, #75DDDD, #09BC8A);
+    background: linear-gradient(to bottom right, #05718d, #023047);
     box-shadow: 0 0 7px rgb(0, 0, 0, 0.5);
+    position: fixed;
 }
 
 .body{
     width: 80%;
+    margin-left: 20%;
+    margin-bottom: 30px;
 }
 
 .content{
@@ -39,9 +42,9 @@
     background-color: rgb(255, 255, 255, 0.9);
     border-radius: 10px;
     box-shadow: 0 0 10px rgb(0, 0, 0, 0.8);
-    width: calc(100% - 15px);
-    margin: 7.5px;
-    margin-top: 10px;
+    width: calc(100% - 15%);
+    margin: 7.5%;
+    margin-top: 5%;
 }
 
 .option:hover{
@@ -77,8 +80,8 @@
 
 nav{
     height: 8%;
-    background-color: #3FC9B2;
-    overflow: hidden;
+    background-color: #212529;
+    /* overflow: hidden; */
 }
 
 nav a {
