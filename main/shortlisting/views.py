@@ -37,12 +37,12 @@ def generate_pdf(request):
 
     year_model = None
     for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
-        student = get_object_or_404(model, application_id=username)
-        if student:
+        student_query = model.objects.filter(application_id=username)
+        if student_query.exists():
             year_model = model
+            student_found = True
             break
-    
-    if not year_model:
+    if not student_found:
         return HttpResponse("Student not found")
     
     # Query selected students
@@ -50,7 +50,7 @@ def generate_pdf(request):
     electrical_selected = year_model.objects.filter(branch="ElectricalEngineering", selected=True)
     computer_selected = year_model.objects.filter(branch="ComputerEngineering", selected=True)
     instrumentation_selected = year_model.objects.filter(branch="InstrumentationEngineering", selected=True)
-    manufacturing_selected = year_model.objects.filter(branch="ManfacturingEngineering", selected=True)
+    manufacturing_selected = year_model.objects.filter(branch="ManufacturingEngineering", selected=True)
     mechanical_selected = year_model.objects.filter(branch="MechanicalEngineering", selected=True)
 
     print(civil_selected)
@@ -115,12 +115,12 @@ def select_students(request):
 
     year_model = None
     for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
-        student = get_object_or_404(model, application_id=username)
-        if student:
+        student_query = model.objects.filter(application_id=username)
+        if student_query.exists():
             year_model = model
+            student_found = True
             break
-    
-    if not year_model:
+    if not student_found:
         return HttpResponse("Student not found")
     
     selected_students = []
@@ -132,7 +132,7 @@ def select_students(request):
     selected_students.extend(comp_students)
 
     other_students = []
-    branches = ["CivilEngineering", "ElectricalEngineering", "InstrumentationEngineering", "ManfacturingEngineering"]
+    branches = ["CivilEngineering", "ElectricalEngineering", "InstrumentationEngineering", "ManufacturingEngineering"]
 
     for branch in branches:
         branch_students = year_model.objects.filter(branch=branch, verified=True).order_by('rank')[:10]
@@ -146,7 +146,7 @@ def select_students(request):
         top_verified_students = (year_model.objects.filter(branch="CivilEngineering", verified=True) +
                                  year_model.objects.filter(branch="ElectricalEngineering", verified=True) +
                                  year_model.objects.filter(branch="InstrumentationEngineering", verified=True) +
-                                 year_model.objects.filter(branch="ManfacturingEngineering", verified=True) +
+                                 year_model.objects.filter(branch="ManufacturingEngineering", verified=True) +
                                  year_model.objects.filter(branch="ComputerEngineering", verified=True) +
                                  year_model.objects.filter(branch="MechanicalEngineering", verified=True)).order_by('rank')[:remaining_seats]
 
@@ -170,12 +170,12 @@ def send_roommate_request(request):
 
         year_model = None
         for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
-            student = get_object_or_404(model, application_id=username)
-            if student:
+            student_query = model.objects.filter(application_id=username)
+            if student_query.exists():
                 year_model = model
+                student_found = True
                 break
-        
-        if not year_model:
+        if not student_found:
             return HttpResponse("Student not found")
 
         sender_application_id = request.user.username
@@ -221,12 +221,12 @@ def roommate_requests(request):
 
         year_model = None
         for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
-            student = get_object_or_404(model, application_id=username)
-            if student:
+            student_query = model.objects.filter(application_id=username)
+            if student_query.exists():
                 year_model = model
+                student_found = True
                 break
-        
-        if not year_model:
+        if not student_found:
             return HttpResponse("Student not found")
         # Handle form submission for accepting/rejecting requests
         request_id = request.POST.get('request_id')
@@ -330,12 +330,12 @@ def student_list(request):
 
     year_model = None
     for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
-        student = get_object_or_404(model, application_id=username)
-        if student:
+        student_query = model.objects.filter(application_id=username)
+        if student_query.exists():
             year_model = model
+            student_found = True
             break
-    
-    if not year_model:
+    if not student_found:
         return HttpResponse("Student not found")
     
     selected_branch = request.GET.get('branch', '')
