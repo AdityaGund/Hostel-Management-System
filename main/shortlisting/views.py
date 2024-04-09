@@ -365,10 +365,8 @@ def student_list(request):
 
     return render(request, 'send_roommate_request.html', context)
 
-<<<<<<< HEAD
 def studentDashboard(request):
     return render(request,'studentDashboard.html')
-=======
 @login_required
 def room_preferences(request):
     if request.method == 'POST':
@@ -468,4 +466,3 @@ def room_preferences(request):
             return HttpResponse("Only the topper can select room preferences.")
 
         return render(request, 'room_preferences.html', {'other_roommates_rank': other_roommates_rank})
->>>>>>> f66ff3413eef4794fcc48f9e951eb3cb6b83bf2f
