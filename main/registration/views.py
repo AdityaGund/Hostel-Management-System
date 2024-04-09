@@ -24,6 +24,7 @@ from .models import SelectedDates
 from django.views.decorators.http import require_POST
 from .models import SelectedDates
 
+
 def HomePage(request):
 
 
@@ -41,6 +42,7 @@ def HomePage(request):
     # print("End")
     final_alllotment_date=str(selected_dates.final_room_allotment)
 
+
     reg_start_date=str(selected_dates.registration_period.split(' ')[0])
     reg_end_date=str(selected_dates.registration_period.split(' ')[-1])
     pref_start_date=str(selected_dates.preference_selection_date.split(' ')[0])
@@ -48,7 +50,6 @@ def HomePage(request):
 
     verf_start_date=str(selected_dates.verification_period.split(' ')[0])
     verf_end_date=str(selected_dates.verification_period.split(' ')[-1])
-
 
 
     deadline = datetime(year, month, date, 12, 23, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
@@ -258,7 +259,12 @@ def LoginPage(request):
                 messages.error(request, "All fields are required!")
                 return redirect('login')
         user = authenticate(request, username=username, password=password)
-        print(user)
+        latest_selected_date = SelectedDates.objects.latest('id')
+        final_date = latest_selected_date.final_room_allotment
+        if final_date:
+            final_room_allotment_str = str(final_date)
+            final_date = timezone.make_aware(datetime.strptime(final_room_allotment_str, '%Y-%m-%d'))
+
         if user is not None:
             if user.is_superuser:
                 login(request, user)
@@ -277,10 +283,13 @@ def LoginPage(request):
                         break
                 if not student_found:
                     return HttpResponse("Student not found")
-
                 if year_model.objects.filter(application_id=username, selected=True):
-                    login(request, user)
-                    return redirect('studentHome')
+                    if(timezone.now()>=final_date):
+                        login(request, user)
+                        return redirect('maintenance_request')
+                    else:
+                        login(request, user)
+                        return redirect('studentHome')
                 else:
                     messages.error(request, "invalid credentials!")
                     return redirect('login')
@@ -312,13 +321,14 @@ def admin_selected_dates(request):
 
 
 
+
         pdf_date = request.POST.get('pdfgenerationdate')
 
         pref_start_date = request.POST.get('roommakingprocessStartDate')
         pref_end_date = request.POST.get('roommakingprocessEndDate')
 
         final_result_date = request.POST.get('finalresultdeclaration')
-
+        
 
 
         # Save selected dates to the database
