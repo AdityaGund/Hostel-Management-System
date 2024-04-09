@@ -12,7 +12,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import RoommateRequest, Room
+from .models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -23,6 +23,7 @@ from django.contrib.postgres.search import TrigramSimilarity
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
+import json
 
 def studentHome(request):
     return render(request, 'studentHome.html')
@@ -179,6 +180,7 @@ def send_roommate_request(request):
                 year_model = model
                 student_found = True
                 break
+        selected_year=(str(year_model).split('.'))[-1][:-2]
         if not student_found:
             return HttpResponse("Student not found")
 
@@ -204,9 +206,8 @@ def send_roommate_request(request):
                                            receiver_application_id=sender_application_id).exists():
             return JsonResponse({'success': False, 'message': f"{receiver_application_id} has already sent a roommate request to you."})
 
-
         RoommateRequest.objects.create(sender_application_id=sender_application_id,
-                                       receiver_application_id=receiver_application_id, year=year_model)
+                                       receiver_application_id=receiver_application_id, year=selected_year)
 
         return JsonResponse({'success': True, 'message': f"Roommate request sent to {receiver_application_id}."})
     else:
@@ -232,6 +233,7 @@ def roommate_requests(request):
                 break
         if not student_found:
             return HttpResponse("Student not found")
+        selected_year=(str(year_model).split('.'))[-1][:-2]
         # Handle form submission for accepting/rejecting requests
         request_id = request.POST.get('request_id')
         action = request.POST.get('action')
@@ -251,7 +253,7 @@ def roommate_requests(request):
                 if existing_room:
                     break
             if not existing_room:
-                existing_room = Room.objects.create(student1=sender, year=year_model)
+                existing_room = Room.objects.create(student1=sender, year=selected_year)
                 #delete pending reqeusts received by sender after becoming part of room
                 pending_received_requests = RoommateRequest.objects.filter(receiver_application_id=sender, accepted=False)
                 pending_received_requests.delete()
@@ -363,5 +365,107 @@ def student_list(request):
 
     return render(request, 'send_roommate_request.html', context)
 
+<<<<<<< HEAD
 def studentDashboard(request):
     return render(request,'studentDashboard.html')
+=======
+@login_required
+def room_preferences(request):
+    if request.method == 'POST':
+        username = request.user.username
+        student = Preference.objects.filter(leader=username)
+        if student.exists():
+            response_data = {'success': False, 'message': "You have already submitted your preferences!"}
+            return JsonResponse(response_data)
+
+        student_query = None
+        for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+            student_query = model.objects.filter(application_id=username)
+            if student_query.exists():
+                student_query = student_query.first()
+                break
+
+        if not student_query:
+            response_data = {'success': False, 'message': "Student not found"}
+            return JsonResponse(response_data)
+
+        data = json.loads(request.body)
+        selected_rooms = data.get('selected_rooms', [])
+
+        if student_query.branch == 'MechanicalEngineering' or student_query.branch == 'ManufacturingEngineering':
+            rank = student_query.id % 1000
+        else:
+            rank = student_query.id % 100
+
+        # Search for the user across all room objects
+        for room in Room.objects.all():
+            if username in [room.student1, room.student2, room.student3, room.student4]:
+                # Create Preference object for the room
+                preference = Preference.objects.create(
+                    room=room,
+                    leader=username,
+                    leader_rank=rank,  # Assuming leader rank is submitted via POST
+                    engineering_branch=student_query.branch,  # Assuming engineering branch is submitted via POST
+                    preferences=selected_rooms
+                )
+                response_data = {'success': True, 'message': "Preferences saved successfully!",  'redirect_url': '/studentHome/'}
+                return JsonResponse(response_data)
+
+        # If the loop completes without finding a room, return an error message
+        response_data = {'success': False, 'message': "Failed to save preferences. Please try again later."}
+        return JsonResponse(response_data)
+
+    else:
+        username = request.user.username
+        student_query = None
+        for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+            student_query = model.objects.filter(application_id=username)
+            if student_query.exists():
+                student_query = student_query.first()
+                break
+
+        if not student_query:
+            return HttpResponse("Student not found")
+
+        if student_query.branch == 'MechanicalEngineering' or student_query.branch == 'ManufacturingEngineering':
+            rank = student_query.id % 1000
+        else:
+            rank = student_query.id % 100
+
+        # Search for the user across all room objects
+        user_in_room = False
+        user_room = None
+        for room in Room.objects.all():
+            if username in [room.student1, room.student2, room.student3, room.student4]:
+                user_in_room = True
+                user_room = room
+                break
+
+        if not user_in_room:
+            return HttpResponse("You are not part of any room.")
+
+        # Calculate rank of other roommates
+        other_roommates_rank = []
+        for student in [user_room.student1, user_room.student2, user_room.student3, user_room.student4]:
+            if student != username:
+                student_query = None
+                for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+                    student_query = model.objects.filter(application_id=student)
+                    if student_query.exists():
+                        student_query = student_query.first()
+                        break
+
+                if not student_query:
+                    continue
+
+                if student_query.branch == 'MechanicalEngineering' or student_query.branch == 'ManufacturingEngineering':
+                    roommate_rank = student_query.id % 1000
+                else:
+                    roommate_rank = student_query.id % 100
+                other_roommates_rank.append(roommate_rank)
+        
+        if not all(rank < roommate_rank for roommate_rank in other_roommates_rank):
+            return HttpResponse("Only the topper can select room preferences.")
+
+        return render(request, 'room_preferences.html', {'other_roommates_rank': other_roommates_rank})
+>>>>>>> f66ff3413eef4794fcc48f9e951eb3cb6b83bf2f
