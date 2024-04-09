@@ -259,11 +259,7 @@ def LoginPage(request):
                 messages.error(request, "All fields are required!")
                 return redirect('login')
         user = authenticate(request, username=username, password=password)
-        latest_selected_date = SelectedDates.objects.latest('id')
-        final_date = latest_selected_date.final_room_allotment
-        if final_date:
-            final_room_allotment_str = str(final_date)
-            final_date = timezone.make_aware(datetime.strptime(final_room_allotment_str, '%Y-%m-%d'))
+        
 
         if user is not None:
             if user.is_superuser:
@@ -274,6 +270,11 @@ def LoginPage(request):
                 login(request, user)
                 return redirect('adminHome')
             else:
+                latest_selected_date = SelectedDates.objects.latest('id')
+                final_date = latest_selected_date.final_room_allotment
+                if final_date:
+                    final_room_allotment_str = str(final_date)
+                    final_date = timezone.make_aware(datetime.strptime(final_room_allotment_str, '%Y-%m-%d'))
                 year_model = None
                 for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
                     student_query = model.objects.filter(application_id=username)

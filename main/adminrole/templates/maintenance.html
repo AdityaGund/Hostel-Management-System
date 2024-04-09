@@ -1,0 +1,110 @@
+{% extends "adminbase.html" %} {% block addcss %}
+<link rel="stylesheet" href="../static/css/maintenance.css">
+{% endblock %} {% block nav %}
+
+Maintenance Request Form
+========================
+
+{% endblock %} 
+
+{% block content %}
+
+<div class="container">
+    <div class="column">
+        <div class="requests-block">
+            <h2>Pending Requests</h2>
+            {% for request in pending_requests %}
+            <div class="request">
+                <div class="request-content">
+                    <div class="request-description">{{ request.user }}</div>
+                    <div class="request-description">{{ request.description }}</div>
+                    <img src="" alt="" class="request-image" data-image-path="{{ request.image }}">
+                </div>
+                <!-- <form method="post" action="{% url 'maintenance_request' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                    <input type="submit" name="submit_action" value="Mark Fulfilled" class="fulfill-btn">
+                </form> -->
+            </div>
+            {% empty %}
+            <p>No pending requests</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="column">
+        <div class="requests-block">
+            <h2>Fulfilled Requests</h2>
+            {% for request in fulfilled_requests %}
+            <div class="request">
+                <div class="request-content">
+                    <div class="request-description"> {{request.user}} : {{ request.description }}</div>
+                    <img src="" alt="" class="request-image" data-image-path="{{ request.image }}">
+                </div>
+            </div>
+            {% empty %}
+            <p>No fulfilled requests</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- New Request Form Modal -->
+<!-- <div id="new-request-modal" class="modal open">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form method="post" enctype="multipart/form-data" class="maintenance-form">
+            {% csrf_token %}
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description" rows="4" cols="50"></textarea><br>
+            <label for="image">Image:</label><br>
+            <input type="file" id="image" name="image" class="image-input"><br><br>
+            <input type="submit" name="submit_action" value="Submit" class="submit-btn">
+        </form>
+    </div>
+</div> -->
+{% endblock %}
+
+{% block addscript %}
+<script>
+    const images = document.querySelectorAll('.request-image');
+
+    // Loop through each image and set the relative path
+    images.forEach(image => {
+        const absolutePath = image.dataset.imagePath;
+        const imageName = absolutePath.split('/').pop();
+        const relativePath = '../static/images/maintenance_request/' + imageName;
+        image.src = relativePath;
+
+        // Add click event listener to each image for showing in popup
+        image.addEventListener('click', function() {
+            window.open(relativePath, 'Image Preview', 'width=600,height=400');
+        });
+    });
+
+    // Get the modal
+    // var modal = document.getElementById("new-request-modal");
+
+    // // Get the button that opens the modal
+    // var btn = document.getElementById("new-request-btn");
+
+    // // Get the <span> element that closes the modal
+    // var span = document.getElementsByClassName("close")[0];
+
+    // // When the user clicks on the button, open the modal
+    // btn.onclick = function() {
+    //     modal.style.display = "block";
+    // }
+
+    // // When the user clicks on <span> (x), close the modal
+    // span.onclick = function() {
+    //     modal.style.display = "none";
+    // }
+
+    // // When the user clicks anywhere outside of the modal, close it
+    // window.onclick = function(event) {
+    //     if (event.target == modal) {
+    //         modal.style.display = "none";
+    //     }
+    // }
+</script>
+{% endblock %}

@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'registration',
     'shortlisting',
-    'studentrole'
+    'studentrole',
+    'adminrole'
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'studentapplication',
         'USER': 'root',
-        'PASSWORD': '612203061',
+        'PASSWORD': '2005',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
