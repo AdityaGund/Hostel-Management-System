@@ -11,7 +11,37 @@
     <title>Super Admin Login</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/offcanvas/">
-    
+    <style>
+      .dateselection{
+        margin: 40px;
+      }
+    .remove-btn{
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+  }
+
+  #removebtn:hover {
+    color: #fff;
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+
+
+    </style>
 
     <!-- Bootstrap core CSS -->
     
@@ -34,7 +64,7 @@
       <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
+            <!-- <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a> -->
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link" href="#">Notifications</a>
@@ -77,9 +107,9 @@
 
     <main role="main" class="container">
       <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
-        <img class="mr-3" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-outline.svg" alt="" width="48" height="48">
+        <!-- <img class="mr-3" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-outline.svg" alt="" width="48" height="48"> -->
         <div class="lh-100">
-          <h6 class="mb-0 text-white lh-100">Bootstrap</h6>
+          <!-- <h6 class="mb-0 text-white lh-100">Bootstrap</h6> -->
         </div>
       </div>
 
@@ -168,8 +198,8 @@
           <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
             <div class="d-flex justify-content-between align-items-center w-100 ">
               <strong class="fs-3 text-gray-dark ">{{ user.email }}</strong>
-              <a href="#">Update Details</a>
-              
+              <!-- <a href="#">Update Details</a> -->
+              <button class="remove-btn" data-user-id="{{user.id}}">Remove</button>
               <!-- Modal -->
               <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -194,10 +224,248 @@
        
       </div>
     </main>
+    <!-- Add new sections for setting dates -->
+
+
+
+    <div id="selectedDatesTable"></div>
+
+    <div id="message"></div>
+
+    <div class="dateselection">    
+      <div class="my-3 p-3 bg-white rounded box-shadow" id="registration">
+          <h5 class="border-bottom border-gray pb-2 mb-0">Set Registration Dates</h5>
+          <form id="registrationDatesForm">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="registrationStartDate">Start Date:</label>
+                  <input type="date" class="form-control" id="registrationStartDate" name="registrationStartDate">
+              </div>
+              <div class="form-group">
+                  <label for="registrationEndDate">End Date:</label>
+                  <input type="date" class="form-control" id="registrationEndDate" name="registrationEndDate">
+              </div>
+          </form>
+      </div>
+      
+      <div class="my-3 p-3 bg-white rounded box-shadow" id="eligibleStudents">
+          <h5 class="border-bottom border-gray pb-2 mb-0">List Of Eligible Students Declaration</h5>
+          <form id="eligibleStudentsForm">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="pdfgenerationdate">Set Date:</label>
+                  <input type="date" class="form-control" id="pdfgenerationdate" name="pdfgenerationdate">
+              </div>
+          </form>
+      </div>
+      
+      <div class="my-3 p-3 bg-white rounded box-shadow" id="preferenceDatesForm">
+          <h5 class="border-bottom border-gray pb-2 mb-0">Set Preference Selection Dates</h5>
+          <form id="preferenceDatesForm">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="roommakingprocessStartDate">Start Date:</label>
+                  <input type="date" class="form-control" id="roommakingprocessStartDate" name="roommakingprocessStartDate">
+              </div>
+              <div class="form-group">
+                  <label for="roommakingprocessEndDate">End Date:</label>
+                  <input type="date" class="form-control" id="roommakingprocessEndDate" name="roommakingprocessEndDate">
+              </div>
+          </form>
+      </div>
+      
+      <div class="my-3 p-3 bg-white rounded box-shadow" id="finalResult">
+          <h5 class="border-bottom border-gray pb-2 mb-0">Set Final Result Declaration Date</h5>
+          <form id="finalResultForm">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="finalresultdeclaration">Set Date:</label>
+                  <input type="date" class="form-control" id="finalresultdeclaration" name="finalresultdeclaration">
+              </div>
+          </form>
+      </div>
+    <div class="my-3 p-3 bg-white rounded box-shadow" id="offlineVerificationForm">
+        <h5 class="border-bottom border-gray pb-2 mb-0">Set Offline Verification Dates</h5>
+        <form id="offlineVerificationForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="offlineverificationStartDate">Start Date:</label>
+                <input type="date" class="form-control" id="offlineverificationStartDate" name="offlineverificationStartDate">
+            </div>
+            <div class="form-group">
+                <label for="offlineverificationEndDate">End Date:</label>
+                <input type="date" class="form-control" id="offlineverificationEndDate" name="offlineverificationEndDate">
+            </div>
+        </form>
+    </div>
+
+
+      <!-- Single Save Button -->
+      <div class="text-center">
+          <button id="saveButton" class="btn btn-primary">Save All Dates</button>
+      </div>
+  </div>
+  
+  
+
+<!-- Add similar sections for result declaration dates and choice filling dates -->
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    var submitDatesUrl = "{% url 'submitDates' %}";
+function getSelectedDates() {
+    $.ajax({
+        url: submitDatesUrl, // Replace with your Django URL name
+        type: 'GET',
+        success: function(response) {
+            displaySelectedDates(response);
+        },
+        error: function(error) {
+            console.error('Error:', error);
+        }
+    });
+}
+
+
+
+$(document).ready(function () {
+//remove admin feature
+$('.remove-btn').click(function() {
+    var userId = $(this).data('user-id');
+    var confirmRemove = confirm('Are you sure you want to remove this admin user?');
+
+    if (confirmRemove) {
+      // Send AJAX request to remove the admin user
+      $.ajax({
+        url: '{% url "remove_admin" %}', // Replace with your Django URL name
+        type: 'POST',
+        data: {
+          user_id: userId,
+          csrfmiddlewaretoken: '{{ csrf_token }}' // Include CSRF token from Django template
+        },
+        success: function(response) {
+          alert('Admin user removed successfully');
+          // Optionally, you can reload the page or update the admin user list
+          location.reload();
+        },
+        error: function(error) {
+          console.error('Error:', error);
+        }
+      });
+    }
+  });
+});
+
+
+
+
+    // Check if selected dates are already stored in localStorage
+getSelectedDates();
+
+    const storedDates = localStorage.getItem('selectedDates');
+    if (storedDates) {
+        // If stored dates exist, display them in the table
+        displaySelectedDates(JSON.parse(storedDates));
+    } else {
+        // If no dates are stored, display an empty table
+        displaySelectedDates({});
+    }
+
+    // Save button click event
+    $('#saveButton').click(function () {
+        // Validate if all date inputs are filled
+        var allDatesFilled = true;
+        $('input[type="date"]').each(function () {
+            if ($(this).val() === '') {
+                allDatesFilled = false;
+                return false; // Break the loop if any date input is empty
+            }
+        });
+        
+        // If any date input is empty, show an alert and return
+        if (!allDatesFilled) {
+            alert('Please fill in all date fields');
+            return;
+        }
+        
+        // Prepare data to send with AJAX request
+        const formData = {
+            csrfmiddlewaretoken: '{{ csrf_token }}', // Include CSRF token from Django template
+        };
+        $('input[type="date"]').each(function () {
+            formData[$(this).attr('name')] = $(this).val();
+        });
+
+        var submitDatesUrl = "{% url 'submitDates' %}";
+        // AJAX request to submit forms
+        $.ajax({
+            url: submitDatesUrl, // Use Django template tag directly here
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                alert('Dates Set Successfully');
+                displaySelectedDates(response); // Display selected dates
+                // Store selected dates in localStorage
+                localStorage.setItem('selectedDates', JSON.stringify(response));
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+
+    // Clear local storage when the page loads for the first time or database is cleared
+    if (!$.isEmptyObject(storedDates)) {
+        localStorage.removeItem('selectedDates');
+    }
+
+
+function displaySelectedDates(data) {
+    // Clear previous content and message
+    $('#selectedDatesTable').html('');
+    $('#message').html('');
+
+    // Check if data is empty or contains only the 'message' key
+    if ($.isEmptyObject(data) || (Object.keys(data).length === 1 && 'message' in data)) {
+        displayMessage('No dates selected');
+        return;
+    }
+
+    // Create table
+    const table = $('<table>').addClass('table table-striped table-bordered text-center');
+    // Table headers
+    const headerRow = $('<tr>').addClass('bg-primary text-white');
+    headerRow.append($('<th>').text('Procedure'));
+    headerRow.append($('<th>').text('Selected Duration'));
+    table.append(headerRow);
+    // Add rows for each form
+    $.each(data, function (procedure, duration) {
+        if (duration === '') {
+            // If duration is empty, skip this row
+            return true; // Equivalent to 'continue' in a regular loop
+        }
+        const row = $('<tr>');
+        row.append($('<td>').text(procedure));
+        row.append($('<td>').text(duration));
+        table.append(row);
+    });
+    // Append table to selectedDatesTable
+    $('#selectedDatesTable').append(table);
+}
+
+function displayMessage(message) {
+    $('#message').html('<p style="text-align: center; font-weight: bold;">' + message + '</p>');
+}
+    </script>
+    
+      
+      
+      
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
@@ -207,6 +475,6 @@
     <script src="offcanvas.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    
   </body>
 </html>

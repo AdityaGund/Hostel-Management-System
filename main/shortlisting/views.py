@@ -28,6 +28,10 @@ def studentHome(request):
     return render(request, 'studentHome.html')
 
 def generate_pdf(request):
+
+    select_students(request)
+
+
     current_user = request.user
     if not current_user.is_authenticated:
         return HttpResponse("User not authenticated")
@@ -319,7 +323,7 @@ def roommate_requests(request):
 
 
 # for passing the student list into the html file 
-
+@login_required
 def student_list(request):
     current_user = request.user
     if not current_user.is_authenticated:
@@ -358,3 +362,6 @@ def student_list(request):
     }
 
     return render(request, 'send_roommate_request.html', context)
+
+def studentDashboard(request):
+    return render(request,'studentDashboard.html')

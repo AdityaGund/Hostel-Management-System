@@ -12,4 +12,7 @@ urlpatterns = [
     path('accommodation/', views.Accommodation, name='accommodation'),
     path('accommodation/accommodation_reg/', views.Accommodation_reg, name='accommodation_reg'),
     path('',views.LandingPage,name="landing"),
+    path('submitDates/', views.admin_selected_dates, name='submitDates'),
+    path('remove_admin/', views.remove_admin, name='remove_admin'),
+
 ]

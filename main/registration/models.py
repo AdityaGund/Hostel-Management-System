@@ -52,3 +52,9 @@ class CheckInOut(models.Model):
     check_out_time = models.DateTimeField('timezone.now')
 
     
+class SelectedDates(models.Model):
+    registration_period = models.CharField(max_length=100)
+    selected_students_list = models.DateField()
+    preference_selection_date = models.CharField(max_length=100)
+    final_room_allotment = models.DateField()
+    verification_period = models.CharField(null=True, max_length=100)
