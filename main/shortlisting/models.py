@@ -9,7 +9,7 @@ class RoommateRequest(models.Model):
 
     def __str__(self):
         return f"Request from {self.sender_application_id} to {self.receiver_application_id}"
-    
+
 class Room(models.Model):
     id = models.AutoField(primary_key=True)
     year = models.CharField(max_length=10, null=True)
@@ -17,3 +17,16 @@ class Room(models.Model):
     student2 = models.CharField(max_length=10, null=True)
     student3 = models.CharField(max_length=10, null=True)
     student4 = models.CharField(max_length=10, null=True)
+
+class Preference(models.Model):
+    room = models.OneToOneField(Room, on_delete=models.CASCADE, primary_key=True)
+    leader = models.CharField(max_length=10)
+    leader_rank = models.IntegerField()
+    engineering_branch = models.CharField(max_length=100)
+    preferences = models.JSONField()
+
+    def save(self, *args, **kwargs):
+        if not self.preferences:
+            # Initialize 40 empty preferences
+            self.preferences = [None] * 40
+        super().save(*args, **kwargs)
