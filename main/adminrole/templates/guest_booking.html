@@ -1,0 +1,70 @@
+{% extends "adminbase.html" %}
+
+{% block addcss %}
+<link rel="stylesheet" href="../static/guest_booking.css">
+{% endblock %}
+
+{% block content %}
+<h1>Booking Requests</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Room ID</th>
+            <th>Check-in Date</th>
+            <th>Check-out Date</th>
+            <th>Guest Name</th>
+            <th>Guest Email</th>
+            <th>ID Proof</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in booking_requests %}
+        <tr>
+            <td>{{ booking.room_id }}</td>
+            <td>{{ booking.check_in_date }}</td>
+            <td>{{ booking.check_out_date }}</td>
+            <td>{{ booking.guest_name }}</td>
+            <td>{{ booking.guest_email }}</td>
+            <td>
+                {% if booking.id_proof %}
+                    <embed src="" class="id_proof" data-file-path="{{ booking.id_proof }}" type="application/pdf" width="50%" height="200">
+                {% else %}
+                    No ID Provided
+                {% endif %}
+            </td>
+            <td>
+                <form action="{% url 'guest_booking' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="approve">
+                    <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                    <button type="submit">Approve</button>
+                </form>
+                <form action="{% url 'guest_booking' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="reject">
+                    <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                    <button type="submit">Reject</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{% block addscript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const files = document.querySelectorAll('.id_proof');
+
+        // Loop through each embed element and set the src attribute
+        files.forEach(file => {
+            const absolutePath = file.dataset.filePath;
+            const fileName = absolutePath.split('/').pop(); // Get the file name
+            file.src = fileName; // Set the src attribute to the file name
+        });
+    });
+</script>
+</script>
+{% endblock %}

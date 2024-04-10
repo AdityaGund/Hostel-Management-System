@@ -5,4 +5,4 @@ class MaintenanceRequest(models.Model):
     description = models.TextField()
     fulfilled = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='studentrole/static/images/maintenance_request', blank=True, null=True)
+    image = models.ImageField(upload_to='', blank=True, null=True)

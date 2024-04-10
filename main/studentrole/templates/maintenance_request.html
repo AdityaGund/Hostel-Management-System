@@ -75,7 +75,7 @@ Maintenance Request Form
     images.forEach(image => {
         const absolutePath = image.dataset.imagePath;
         const imageName = absolutePath.split('/').pop();
-        const relativePath = '../static/images/maintenance_request/' + imageName;
+        const relativePath = '/media/'+imageName;
         image.src = relativePath;
 
         // Add click event listener to each image for showing in popup
