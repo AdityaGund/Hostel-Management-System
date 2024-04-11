@@ -1,11 +1,15 @@
 {% extends "adminbase.html" %}
-
+{% block title %}
+<title>Guest Booking</title>
+{% endblock %}
 {% block addcss %}
 <link rel="stylesheet" href="../static/guest_booking.css">
 {% endblock %}
 
-{% block content %}
+{% block header%}
 <h1>Booking Requests</h1>
+{% endblock %}
+{% block content %}
 
 <table>
     <thead>

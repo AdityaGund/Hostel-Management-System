@@ -13,30 +13,15 @@
     align-items: center;
     width: 24%;
     height: 15vmin;
-    background-color: white;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgb(0, 0, 0, 0.5);
     text-align: center;
     font-weight: bold;
-}
-#revenue{
     color: #fff;
-    background: linear-gradient(to right, #4CAF50, #2196F3);
-    background: linear-gradient(to right, #24cfe8, #71d7af);
-    background: linear-gradient(to right, #f7f8f3, #304ffe);
-    background: linear-gradient(to right, #d7e2f0, #fbc7d4);
     background: linear-gradient(to right, #34679d, #4ca1af);
-    /* background: linear-gradient(to right, #ff9800, #f44336); 
-    background: linear-gradient(to right, #ffd700, #daa520);
-    background: linear-gradient(to right, #b76e28, #cd7f32);
-    background: linear-gradient(to right, #2ECC71, #000000);
-    background: linear-gradient(to right, #2980b9, #ffd700);
-    background: linear-gradient(to right, #ff9933, #ffcc99, #c2c2f0, #4169e1, #50c7c7, #ffc0cb); */
-
 }
 .down-container{
     display: flex;
-    /* background-color: aqua; */
     height: 70vmin;
     gap: 3%;
 }

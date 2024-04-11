@@ -1,10 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'adminbase.html' %}
+{% block title %}
+<title>Admin </title>    
+{% endblock %}
 {%block addcss%}
 <link rel="stylesheet" href="../static/css/adminhome.css">
 {% endblock %}
 {%block content%}
 <div class="up-container">
-    <div class="note" id="1">CheckOut</div>
+    <div class="note" id="Check-outs">Check-outs : {{checkouts}}</div>
     <div class="note" id="2">Guest Ro</div>
     <div class="note" id="revenue">Current Month Revenue: <br> &#8377;{{ current_month }}</div>
 </div>

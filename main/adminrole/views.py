@@ -113,6 +113,7 @@ def checkinout(request):
 
 def admin_home(request):
     bookings = Booking.objects.all()
+    null_checkin_count = CheckInOut.objects.filter(check_in_time__isnull=True).count()
     dates_list = []
     current_year = datetime.now().year
     current_month = datetime.now().month
@@ -127,9 +128,10 @@ def admin_home(request):
     context = {
             'available_rooms':total_rooms,
             'not_available':0,
-            'current_month': monthly_data[1][current_month-1],
+            'current_month': (monthly_data[1][current_month-1])*1000,
             'monthly_occupancy': monthly_data[0],
-            'monthly_revenue': monthly_data[1]
+            'monthly_revenue': monthly_data[1],
+            'checkouts': null_checkin_count
     }
 
     if request.method == 'POST':
@@ -149,7 +151,8 @@ def admin_home(request):
             'not_available':total_rooms - available_rooms,
             'current_month': monthly_data[1][current_month-1]*1000,
             'monthly_occupancy': monthly_data[0],
-            'monthly_revenue': monthly_data[1]
+            'monthly_revenue': monthly_data[1],
+            'checkouts': null_checkin_count
         }
 
     return render(request, 'adminhome.html', context)

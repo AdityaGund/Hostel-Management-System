@@ -5,7 +5,7 @@
     <title>Admin Home</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <link rel="stylesheet" href="../static/css/adminbase.css">
     {%block addcss%}
     {% endblock %}
 </head>
@@ -16,12 +16,25 @@
             <div class="options">
                 <div class="option" id="option1">
                     <div class="icon"><i class="material-icons">computer</i></div>
-                    <div class="text"><a href="{% url 'send_roommate_request' %}">Reports</a></div>
+                    <div class="text"><a href="{% url 'admin_home' %}">Reports</a></div>
+                </div>
+                <div class="option" id="option2">
+                    <div class="icon"><i class="material-icons">forum</i></div>
+                    <div class="text"><a href="{% url 'guest_booking' %}">Guest Booking</a></div>
+                </div>
+                <div class="option" id="option3">
+                    <div class="icon"><i class="material-icons">engineering</i></div>
+                    <div class="text"><a href="{% url 'maintenance' %}">Maintenance</a></div>
+                </div>
+                <div class="option" id="option4">
+                    <div class="icon"><i class="material-icons">schedule</i></div>
+                    <div class="text"><a href="{% url 'checkinout' %}">Check In /Out</a></div>
                 </div>
             </div>
         </div>
         <div class="body">
             <div class="content">
+                <div class="header">{% block header%}{% endblock %}</div>
                 {% block content %}
                 {% endblock %}
             </div>
