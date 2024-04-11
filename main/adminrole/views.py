@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from guest.models import *
 from studentrole.models import *
+from registration.models import *
+from .models import *
+from .forms import *
 from django.core.mail import send_mail
+from django.utils import timezone
 
 def maintenance(request):
     # Retrieve all maintenance requests from the database
@@ -48,3 +52,44 @@ def guest_booking(request):
 
     booking_requests = Booking.objects.filter(approved=False)
     return render(request, 'guest_booking.html', {'booking_requests': booking_requests})
+
+def checkinout(request):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'checkout':
+            print('done')
+            form = CheckOutForm(request.POST)
+            if form.is_valid():
+                mis = form.cleaned_data['mis']
+                year = form.cleaned_data['year']
+                year_model = None
+                if year == 'FirstYear':
+                    year_model = FirstYear
+                elif year == 'SecondYear':
+                    year_model = SecondYear
+                elif year == 'ThirdYear':
+                    year_model = ThirdYear
+                else:
+                    year_model = FinalYear
+                print('done')
+                student = year_model.objects.filter(application_id=mis, selected=True)
+                if student.exists():
+                    print('done')
+                    checkout = form.save(commit=False)
+                    checkout.check_out_time = timezone.localtime(timezone.now())
+                    checkout.save()
+        elif action == 'checkin':
+            form = CheckInForm(request.POST)
+            print('done')
+            if form.is_valid():
+                mis = form.cleaned_data['mis']
+                student = get_object_or_404(CheckInOut, mis=mis, check_in_time=None)
+                print(student)
+                student.check_in_time = timezone.localtime(timezone.now())
+                student.save()
+        return redirect('checkinout')
+    
+    entries = CheckInOut.objects.all()
+    checkinform = CheckInForm()
+    checkoutform = CheckOutForm()
+    return render(request, 'checkinout.html', {'checkinform': checkinform, 'checkoutform':checkoutform, 'entries':entries})

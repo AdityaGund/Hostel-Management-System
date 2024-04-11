@@ -40,17 +40,6 @@ class FinalYear(models.Model):
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
     branch = models.CharField(max_length=100)
-
-# class HostelStudents(models.Model):
-    
-class CheckInOut(models.Model):
-    student_name = models.CharField(max_length=100)
-    mis= models.IntegerField ()
-    year = models.CharField(max_length=100)
-    reason = models.CharField(max_length=100)
-    check_in_time = models.DateTimeField('timezone.now')
-    check_out_time = models.DateTimeField('timezone.now')
-
     
 class SelectedDates(models.Model):
     registration_period = models.CharField(max_length=100)

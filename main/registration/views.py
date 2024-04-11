@@ -8,7 +8,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth.models import Group
-from registration.models import CheckInOut
+# from registration.models import CheckInOut
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -70,43 +70,43 @@ def HomePage(request):
 
 def AdminHome(request):
     
-    checkInusrs = CheckInOut.objects.all()
-    context={"checkInusrs":checkInusrs}
+#     checkInusrs = CheckInOut.objects.all()
+#     context={"checkInusrs":checkInusrs}
     
-        # if "increase_count" in request.POST:
-    print("fdfd",request.POST)
+#         # if "increase_count" in request.POST:
+#     print("fdfd",request.POST)
         
-    if request.method == 'POST':
+#     if request.method == 'POST':
         
-        if "check_out_submit" in request.POST:  
-            name = request.POST['name']
-            mis = request.POST['mis']
-            year = request.POST['year']
-            reason = request.POST['reason']
-            check_out_time = request.POST['check_out_time']
-            obj=CheckInOut(student_name=name,mis=mis,year=year,reason=reason,check_out_time=check_out_time,check_in_time=check_out_time)
-            obj.save()
-            return redirect('adminHome')   
+#         if "check_out_submit" in request.POST:  
+#             name = request.POST['name']
+#             mis = request.POST['mis']
+#             year = request.POST['year']
+#             reason = request.POST['reason']
+#             check_out_time = request.POST['check_out_time']
+#             obj=CheckInOut(student_name=name,mis=mis,year=year,reason=reason,check_out_time=check_out_time,check_in_time=check_out_time)
+#             obj.save()
+#             return redirect('adminHome')   
         
         
-        # if not checkInusrs:
-        #     message = f"No entry found for MIS {mis}"
-        #     return render(request, 'my_template.html', {'message': message})
-        # context = {'checkInusrs': checkInusrs}
-        # return render(request, 'my_template.html', context)
+#         # if not checkInusrs:
+#         #     message = f"No entry found for MIS {mis}"
+#         #     return render(request, 'my_template.html', {'message': message})
+#         # context = {'checkInusrs': checkInusrs}
+#         # return render(request, 'my_template.html', context)
         
-        if "check_in_submit" in request.POST:
-            mis=request.POST['mis']
-            checkInusrs = CheckInOut.objects.filter(mis=mis).last()
-            if not checkInusrs:
-                message = f"No entry found for MIS {mis}"
-                return render(request,"checkin.html",{'message': message})
-            else:
-                message = f"Checkout successful found for MIS {mis}"
-                checkInusrs.check_out_time=timezone.now()
-                checkInusrs.save()
-                # context={"name":checkInusrs.student_name,"check_out_time":checkInusrs.check_out_time,"check_in_time":checkInusrs.check_in_time,"mis":checkInusrs.mis}
-                return render(request,"checkin.html",{'message': message})
+#         if "check_in_submit" in request.POST:
+#             mis=request.POST['mis']
+#             checkInusrs = CheckInOut.objects.filter(mis=mis).last()
+#             if not checkInusrs:
+#                 message = f"No entry found for MIS {mis}"
+#                 return render(request,"checkin.html",{'message': message})
+#             else:
+#                 message = f"Checkout successful found for MIS {mis}"
+#                 checkInusrs.check_out_time=timezone.now()
+#                 checkInusrs.save()
+#                 # context={"name":checkInusrs.student_name,"check_out_time":checkInusrs.check_out_time,"check_in_time":checkInusrs.check_in_time,"mis":checkInusrs.mis}
+#                 return render(request,"checkin.html",{'message': message})
             
     return render(request, 'adminHome.html',context)
 
