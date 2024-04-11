@@ -24,69 +24,99 @@ from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
 import json
+from .models import Preference
+import random
+from django.core.exceptions import ObjectDoesNotExist
+from .models import Room
+from registration.models import FirstYear, SecondYear, ThirdYear, FinalYear
+
+
 
 def studentHome(request):
     return render(request, 'studentHome.html')
 
 def generate_pdf(request):
-
-    select_students(request)
-
-
     current_user = request.user
     if not current_user.is_authenticated:
         return HttpResponse("User not authenticated")
 
-    # Get the application_id (username)
     username = current_user.username
 
-    year_model = None
-    for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
-        student_query = model.objects.filter(application_id=username)
-        if student_query.exists():
-            year_model = model
-            student_found = True
-            break
-    if not student_found:
-        return HttpResponse("Student not found")
-    
-    # Query selected students
-    civil_selected = year_model.objects.filter(branch="CivilEngineering", selected=True)
-    electrical_selected = year_model.objects.filter(branch="ElectricalEngineering", selected=True)
-    computer_selected = year_model.objects.filter(branch="ComputerEngineering", selected=True)
-    instrumentation_selected = year_model.objects.filter(branch="InstrumentationEngineering", selected=True)
-    manufacturing_selected = year_model.objects.filter(branch="ManufacturingEngineering", selected=True)
-    mechanical_selected = year_model.objects.filter(branch="MechanicalEngineering", selected=True)
+    all_years = [FirstYear, SecondYear, ThirdYear, FinalYear]
 
-    print(civil_selected)
-
-    # Generate PDF report
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="selected_students_report.pdf"'
-
     doc = SimpleDocTemplate(response, pagesize=letter)
     elements = []
 
+    styles = getSampleStyleSheet()
+
     def add_table_to_doc(heading, queryset):
-        # Define styles
-        styles = getSampleStyleSheet()
-        heading_style = styles['Heading1']
-        table_style = styles['Normal']
+        elements.append(Paragraph(heading, styles['Heading1']))
+        elements.append(Spacer(1, 12)) 
 
-        # Add heading
-        elements.append(Paragraph(heading, heading_style))
-        elements.append(Spacer(1, 12))  # Add space below heading
-
-        # Add table
         data = [['Name', 'Rank', 'Application ID', 'Email']]
         for student in queryset:
             row = [student.name, str(student.rank), student.application_id, student.email]
             data.append(row)
 
+        table_data = []
+        for row in data:
+            row_data = [Paragraph(cell, styles['Normal']) for cell in row]
+            table_data.append(row_data)
+
+        table_style = TableStyle([('GRID', (0, 0), (-1, -1), 1, colors.black)])
+        table = Table(table_data)
+        table.setStyle(table_style)
+
+        elements.append(table)
+        elements.append(Spacer(1, 12))  
+
+    branches = ["CivilEngineering", "ElectricalEngineering", "ComputerEngineering", "InstrumentationEngineering", "ManufacturingEngineering", "MechanicalEngineering"]
+    for year_model in all_years:
+        for branch in branches:
+            queryset_branch_all = year_model.objects.filter(selected=True, branch=branch)
+            print(f"Number of students for {year_model.__name__} - {branch}: {len(queryset_branch_all)}")  
+
+            add_table_to_doc(f"{year_model.__name__} - {branch} Selected Students", queryset_branch_all)
+
+    doc.build(elements)
+    return response
+
+
+def generate_pdf2(reqeust):
+    # roomAllocation(reqeust)
+    styles = getSampleStyleSheet()
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="room_allotment_report.pdf"'
+
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    elements = []
+
+    # Get all years
+    years = ['FirstYear', 'SecondYear', 'ThirdYear', 'FinalYear']
+
+    # Iterate over each year
+    for year in years:
+        # Query room allotment data for the current year
+        rooms = Room.objects.filter(year=year)
+
+        # Add heading for the current year
+        heading = f"{year} Room Allotment"
+        elements.append(Paragraph(heading, styles['Heading1']))
+        elements.append(Spacer(1, 12))  # Add space below heading
+
+        # Add table for room allotment
+        data = [['Room Number', 'Student 1', 'Student 2', 'Student 3', 'Student 4']]
+        for room in rooms:
+            room_data = [room.alloted_room, room.student1, room.student2, room.student3, room.student4]
+            data.append(room_data)
+
         # Generate table as a list of Paragraph objects
         table_data = []
         for row in data:
-            row_data = [Paragraph(cell, table_style) for cell in row]
+            row_data = [Paragraph(str(cell), styles['Normal']) for cell in row]
             table_data.append(row_data)
 
         # Add borders to table
@@ -98,70 +128,50 @@ def generate_pdf(request):
         elements.append(table)
         elements.append(Spacer(1, 12))  # Add space after table
 
-
-    # Add tables for each branch
-    add_table_to_doc("Civil Engineering", civil_selected)
-    add_table_to_doc("Electrical Engineering", electrical_selected)
-    add_table_to_doc("Computer Engineering", computer_selected)
-    add_table_to_doc("Instrumentation Engineering", instrumentation_selected)
-    add_table_to_doc("Manufacturing Engineering", manufacturing_selected)
-    add_table_to_doc("Mechanical Engineering", mechanical_selected)
-
+    # Build the PDF document
     doc.build(elements)
+
     return response
 
+
+
+
 def select_students(request):
-    current_user = request.user
-    if not current_user.is_authenticated:
-        return HttpResponse("User not authenticated")
+    for year_model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+        selected_students = []
 
-    # Get the application_id (username)
-    username = current_user.username
+        mech_students = year_model.objects.filter(branch="MechanicalEngineering", verified=True).order_by('rank')[:20]
+        selected_students.extend(mech_students)
 
-    year_model = None
-    for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
-        student_query = model.objects.filter(application_id=username)
-        if student_query.exists():
-            year_model = model
-            student_found = True
-            break
-    if not student_found:
-        return HttpResponse("Student not found")
-    
-    selected_students = []
+        comp_students = year_model.objects.filter(branch="ComputerEngineering", verified=True).order_by('rank')[:20]
+        selected_students.extend(comp_students)
 
-    mech_students = year_model.objects.filter(branch="MechanicalEngineering", verified=True).order_by('rank')[:20]
-    selected_students.extend(mech_students)
+        other_students = []
+        branches = ["CivilEngineering", "ElectricalEngineering", "InstrumentationEngineering", "ManufacturingEngineering"]
 
-    comp_students = year_model.objects.filter(branch="ComputerEngineering", verified=True).order_by('rank')[:20]
-    selected_students.extend(comp_students)
+        for branch in branches:
+            branch_students = year_model.objects.filter(branch=branch, verified=True).order_by('rank')[:10]
+            other_students.extend(branch_students)
 
-    other_students = []
-    branches = ["CivilEngineering", "ElectricalEngineering", "InstrumentationEngineering", "ManufacturingEngineering"]
+        selected_students.extend(other_students)
 
-    for branch in branches:
-        branch_students = year_model.objects.filter(branch=branch, verified=True).order_by('rank')[:10]
-        other_students.extend(branch_students)
+        remaining_seats = 80 - len(selected_students)
 
-    selected_students.extend(other_students)
-
-    remaining_seats = 80 - len(selected_students)
-
-    if remaining_seats > 0:
-        top_verified_students = (year_model.objects.filter(branch="CivilEngineering", verified=True) +
-                                 year_model.objects.filter(branch="ElectricalEngineering", verified=True) +
-                                 year_model.objects.filter(branch="InstrumentationEngineering", verified=True) +
-                                 year_model.objects.filter(branch="ManufacturingEngineering", verified=True) +
-                                 year_model.objects.filter(branch="ComputerEngineering", verified=True) +
-                                 year_model.objects.filter(branch="MechanicalEngineering", verified=True)).order_by('rank')[:remaining_seats]
-
-        selected_students.extend(top_verified_students)
-    
-    for student in selected_students:
-            student.selected = True
-            student.save()
+        if remaining_seats > 0:
+            top_verified_students = (year_model.objects.filter(branch="CivilEngineering", verified=True) |
+                            year_model.objects.filter(branch="ElectricalEngineering", verified=True) |
+                            year_model.objects.filter(branch="InstrumentationEngineering", verified=True) |
+                            year_model.objects.filter(branch="ManufacturingEngineering", verified=True) |
+                            year_model.objects.filter(branch="ComputerEngineering", verified=True) |
+                            year_model.objects.filter(branch="MechanicalEngineering", verified=True)).order_by('rank')[:remaining_seats]
 
 
+            selected_students.extend(top_verified_students)
+        
+        for student in selected_students:
+                student.selected = True
+                student.save()
+    return redirect('generate_pdf')
 
 @login_required
 def send_roommate_request(request):
@@ -473,3 +483,113 @@ def room_preferences(request):
 
 def studentDashboard(request):
     return render(request,'studentDashboard.html')
+
+
+
+def allot_rooms(request):
+    # Firstly Will Start Room Allocation Process From Random Branch.
+    
+    branches=['ComputerEngineering','CivilEngineering','ElectricalEngineering','InstrumentationEngineering','ManufacturingEngineering','MechanicalEngineering']
+
+    years=['FirstYear','SecondYear','ThirdYear','FinalYear']
+
+    # current_year=years[1]
+  
+    for current_year in years:
+        branch_counter=random.randint(0,5)
+        
+        allAlloted=False
+
+        toppers_lists = {
+            'ComputerEngineering': list(Preference.objects.filter(room__year=current_year, engineering_branch='ComputerEngineering').order_by('leader_rank').values_list('leader', flat=True)),
+            'CivilEngineering': list(Preference.objects.filter(room__year=current_year, engineering_branch='CivilEngineering').order_by('leader_rank').values_list('leader', flat=True)),
+            'ElectricalEngineering': list(Preference.objects.filter(room__year=current_year, engineering_branch='ElectricalEngineering').order_by('leader_rank').values_list('leader', flat=True)),
+            'InstrumentationEngineering': list(Preference.objects.filter(room__year=current_year, engineering_branch='InstrumentationEngineering').order_by('leader_rank').values_list('leader', flat=True)),
+            'ManufacturingEngineering': list(Preference.objects.filter(room__year=current_year, engineering_branch='ManufacturingEngineering').order_by('leader_rank').values_list('leader', flat=True)),
+            'MechanicalEngineering': list(Preference.objects.filter(room__year=current_year, engineering_branch='MechanicalEngineering').order_by('leader_rank').values_list('leader', flat=True)),
+        }
+
+
+        allRooms=['101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','120','201','202','203','204','205','206','207','208','209','210','211','212','213','214','215','216','217','218','219','220']
+
+        pendingList=[]
+
+        while(not allAlloted):
+            current_branch=branches[branch_counter]
+            branch_counter+=1
+            if(branch_counter>5):
+                branch_counter=branch_counter%5-1
+            print("START")
+            print(current_branch)
+            current_list=toppers_lists[current_branch]
+            print(current_list)
+
+            if current_list:
+                current_student = current_list[0]
+                print(current_student)
+                try:
+                    current_student_preferences = Preference.objects.get(leader=current_student)
+                    current_student_responses = current_student_preferences.preferences
+                    print(current_student_preferences)
+                    print((current_student_responses))
+                    roomAllotedForCurrnetStudent = False
+                    if current_student_responses: 
+                        for i in range(len(current_student_responses)):
+                            current_preference = current_student_responses[i]
+                            print(current_preference)
+                            if current_preference in allRooms:
+                                allotedRoom = current_preference
+                                current_student_preferences.alloted_room = allotedRoom
+                                current_student_preferences.save() 
+
+                                room=Room.objects.get(id=current_student_preferences.room.id)
+                                room.alloted_room=allotedRoom
+                                room.save()
+
+                                allRooms.remove(current_preference)
+                                current_list.remove(current_student)
+                                roomAllotedForCurrnetStudent = True
+                                break
+                    if not roomAllotedForCurrnetStudent:
+                        print("No preferences found for the current student")
+                        pendingList.append(current_student)
+                        current_list.remove(current_student)
+
+                except ObjectDoesNotExist:
+                    print(f"Preference object does not exist for leader {current_student}")
+                    current_list.remove(current_student)
+
+            else:
+                print("No students found for the current branch")
+
+            print(len(current_list))
+            print(allRooms)
+
+            toppers_lists[current_branch]=current_list
+            
+            
+            
+            allAlloted = all(len(current_list) == 0 for current_list in toppers_lists.values())
+
+        for i in range(len(pendingList)):
+            student = pendingList[i] 
+            if i < len(allRooms):  
+                allotedRoom = allRooms[i] 
+                try:
+                    current_student_object = Preference.objects.get(leader=student)
+                    current_student_object.alloted_room = allotedRoom
+                    current_student_object.save()
+
+                    room=Room.objects.get(id=current_student_object.room.id)
+                    room.alloted_room=allotedRoom
+                    room.save()
+
+
+                    allRooms.remove(allotedRoom)  
+                except Preference.DoesNotExist:
+                    print(f"Preference object does not exist for leader {student}")
+            else:
+                print("No more available rooms for pending students")
+                break 
+        print("END")
+    return redirect('generate_pdf2')
