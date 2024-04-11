@@ -13,14 +13,36 @@
   <div class="navbar">
     <div class="navbar-title">Hostel</div>
     <div class="navbar-buttons">
-      <button class="navbar-button"><a href="{% url 'logout' %}" class="anchor">Logout</a></button>
+      
+
+
+<!-- Timeline Logic  For Maintaining the Admin Selected Dates In Procedure  -->
+  
+
+
+    {%load tz%}
+    {%now "Y-m-d" as today %}
+
+
+    {% if reg_start_date <= today and reg_end_date >= today %}
+        <button class="navbar-button"><a href="{% url 'signup' %}" class="anchor">Apply</a></button> 
+    {% else %}
+        <button class="navbar-button">Registration Closed</button> 
+    {% endif %}
+
+
+    <button class="navbar-button"><a href="{% url 'login' %}" class="anchor">Login</a></button>
+
+
+ <!-- Avove is  Admin selected dates logic -->
+
     </div>
   </div>
   <div class="container">
     <div class="content">
       <h2>Welcome to Our Hostel Allotment Process</h2>
       <p>
-        At our institution, we've streamlined the journey to your new home, ensuring a smooth and efficient experience for all students. Begin by registering on our user-friendly website from [Registration Date Range]. Following this, check the website on [Eligibility Announcement Date] to see if you've made the cut – the list of eligible students will be proudly displayed. Once eligible, personalize your stay by filling out roommate and room number preferences from [Preferences Date Range]. The moment of truth arrives on [Hostel Allotment Date] when the final allotment list is unveiled, revealing where you'll be residing for the upcoming academic term. Congratulations to those allotted! Complete the process by attending Offline Document Verification from [Verification Date Range], ensuring a hassle-free and secure transition to your new hostel life. We look forward to welcoming you to your home away from home!
+        At our institution, we've streamlined the journey to your new home, ensuring a smooth and efficient experience for all students. Begin by registering on our user-friendly website from {{reg_start_date}} to {{reg_end_date}}. Following this, check the website on {{deadline}} to see if you've made the cut – the list of eligible students will be proudly displayed. Once eligible, personalize your stay by filling out roommate and room number preferences from {{pref_start_date}} to {{pref_end_date}}. The moment of truth arrives on {{final_allotment}} when the final allotment list is unveiled, revealing where you'll be residing for the upcoming academic term. Congratulations to those allotted! Complete the process by attending Offline Document Verification from {{verf_start_date}} to {{verf_end_date}}, ensuring a hassle-free and secure transition to your new hostel life. We look forward to welcoming you to your home away from home!
       </p>
     </div>
     <div class="image">
@@ -29,44 +51,63 @@
   </div>
   <ul>
       <li style="--accent-color:#780000">
-          <div class="date">25 May - 27 May</div>
+          <div class="date">{{reg_start_date}} to {{reg_end_date}}</div>
           <div class="title">Registration</div>
           <div class="descr">Begin your hostel journey by registering on the website. Secure your spot in the upcoming hostel allotment process by completing the online registration.</div>
       </li>
       <li style="--accent-color:#4CADAD">
-          <div class="date">28 May</div>
+          <div class="date">{{deadline}}</div>
           <div class="title">List Of Eligible Students</div>
           <div class="descr">Check the website to see if you've made the cut! The list of eligible students for hostel allotment will be declared, so keep an eye out for your name.</div>
       </li>
       <li style="--accent-color:#29128e">
-          <div class="date">29 May - 31 May</div>
+          <div class="date">{{pref_start_date}} to {{pref_end_date}}</div>
           <div class="title">Fill Out Preferences</div>
           <div class="descr">Now that you're eligible, it's time to make it personal. Choose your preferences for roommates and specific room numbers. Ensure your living experience aligns with your preferences</div>
       </li>
       <li style="--accent-color:#780000">
-          <div class="date">1 June</div>
+          <div class="date">{{final_allotment}}</div>
           <div class="title">Hostel Allotment List</div>
           <div class="descr">The moment of truth! The final hostel allotment list will be displayed on the website. Find out where you'll be calling home for the upcoming academic term.</div>
       </li>
       <li style="--accent-color:#4CADAD">
-          <div class="date">2 June - 5 June</div>
+          <div class="date">{{verf_start_date}} to {{verf_end_date}}</div>
           <div class="title">Offline Document Verification</div>
           <div class="descr">Congratulations on your hostel allotment! Head for offline document verification on the specified date to finalize your stay. Bring the required documents for authentication and enjoy hassle-free hostel living.</div>
       </li>
-      <div class="deadline">
-          <div>
-            Remaining time for results declaration: <span id="countdown"></span>
-          </div>
-          <form id="generate-pdf-form" action="{% url 'generate_pdf' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" id="download-btn" disabled="true">Generate PDF</button>
-          </form>
-      </div>
+      
+
+      
+      
   </ul>
 
+<div class="message">
+  <p class="firstparagraph">If your name is in the list of selected students list you can login for further process.</p>
+  <p class="second-paragraph">Wishing You A Great Experience Ahead!</p>
+
+</div>
 
 
-
+  <div class="buttons">
+    <div class="deadline">
+        <div>
+          Remaining time for results declaration: <span id="countdown"></span>
+        </div>
+        <form id="generate-pdf-form" action="{% url 'generate_pdf' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" id="download-btn" disabled="true">Generate PDF</button>
+        </form>
+    </div>
+    <div class="finalresult">
+      <div>
+        Remaining time for results declaration: <span id="countdown2"></span>
+      </div>
+      <form id="generate-pdf-form2" action="{% url 'generate_pdf' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" id="download-btn2" disabled="true">Generate PDF</button>
+      </form>
+    </div>
+  </div>
 
   <script>
     // debugger
@@ -85,6 +126,7 @@
                 if (distance <= 0) {  // Adjusted condition to handle negative distance
                     clearInterval(x);
                     document.getElementById("countdown").innerHTML = "Deadline reached";
+                    document.getElementById("countdown2").innerHTML="Deadline reached";
                     console.log("in");
                     document.getElementById("download-btn").disabled = false; // Enable download button
                 }

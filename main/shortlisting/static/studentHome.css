@@ -1,0 +1,141 @@
+body {
+    background-color: #f4f4f4;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.navbar {
+    background-color: #3c009d;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.navbar h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.navbar button {
+    background-color: white;
+    color: #3c009d;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-top: 70px;
+    padding: 20px;
+}
+
+.left-section {
+    width: 20%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 90px; /* Adjust this value to align with navbar */
+    bottom: 0;
+}
+
+.option-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.option {
+    background-color: white;
+    color: #3c009d;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.option:hover {
+    background-color: #f5f5f5;
+}
+
+.right-section {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Align items flex-start */
+}
+
+.rules-container {
+    background-color: white;
+    padding: 40px; /* Increase padding for a larger size */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-left: 440px;
+    min-height: calc(100vh - 240px); /* Set minimum height */
+    /*overflow-y: auto;*/ /* Add scrollbar for overflow */
+    width: 1300px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 30px;
+}
+
+.text {
+    color: #3c009d;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.underline {
+    width: 61px;
+    height: 3px;
+    background: #3c009d;
+    border-radius: 9px;
+}
+
+.rules-container p {
+    line-height: 1.5;
+    color: #797979;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Add more random rules to make the page scrollable */
+.rules-container .random-rule {
+    margin-bottom: 20px;
+}
+
+.anchor{
+    text-decoration: none;
+}

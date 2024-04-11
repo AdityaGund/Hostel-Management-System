@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check In/Out</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .buttons {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal styles */
+        .form-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Table styles */
+        .history-table {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Check In/Out</h2>
+        <div class="buttons">
+            <button id="checkout-btn">Check Out</button>
+            <button id="checkin-btn">Check In</button>
+        </div>
+
+        <!-- Check Out Form Modal -->
+        <div id="checkout-form-modal" class="form-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Check Out Form</h3>
+                <form id="checkout-form" method="post" action="{% url 'checkinout' %}">
+                    {% csrf_token %}
+                    {{checkoutform.as_p}}
+                    <input type="hidden" name="action" value="checkout"> <!-- Corrected value -->
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Check In Form Modal -->
+        <div id="checkin-form-modal" class="form-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Check In Form</h3>
+                <form id="checkin-form" method="post" action="{% url 'checkinout' %}">
+                    {% csrf_token %}
+                    {{checkinform.as_p}}
+                    <input type="hidden" name="action" value="checkin">
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Check-in/Check-out History Table -->
+        <div class="history-table">
+            <h3>Check-in/Check-out History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>MIS</th>
+                        <th>Reason</th>
+                        <th>Year</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ entry.mis }}</td>
+                            <td>{{ entry.reason }}</td>
+                            <td>{{ entry.year }}</td>
+                            <td>{{ entry.check_in_time }}</td>
+                            <td>{{ entry.check_out_time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript code for modal functionality
+        document.addEventListener("DOMContentLoaded", function() {
+            var checkoutModal = document.getElementById("checkout-form-modal");
+            var checkoutBtn = document.getElementById("checkout-btn");
+            var checkoutCloseBtn = checkoutModal.getElementsByClassName("close")[0];
+
+            checkoutBtn.addEventListener("click", function() {
+                checkoutModal.style.display = "block";
+            });
+
+            checkoutCloseBtn.addEventListener("click", function() {
+                checkoutModal.style.display = "none";
+            });
+
+            window.addEventListener("click", function(event) {
+                if (event.target == checkoutModal) {
+                    checkoutModal.style.display = "none";
+                }
+            });
+
+            var checkinModal = document.getElementById("checkin-form-modal");
+            var checkinBtn = document.getElementById("checkin-btn");
+            var checkinCloseBtn = checkinModal.getElementsByClassName("close")[0];
+
+            checkinBtn.addEventListener("click", function() {
+                checkinModal.style.display = "block";
+            });
+
+            checkinCloseBtn.addEventListener("click", function() {
+                checkinModal.style.display = "none";
+            });
+
+            window.addEventListener("click", function(event) {
+                if (event.target == checkinModal) {
+                    checkinModal.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

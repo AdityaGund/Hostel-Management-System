@@ -272,3 +272,74 @@ img {
   text-decoration: none;
   color: white;
 }
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #ddd; /* Subtle border color */
+  max-width: 1400px; /* Increased max-width */
+  margin: 0 auto;
+  margin-bottom: 15px;
+}
+
+.deadline,
+.finalresult {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 48%;
+  background-color:#00b4d8;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deadline form,
+.finalresult form {
+  margin: 15px 50px;
+  width: 100%;
+}
+
+button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+
+button[type="submit"]:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.message{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.second-paragraph {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
+  color: #333; 
+}
+.firstparagraph{
+  display: block;
+  font-weight: bold;
+}

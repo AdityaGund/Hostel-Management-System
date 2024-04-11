@@ -1,0 +1,64 @@
+{% extends "adminbase.html" %} {% block addcss %}
+<link rel="stylesheet" href="../static/css/maintenance.css">
+{% endblock %} {% block nav %}
+
+Maintenance Request Form
+========================
+
+{% endblock %} 
+
+{% block content %}
+
+<div class="container">
+    <div class="column">
+        <div class="requests-block">
+            <h2>Pending Requests</h2>
+            {% for request in pending_requests %}
+            <div class="request">
+                <div class="request-content">
+                    <div class="request-description">{{ request.user }}</div>
+                    <div class="request-description">{{ request.description }}</div>
+                    <img src="" alt="" class="request-image" data-image-path="{{ request.image }}">
+                </div>
+            </div>
+            {% empty %}
+            <p>No pending requests</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="column">
+        <div class="requests-block">
+            <h2>Fulfilled Requests</h2>
+            {% for request in fulfilled_requests %}
+            <div class="request">
+                <div class="request-content">
+                    <div class="request-description"> {{request.user}} : {{ request.description }}</div>
+                    <img src="" alt="" class="request-image" data-image-path="{{ request.image }}">
+                </div>
+            </div>
+            {% empty %}
+            <p>No fulfilled requests</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block addscript %}
+<script>
+    const images = document.querySelectorAll('.request-image');
+
+    // Loop through each image and set the relative path
+    images.forEach(image => {
+        const absolutePath = image.dataset.imagePath;
+        const imageName = absolutePath.split('/').pop();
+        const relativePath = '/media/' + imageName;
+        image.src = relativePath;
+
+        // Add click event listener to each image for showing in popup
+        image.addEventListener('click', function() {
+            window.open(relativePath, 'Image Preview', 'width=600,height=400');
+        });
+    });
+</script>
+{% endblock %}

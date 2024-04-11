@@ -8,7 +8,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth.models import Group
-from registration.models import CheckInOut
+# from registration.models import CheckInOut
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -18,58 +18,95 @@ from .forms import OTPVerificationForm
 from django.core.mail import send_mail
 import random
 from django.apps import apps
+from registration.models import FirstYear,SecondYear,ThirdYear,FinalYear
+from django.http import JsonResponse
+from .models import SelectedDates
+from django.views.decorators.http import require_POST
+from .models import SelectedDates
 
-@login_required(login_url='login')
+
 def HomePage(request):
-    deadline = datetime(2024, 3, 15, 19, 10, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
+
+
+    selected_dates=SelectedDates.objects.latest('id')
+
+    deadlinedate=str(selected_dates.selected_students_list)
+    # print("Hello")
+    # print(deadlinedate)
+    year=int(deadlinedate.split('-')[0])
+    month=int(deadlinedate.split('-')[1])
+    date=int(deadlinedate[-2:])
+    # print(year)
+    # print(month)
+    # print(date)
+    # print("End")
+    final_alllotment_date=str(selected_dates.final_room_allotment)
+
+
+    reg_start_date=str(selected_dates.registration_period.split(' ')[0])
+    reg_end_date=str(selected_dates.registration_period.split(' ')[-1])
+    pref_start_date=str(selected_dates.preference_selection_date.split(' ')[0])
+    pref_end_date=str(selected_dates.preference_selection_date.split(' ')[-1])
+
+    verf_start_date=str(selected_dates.verification_period.split(' ')[0])
+    verf_end_date=str(selected_dates.verification_period.split(' ')[-1])
+
+
+    deadline = datetime(year, month, date, 12, 23, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
     # Get the current time in the same timezone as the deadline
     current_time = timezone.now()
 
     # Calculate remaining time
     remaining_time = (deadline - current_time).total_seconds()  # Convert timedelta to seconds
 
-    return render(request, 'home.html', {'remaining_time': remaining_time})
+
+
+
+
+
+    return render(request, 'home.html', {'remaining_time': remaining_time,'reg_start_date':reg_start_date,'reg_end_date':reg_end_date,'deadline':deadlinedate,'pref_start_date':pref_start_date,'pref_end_date':pref_end_date,'final_allotment':final_alllotment_date,
+    'verf_start_date':verf_start_date,'verf_end_date':verf_end_date})
 
 
 def AdminHome(request):
     
-    checkInusrs = CheckInOut.objects.all()
-    context={"checkInusrs":checkInusrs}
+#     checkInusrs = CheckInOut.objects.all()
+#     context={"checkInusrs":checkInusrs}
     
-        # if "increase_count" in request.POST:
-    print("fdfd",request.POST)
+#         # if "increase_count" in request.POST:
+#     print("fdfd",request.POST)
         
-    if request.method == 'POST':
+#     if request.method == 'POST':
         
-        if "check_out_submit" in request.POST:  
-            name = request.POST['name']
-            mis = request.POST['mis']
-            year = request.POST['year']
-            reason = request.POST['reason']
-            check_out_time = request.POST['check_out_time']
-            obj=CheckInOut(student_name=name,mis=mis,year=year,reason=reason,check_out_time=check_out_time,check_in_time=check_out_time)
-            obj.save()
-            return redirect('adminHome')   
+#         if "check_out_submit" in request.POST:  
+#             name = request.POST['name']
+#             mis = request.POST['mis']
+#             year = request.POST['year']
+#             reason = request.POST['reason']
+#             check_out_time = request.POST['check_out_time']
+#             obj=CheckInOut(student_name=name,mis=mis,year=year,reason=reason,check_out_time=check_out_time,check_in_time=check_out_time)
+#             obj.save()
+#             return redirect('adminHome')   
         
         
-        # if not checkInusrs:
-        #     message = f"No entry found for MIS {mis}"
-        #     return render(request, 'my_template.html', {'message': message})
-        # context = {'checkInusrs': checkInusrs}
-        # return render(request, 'my_template.html', context)
+#         # if not checkInusrs:
+#         #     message = f"No entry found for MIS {mis}"
+#         #     return render(request, 'my_template.html', {'message': message})
+#         # context = {'checkInusrs': checkInusrs}
+#         # return render(request, 'my_template.html', context)
         
-        if "check_in_submit" in request.POST:
-            mis=request.POST['mis']
-            checkInusrs = CheckInOut.objects.filter(mis=mis).last()
-            if not checkInusrs:
-                message = f"No entry found for MIS {mis}"
-                return render(request,"checkin.html",{'message': message})
-            else:
-                message = f"Checkout successful found for MIS {mis}"
-                checkInusrs.check_out_time=timezone.now()
-                checkInusrs.save()
-                # context={"name":checkInusrs.student_name,"check_out_time":checkInusrs.check_out_time,"check_in_time":checkInusrs.check_in_time,"mis":checkInusrs.mis}
-                return render(request,"checkin.html",{'message': message})
+#         if "check_in_submit" in request.POST:
+#             mis=request.POST['mis']
+#             checkInusrs = CheckInOut.objects.filter(mis=mis).last()
+#             if not checkInusrs:
+#                 message = f"No entry found for MIS {mis}"
+#                 return render(request,"checkin.html",{'message': message})
+#             else:
+#                 message = f"Checkout successful found for MIS {mis}"
+#                 checkInusrs.check_out_time=timezone.now()
+#                 checkInusrs.save()
+#                 # context={"name":checkInusrs.student_name,"check_out_time":checkInusrs.check_out_time,"check_in_time":checkInusrs.check_in_time,"mis":checkInusrs.mis}
+#                 return render(request,"checkin.html",{'message': message})
             
     return render(request, 'adminHome.html',context)
 
@@ -133,14 +170,15 @@ def send_verification_email(email, verification_code):
 
 def SignupPage(request):
     if request.method == 'POST':
-        if all(field in request.POST for field in ['username', 'email', 'password1', 'password2', 'branch']):
+        if all(field in request.POST for field in ['username', 'email', 'password1', 'password2', 'branch', 'year']):
             username = request.POST['username']
             email = request.POST['email']
             password = request.POST['password1']
             re_password = request.POST['password2']
             branch = request.POST['branch']
+            year = request.POST['year']
 
-            if not (username and email and password and re_password and branch):
+            if not (username and email and password and re_password and branch and year):
                 messages.error(request, "All fields are required!")
                 return redirect('signup')  
 
@@ -148,31 +186,27 @@ def SignupPage(request):
                 messages.error(request, "Passwords do not match!")
                 return redirect('signup')  
 
-            branch_model = None
-            if branch == 'CivilEngineering':
-                branch_model = CivilEngineering
-            elif branch == 'ElectricalEngineering':
-                branch_model = ElectricalEngineering
-            elif branch == 'ComputerEngineering':
-                branch_model = ComputerEngineering
-            elif branch == 'InstrumentationEngineering':
-                branch_model = InstrumentationEngineering
-            elif branch == 'ManfacturingEngineering':
-                branch_model = ManfacturingEngineering
-            elif branch == 'MechanicalEngineering':
-                branch_model = MechanicalEngineering
+            year_model = None
+            if year == 'FirstYear':
+                year_model = FirstYear
+            elif year == 'SecondYear':
+                year_model = SecondYear
+            elif year == 'ThirdYear':
+                year_model = ThirdYear
+            elif year == 'FinalYear':
+                year_model = FinalYear
 
-            if branch_model is None:
-                messages.error(request, "Invalid branch selection!")
+            if year_model is None:
+                messages.error(request, "Invalid year selection!")
                 return redirect('signup')
 
-            if branch_model.objects.filter(application_id=username, email=email).exists():
+            if year_model.objects.filter(application_id=username, email=email, branch=branch).exists():
                 verification_code = ''.join(random.choices('0123456789', k=6))
                 request.session['verification_code'] = verification_code
                 request.session['email'] = email
                 request.session['application_id'] = username
                 request.session['password'] = password
-                request.session['branch'] = branch_model.__name__
+                request.session['year'] = year_model.__name__
                 send_verification_email(email, verification_code)
                 messages.success(request, 'OTP sent successfully. Check your email.')
                 return redirect('verify_otp')
@@ -199,9 +233,9 @@ def verify_otp(request):
             if entered_otp == stored_otp:
                 messages.success(request, 'Verification successful. Your can login now.')
                 application_id = request.session.get('application_id')
-                branch_model_name = request.session.get('branch')
-                branch_model = apps.get_model('registration', branch_model_name)
-                student = branch_model.objects.get(application_id=application_id)
+                year_model_name = request.session.get('year')
+                year_model = apps.get_model('registration', year_model_name)
+                student = year_model.objects.get(application_id=application_id)
                 student.verified = True
                 new_user = User.objects.create_user(username=application_id, email=email, password=password)
                 admin_group = Group.objects.get(name='Student')
@@ -209,7 +243,7 @@ def verify_otp(request):
                 new_user.save()
                 student.user = new_user
                 student.save()
-                return redirect('login')
+                return redirect('home')
             else:
                 messages.error(request, 'Invalid OTP. Please try again.')
     else:
@@ -225,6 +259,8 @@ def LoginPage(request):
                 messages.error(request, "All fields are required!")
                 return redirect('login')
         user = authenticate(request, username=username, password=password)
+        
+
         if user is not None:
             if user.is_superuser:
                 login(request, user)
@@ -234,8 +270,30 @@ def LoginPage(request):
                 login(request, user)
                 return redirect('adminHome')
             else:
-                login(request, user)
-                return redirect('home')
+                latest_selected_date = SelectedDates.objects.latest('id')
+                final_date = latest_selected_date.final_room_allotment
+                if final_date:
+                    final_room_allotment_str = str(final_date)
+                    final_date = timezone.make_aware(datetime.strptime(final_room_allotment_str, '%Y-%m-%d'))
+                year_model = None
+                for model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
+                    student_query = model.objects.filter(application_id=username)
+                    if student_query.exists():
+                        year_model = model
+                        student_found = True
+                        break
+                if not student_found:
+                    return HttpResponse("Student not found")
+                if year_model.objects.filter(application_id=username, selected=True):
+                    if(timezone.now()>=final_date):
+                        login(request, user)
+                        return redirect('maintenance_request')
+                    else:
+                        login(request, user)
+                        return redirect('studentHome')
+                else:
+                    messages.error(request, "invalid credentials!")
+                    return redirect('login')
         else:
             messages.error(request, "invalid credentials!")
             return redirect('login')
@@ -244,3 +302,82 @@ def LoginPage(request):
 def LogoutPage(request):
     logout(request)
     return redirect('login')
+
+
+
+
+# views.py
+
+def admin_selected_dates(request):
+    if request.method == 'POST':
+        # Process the form data here
+        # Retrieve form data from request.POST dictionary
+        reg_start_date = request.POST.get('registrationStartDate')
+        reg_end_date = request.POST.get('registrationEndDate')
+        reg_period = f'{reg_start_date} to {reg_end_date}'
+
+        verf_start_date = request.POST.get('offlineverificationStartDate')
+        verf_end_date = request.POST.get('offlineverificationEndDate')
+        verf_period = f'{verf_start_date} to {verf_end_date}'
+
+
+
+
+        pdf_date = request.POST.get('pdfgenerationdate')
+
+        pref_start_date = request.POST.get('roommakingprocessStartDate')
+        pref_end_date = request.POST.get('roommakingprocessEndDate')
+
+        final_result_date = request.POST.get('finalresultdeclaration')
+        
+
+
+        # Save selected dates to the database
+        selected_dates = SelectedDates.objects.create(
+            registration_period=reg_period,
+            selected_students_list=pdf_date,
+            preference_selection_date=f'{pref_start_date} to {pref_end_date}',
+            final_room_allotment=final_result_date,
+            verification_period=verf_period,
+        )
+
+        # Return a JSON response with the processed data, including selected dates
+        response_data = {
+            'Registration': selected_dates.registration_period,
+            'Selected Students List': selected_dates.selected_students_list,
+            'Preference Selection Date': selected_dates.preference_selection_date,
+            'Final Room Allotment': selected_dates.final_room_allotment,
+            'Offline Verification':selected_dates.verification_period,
+            'message': 'Selected dates saved successfully'
+        }
+        return JsonResponse(response_data)
+    else:
+        # Handle GET requests or other HTTP methods
+        # Retrieve selected dates from the database
+        try:
+            selected_dates = SelectedDates.objects.latest('id')
+            response_data = {
+                'Registration': selected_dates.registration_period,
+                'Selected Students List': selected_dates.selected_students_list,
+                'Preference Selection Date': selected_dates.preference_selection_date,
+                'Final Room Allotment': selected_dates.final_room_allotment,
+                'Offline Verification':selected_dates.verification_period,
+            }
+            return JsonResponse(response_data)
+        except SelectedDates.DoesNotExist:
+            return JsonResponse({})
+        
+
+
+@require_POST
+@login_required
+def remove_admin(request):
+    user_id = request.POST.get('user_id')
+
+    try:
+        user = User.objects.get(id=user_id)
+        user.delete()
+        return JsonResponse({'success': True})
+    except User.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'User not found'})
+

@@ -1,92 +1,49 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class CivilEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
+class FirstYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     rank = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
+    branch = models.CharField(max_length=100)
 
-class ElectricalEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
+class SecondYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
+    rank = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
+    branch = models.CharField(max_length=100)
 
-class ComputerEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
+class ThirdYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
+    rank = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
+    branch = models.CharField(max_length=100)
 
-class InstrumentationEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
+class FinalYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
+    rank = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    percentile = models.FloatField()
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
-
-class ManfacturingEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
-    application_id = models.CharField(max_length=10)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    percentile = models.FloatField()
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-
-class MechanicalEngineering(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
-    application_id = models.CharField(max_length=10)
-    email = models.EmailField()
-    name = models.CharField(max_length=100)
-    percentile = models.FloatField()
-    verified = models.BooleanField(default=False)
-    selected = models.BooleanField(default=False)
-
-# class HostelStudents(models.Model):
+    branch = models.CharField(max_length=100)
     
-class CheckInOut(models.Model):
-    student_name = models.CharField(max_length=100)
-    mis= models.IntegerField ()
-    year = models.CharField(max_length=100)
-    reason = models.CharField(max_length=100)
-    check_in_time = models.DateTimeField('timezone.now')
-    check_out_time = models.DateTimeField('timezone.now')
-
-    
-def creating_table(data):
-    for item in data:
-        student = CivilEngineering.objects.create(
-            id=item[0],
-            rank=item[1],
-            application_id=item[2],
-            email=item[3],
-            name=item[4],
-            gender=item[5],
-            percentile=item[6]
-        )
-        student.save()
+class SelectedDates(models.Model):
+    registration_period = models.CharField(max_length=100)
+    selected_students_list = models.DateField()
+    preference_selection_date = models.CharField(max_length=100)
+    final_room_allotment = models.DateField()
+    verification_period = models.CharField(null=True, max_length=100)

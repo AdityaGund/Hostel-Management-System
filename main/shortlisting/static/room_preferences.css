@@ -1,0 +1,259 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* General styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.nav-menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-menu li {
+    margin-left: 20px;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #ccc;
+}
+
+/* Container styles */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 40px;
+}
+
+/* Main box styles */
+.main-box {
+    width: 60%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    /* position: fixed; */
+}
+
+.main-box h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.floor-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.floor {
+    width: 100%;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f1f1f1;
+}
+
+.room-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.room-numbers {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.corridor {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 0 10px;
+}
+
+.number {
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.number:hover {
+    background-color: #0056b3;
+}
+
+.selected {
+    background-color: #28a745 !important;
+}
+
+/* Side box styles */
+.side-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+    margin-left: 40px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: scroll;
+}
+
+.side-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.table-box {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    width: 90%;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+}
+
+.table-header span {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+}
+
+#preferenceList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#preferenceList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+#preferenceList li:last-child {
+    border-bottom: none;
+}
+
+.pref-no,
+.room-no {
+    flex: 1;
+    text-align: center;
+}
+
+.remove-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #c82333;
+}
+
+.remove-btn i {
+    font-size: 16px;
+}
+
+/* .submit-button {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.submit-button button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button button:hover {
+    background-color: #0056b3;
+} */
+
+/* Submit button styles */
+.submit-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    max-width: 50%;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
