@@ -140,7 +140,7 @@
             } else {
                 input.setCustomValidity("");
                 const checkOutDate = document.getElementById('check_out_date');
-                if (checkOutDate.value && checkOutDate.value < input.value) {
+                if (checkOutDate.value && checkOutDate.value <= input.value) {
                     checkOutDate.setCustomValidity("Check-out date should be after the check-in date.");
                 } else {
                     checkOutDate.setCustomValidity("");

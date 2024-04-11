@@ -12,15 +12,15 @@
 .dashboard{
     width: 20%;
     height: 100%;
-    background: linear-gradient(to bottom right, #05718d, #023047);
+    background: linear-gradient(to bottom right, #55e5e7, #0F8B8D);
     box-shadow: 0 0 7px rgb(0, 0, 0, 0.5);
     position: fixed;
 }
 
 .body{
-    width: 80%;
-    margin-left: 20%;
-    margin-bottom: 30px;
+    width: 82%;
+    margin-left: 18%;
+    background-color: aliceblue;
 }
 
 .content{
@@ -34,6 +34,10 @@
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: white;
     justify-content: center;
+}
+
+.title h1{
+    cursor: pointer;
 }
 
 .option{
@@ -75,23 +79,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1px;
+    padding-left:10%;
 }
 
-nav{
-    height: 8%;
-    background-color: #212529;
-    /* overflow: hidden; */
-}
-
-nav a {
-    float: right;
-    display: flex;
-    color: white;
-    text-decoration: none;
-    font-size: 20px;
-    margin: 5px;
-    margin-right: 2%;
-    height: calc(100% - 10px);
-    align-items: center;
-}

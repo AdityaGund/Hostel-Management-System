@@ -12,6 +12,7 @@ class Booking(models.Model):
     guest_email = models.EmailField()
     id_proof = models.FileField(upload_to='', null=True, blank=True)
     approved = models.BooleanField(default=False)
+    charges = models.FloatField(null=True)
 
     def __str__(self):
         return f"{self.guest_name} ({self.check_in_date} - {self.check_out_date})"

@@ -45,6 +45,13 @@ def book_room(request, room_id=None):
             check_out_date_str = request.session.get('check_out_date')
             booking.check_in_date = datetime.strptime(check_in_date_str, '%Y-%m-%d').date()
             booking.check_out_date = datetime.strptime(check_out_date_str, '%Y-%m-%d').date()
+            days = abs((booking.check_out_date-booking.check_in_date).days)
+            if booking.room.capacity == 2:
+                booking.charges = days*200
+            elif booking.room.capacity == 3:
+                booking.charges = days*250
+            else:
+                booking.charges = days*300
             booking.save()
             return redirect('guestroom')
     else:

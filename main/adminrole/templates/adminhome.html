@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{%block addcss%}
+<link rel="stylesheet" href="../static/css/adminhome.css">
+{% endblock %}
+{%block content%}
+<div class="up-container">
+    <div class="note" id="1">CheckOut</div>
+    <div class="note" id="2">Guest Ro</div>
+    <div class="note" id="revenue">Current Month Revenue: <br> &#8377;{{ current_month }}</div>
+</div>
+<div class="down-container">
+    <div class="bar-graph">
+        <canvas id="myChart" width="500em" height="380em"></canvas>
+    </div>
+    <div class="pie-chart"> 
+        <form method="POST" class="form">
+            {% csrf_token %}
+            <input type="date" id="date" name="specificdate">
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+        <div class="pie">
+            <canvas id="roomAvailabilityChart" width="300em" height="300em"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block addscript%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August','September','October','November','December'],
+            datasets: [{
+                label: 'Monthly Occupancy',
+                data: {{ monthly_occupancy }},
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Monthly revenue in Thousands',
+                data: {{ monthly_revenue }},
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 0.5)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var ctx = document.getElementById('roomAvailabilityChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Booked Rooms', 'Available Rooms'],
+            datasets: [{
+                label: 'Rooms',
+                data: [{{ not_available }}, {{ available_rooms }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+</script>
+{% endblock %}

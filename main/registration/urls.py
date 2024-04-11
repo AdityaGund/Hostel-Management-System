@@ -5,7 +5,6 @@ urlpatterns = [
     path('signup/', views.SignupPage, name='signup'),
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('home/', views.HomePage, name='home'),
-    path('adminHome/', views.AdminHome, name='adminHome'),
     path('superAdminHome/', views.SuperAdminHomePage, name='superAdminHome'),
     path('superAdminHome/signup/', views.AdminSignup, name='adminSignup'),
     path('logout/', views.LogoutPage, name='logout'),
