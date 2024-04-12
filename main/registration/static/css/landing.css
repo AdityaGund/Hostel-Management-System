@@ -174,8 +174,198 @@ header .navlinks span {
     color: white;
   }
 
+  header .navlinks span {
+    color: black;
+    display: block;
+    cursor: pointer;
+    line-height: 10vh;
+    font-size: 25px;
+  }
+
 
 }
+
+
+
+
+.owl-nav .owl-prev,
+.owl-nav .owl-next {
+  position: absolute;
+  top: 40%;
+  height: 50px;
+  width: 50px;
+  background: rgba(0, 0, 0, 0.5) !important;
+  color: #fff;
+}
+
+.owl-nav .owl-prev {
+  left: 0;
+}
+
+.owl-nav .owl-next {
+  right: 0;
+}
+
+
+.parallax1 h1 {
+  font-size: 6rem;
+  text-shadow: -1px 9px 14px #2b402ad1;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+.parallax1 {
+  background: url("../images/hostelmain.jpg");
+  /* background: url("https://homesteading.com/wp-content/uploads/2016/02/hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-grass-forest-conservation-Growing-Trees-for-Profit-dt-Feature.jpg"); */
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: "Platypi", serif;
+  font-optical-sizing: auto;
+
+  font-style: normal;
+
+}
+
+
+
+.parallax2 {
+  background: url("../Images//hostel1.jpeg");
+  min-height: 60%;
+}
+
+.parallax3 {
+  min-height: 80%;
+  background: url("../Images/hostel3.jpeg");
+}
+
+.parallax4 {
+  background: url("../Images/hostel2.jpeg");
+  min-height: 80%;
+}
+
+.parallax5 {
+  background: url("../Images/hostel0.jpeg");
+  min-height: 70%;
+}
+
+.parallax6 {
+  background: url("../Images/hostel2.png");
+  /* background: url("https://www.upr.org/sites/upr/files/styles/medium/public/201804/0_12.jpg"); */
+  min-height: 100%;
+}
+
+.parallax1,
+.parallax2,
+.parallax3,
+.parallax4,
+.parallax5,
+.parallax6 {
+  position: relative;
+  /* opacity: .75; */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+section {
+  overflow: auto;
+  /* opacity: 0.75; */
+  background: rgba(255, 255, 255, 0.356);
+  /* padding: 50px 80px; */
+}
+
+
+
+
+
+
+
+
+.contact-forms input,
+.contact-forms textarea {
+  font-size: 14px;
+  color: #000;
+  padding: .9em 0em;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #28a745;
+  border-radius: 0px;
+  outline: none;
+  background: transparent;
+}
+
+.contact-forms textarea {
+  resize: none;
+  height: 11em;
+}
+
+.sent-butnn {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background: #c50e1f;
+  padding: 7px 20px;
+  border-radius: 0px;
+  margin-top: 10px;
+  color: #fff;
+  transition: 0.5s all;
+  -webkit-transition: 0.5s all;
+  -moz-transition: 0.5s all;
+  -o-transition: 0.5s all;
+  -ms-transition: 0.5s all;
+}
+
+
+
+
+
+.address_mail_footer_grids iframe {
+  width: 100%;
+  height: 24em;
+  border: none;
+  padding: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width:768px) {
+
+
+  .parallax1 h1 {
+    font-size: 4rem;
+  }
+
+  .heading h1,
+  .heading h2 {
+    font-size: xx-large;
+  }
+
+
+}
+
+
 
 /*--------book---------*/
 /*--------about---------*/
@@ -201,7 +391,7 @@ header .navlinks span {
 }
 
 .heading h1 {
-  font-size: 110px;
+  /* font-size: 110px; */
   font-weight: 500;
   opacity: 0.1;
   font-family: serif;
@@ -212,7 +402,7 @@ header .navlinks span {
 
 .heading h2 {
   margin: 30px 0;
-  font-size: 45px;
+  /* font-size: 45px; */
   font-family: serif;
   font-weight: 400;
 }
@@ -269,65 +459,8 @@ header .navlinks span {
   border: none;
 }
 
-/*--------counter---------*/
-/*--------rooms---------*/
-.rooms {
-  position: relative;
-}
 
-.rooms .text {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-top: none;
-  padding: 30px;
-}
 
-.rooms i {
-  font-size: 12px;
-  color: #fbb234;
-  margin: 15px 0;
-  margin-right: 5px;
-}
-
-.rooms p {
-  margin: 20px 0;
-  opacity: 0.7;
-}
-
-.rooms h3 {
-  font-size: 30px;
-  line-height: 20px;
-  margin-left: 20px;
-  font-weight: 500;
-  color: #7fc142;
-}
-
-.rooms h3 span {
-  font-size: 15px;
-  font-weight: 400;
-  color: #000;
-}
-
-.owl-carousel1 .owl-nav .owl-prev,
-.owl-carousel1 .owl-nav .owl-next {
-  position: absolute;
-  top: -20%;
-  height: 50px;
-  width: 50px;
-  background: #7fc142 !important;
-}
-
-.owl-carousel1 .owl-nav .owl-prev i,
-.owl-carousel1 .owl-nav .owl-next i {
-  color: #fff;
-}
-
-.owl-carousel1 .owl-nav .owl-prev {
-  left: 90%;
-}
-
-.owl-carousel1 .owl-nav .owl-next {
-  right: 0;
-}
 
 /*--------rooms---------*/
 /*--------gallery---------*/
@@ -385,6 +518,13 @@ header .navlinks span {
   grid-gap: 30px;
 }
 
+
+@media only screen and (max-width:768px) {
+  .grid2 {
+
+    display: block;
+  }
+}
 
 
 .services .box {
@@ -713,177 +853,9 @@ footer label {
     left: 44.5%;
   }
 
-  .news .content.flex {
-    flex-direction: column;
-  }
 
-  .news .left {
-    padding: 30px 0;
-    width: 100%;
-  }
-
-  .news .right {
-    width: 100%;
-  }
-
-  .newsletter {
-    position: relative;
-    background: #7fc142;
-  }
-
-  .newsletter .container {
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 40px 30px;
-    position: relative;
-  }
-
-  .newsletter .flex_space {
-    flex-direction: column;
-  }
-
-  .newsletter input:nth-last-child(2) {
-    margin: 20px 0;
-    width: 100%;
-  }
-
-  .newsletter input:nth-last-child(1) {
-    margin: 0;
-  }
 
   footer .grid {
     grid-template-columns: repeat(1, 1fr);
   }
-}
-
-
-
-
-
-
-
-.parallax1 {
-  background: url("../images/hostelmain.jpg");
-  /* background: url("https://homesteading.com/wp-content/uploads/2016/02/hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-grass-forest-conservation-Growing-Trees-for-Profit-dt-Feature.jpg"); */
-  min-height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-family: "Platypi", serif;
-  font-optical-sizing: auto;
-  font-weight: 800;
-  font-style: normal;
-
-}
-
-.parallax1 h1 {
-  font-size: 6rem;
-  text-shadow: -1px 9px 14px #2b402ad1;
-  ;
-}
-
-.parallax2 {
-  background: url("../Images//hostel1.jpeg");
-  min-height: 60%;
-}
-
-.parallax3 {
-  min-height: 80%;
-  background: url("../Images/hostel3.jpeg");
-}
-
-.parallax4 {
-  background: url("../Images/hostel2.jpeg");
-  min-height: 80%;
-}
-
-.parallax5 {
-  background: url("../Images/hostel0.jpeg");
-  min-height: 70%;
-}
-
-.parallax6 {
-  background: url("../Images/hostel2.png");
-  /* background: url("https://www.upr.org/sites/upr/files/styles/medium/public/201804/0_12.jpg"); */
-  min-height: 100%;
-}
-
-.parallax1,
-.parallax2,
-.parallax3,
-.parallax4,
-.parallax5,
-.parallax6 {
-  position: relative;
-  /* opacity: .75; */
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-section {
-  overflow: auto;
-  /* opacity: 0.75; */
-  background: rgba(255, 255, 255, 0.356);
-  /* padding: 50px 80px; */
-}
-
-/* .dark{
-  overflow: auto;
-  padding: 50px 80px;
-  background-color: #323232;
-  color: #f2f2f2;
-} */
-
-
-
-
-
-
-.contact-forms input,
-.contact-forms textarea {
-  font-size: 14px;
-  color: #000;
-  padding: .9em 0em;
-  outline: none;
-  border: none;
-  border-bottom: 2px solid #28a745;
-  border-radius: 0px;
-  outline: none;
-  background: transparent;
-}
-
-.contact-forms textarea {
-  resize: none;
-  height: 11em;
-}
-
-.sent-butnn {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  background: #c50e1f;
-  padding: 7px 20px;
-  border-radius: 0px;
-  margin-top: 10px;
-  color: #fff;
-  transition: 0.5s all;
-  -webkit-transition: 0.5s all;
-  -moz-transition: 0.5s all;
-  -o-transition: 0.5s all;
-  -ms-transition: 0.5s all;
-}
-
-
-
-
-
-.address_mail_footer_grids iframe {
-  width: 100%;
-  height: 24em;
-  border: none;
-  padding: 10px;
 }
