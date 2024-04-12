@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include('studentrole.urls')),
     path('', include('adminrole.urls')),
     path('', include('guest.urls')),
+    path('',include('Amenities.urls')),
 ]
 
 if settings.DEBUG:

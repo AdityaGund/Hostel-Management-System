@@ -1,0 +1,82 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+  }
+  
+  html {
+    font-size: 62.5%;
+  }
+  body{
+    background-image: url("https://img.freepik.com/free-photo/top-view-elegant-plate-with-copy-space_23-2148517997.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+  }
+  .container1{
+    background-color: #e0eca8;
+    color: black;
+    height: 50px;
+    padding-top: 12px;
+  }
+  h1 a{
+    color: black;
+    text-decoration: none;
+    font-size: 1.8rem;
+    padding-right: 12px;
+  }
+  h1 a:hover{
+    color:rgb(203, 143, 238);
+  }
+  .mycontainer{
+    background-color: aliceblue;
+    margin: 20px;
+    margin-top: 100px;
+    padding: 50px;
+    font-size: large;
+    padding-top: 10px;
+  }
+  .mycontainer h3{
+    text-align: center;
+  }
+  h3 span.badge.badge-pill.badge-warning.badge1{
+    padding: 5px;
+    margin: 5px;
+  }
+  .mycontainer2{
+    background-color: aliceblue;
+    margin: 20px;
+    /* margin-top: 100px; */
+    padding: 50px;
+    font-size: large;
+  }
+
+  .btn.btn-primary.mybtn{
+    margin: auto;
+    display: block;
+    font-size: 20px;
+
+  }
+
+
+
+/* interface animation styling */
+
+  .interface {
+    position: fixed;
+    top: -100%; /* Initially above the viewport */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: top 0.5s ease; /* Transition for smooth animation */
+    z-index: 1;
+    }
+
+  .show {
+    top: 10%; /* Move to center of the viewport */
+  }

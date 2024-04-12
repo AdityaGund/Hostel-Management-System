@@ -89,6 +89,9 @@
             color: #666;
             text-align: center;
         }
+        .message{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -109,8 +112,42 @@
             <!-- Available rooms will be displayed here -->
         </div>
     </div>
+    {% if messages %}
+    <div class="message">
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the message list
+            const messageList = document.querySelectorAll('.message ul li');
+
+            // Check if there are messages to display
+            if (messageList.length > 0) {
+                // Create an array to hold the messages
+                const messages = [];
+
+                // Extract messages from the list
+                messageList.forEach(function(messageItem) {
+                    messages.push(messageItem.textContent);
+                });
+
+                // Display the messages as alerts
+                messages.forEach(function(message) {
+                    showAlert(message);
+                });
+            }
+        });
+
+        // Function to display alert
+        function showAlert(message) {
+            alert(message);
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const availabilityForm = document.getElementById('availability-form');
             availabilityForm.addEventListener('submit', function(event) {

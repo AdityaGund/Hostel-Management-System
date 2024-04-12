@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coep Mess</title>
+    <link href="{% static 'style4.css'%}" rel="stylesheet">
+    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap-grid.min.css'%}" rel="stylesheet">
+    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap.min.css'%}" rel="stylesheet">
+</head>
+
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+        <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="container1">
+        <h1 class="badge-pill head" style="display: block;">
+            COEP MESS
+            <a href="/logout" class="anchor" style="float: right;">Logout</a>
+            <a href="/studentBills" class="anchor" style="float: right;">Check Bills</a>
+            <a href="/createBills" class="anchor" style="float: right;">CreateBill</a>
+        </h1>
+    </div>
+
+    <h4>
+        <span class="badge badge-success badge2"><b>{{today_date}} {{ day}}</b></span>
+    </h4>
+    <div class="container mycontainer">
+        <div class="row">
+            <div class="col-md-8 colum1">
+                <span class="badge badge-pill badge-warning badge1">Coep Mess</span>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Day</th>
+                            <th scope="col">Morning</th>
+                            <th scope="col">Night</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for meal in meals%}
+                        <tr>
+                            <td>{{ meal.day_of_week }}</td>
+                            <td>{{ meal.morning_meal_name }}</td>
+                            <td>{{ meal.dinner_meal_name }}</td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+            {% if user.is_authenticated and user.username == 'coepMess@2024'%}
+            <div class="col-md-3">
+                <form class="inputbox" action="change_meal" method="post">
+                    {% csrf_token %}
+                    <h3>
+                        <span class="badge badge-pill badge-warning badge1">Change Meal</span>
+                    </h3>
+                    <div class="form-group">
+                      <label for="Day">Enter Day:</label>
+                      <input type="Day" class="form-control" id="Day" name="Day"placeholder="Enter the Day to apply changes ">
+                    </div>
+                    <div>
+                        <label for="time">Select The Time :</label>
+                        <select class="form-control select1" id='time' name="time" required>
+                            <option disabled selected value="">Select an option</option>
+                            <option>Morning</option>
+                            <option>Night</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="meal_name">Enter Meal Name:</label>
+                        <input type="meal_name" class="form-control" id="meal_name" name="meal_name" placeholder="Enter the Meal to display.. ">
+                      </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+            </div>
+            {%endif%}
+            <div class="col"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-md-4 colum1">
+                <img
+                    src="https://e7.pngegg.com/pngimages/176/67/png-clipart-person-logo-people-travel-text-rectangle.png">
+                <b>Number of people attending Lunch </b>
+                <p>{{absentee1}}</p>
+            </div>
+            <div class="col-md-4 colum1">
+                <img
+                    src="https://e7.pngegg.com/pngimages/176/67/png-clipart-person-logo-people-travel-text-rectangle.png">
+                <b>Number of people Not attending Lunch </b>
+                <p>{{morning_non_attendee}}</p>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-md-4 colum1">
+                <img
+                    src="https://e7.pngegg.com/pngimages/176/67/png-clipart-person-logo-people-travel-text-rectangle.png">
+                <b>Number of people attending Dinner </b>
+                <p>{{absentee2}}</p>
+            </div>
+            <div class="col-md-4 colum1">
+                <img
+                    src="https://e7.pngegg.com/pngimages/176/67/png-clipart-person-logo-people-travel-text-rectangle.png">
+                <b>Number of people Not attending Dinner </b>
+                <p>{{night_non_attendee}}</p>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+</body>
+
+</html>
