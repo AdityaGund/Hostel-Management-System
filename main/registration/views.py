@@ -111,13 +111,10 @@ def AdminSignup(request):
     
 
 def Accommodation(request):
-    return render(request, 'accommodation_landing.html')
+    return render(request, 'accomodations.html')
 
 def LandingPage(request):
     return render(request,'landing.html')
-
-def Accommodation_reg(request):
-    return render(request,'accommodation_reg.html')
 
 def send_verification_email(email, verification_code):
     subject = 'Verification Code'
@@ -226,7 +223,7 @@ def LoginPage(request):
             
             elif user.groups.filter(name='Admin').exists():
                 login(request, user)
-                return redirect('adminHome')
+                return redirect('admin_home')
             elif user.groups.filter(name='Amenity').exists():
                 login(request, user)
                 return redirect('coepMess')
