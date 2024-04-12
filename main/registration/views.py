@@ -42,6 +42,10 @@ def HomePage(request):
     # print("End")
     final_alllotment_date=str(selected_dates.final_room_allotment)
 
+    year2=int(final_alllotment_date.split('-')[0])
+    month2=int(final_alllotment_date.split('-')[1])
+    date2=int(final_alllotment_date[-2:])
+
 
     reg_start_date=str(selected_dates.registration_period.split(' ')[0])
     reg_end_date=str(selected_dates.registration_period.split(' ')[-1])
@@ -52,19 +56,22 @@ def HomePage(request):
     verf_end_date=str(selected_dates.verification_period.split(' ')[-1])
 
 
-    deadline = datetime(year, month, date, 12, 23, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
+    deadline = datetime(year, month, date, 12, 0, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
     # Get the current time in the same timezone as the deadline
+
+    deadline2=datetime(year2,month2,date2,12,0,0,tzinfo=pytz.timezone('Asia/Kolkata'))
+
     current_time = timezone.now()
 
     # Calculate remaining time
     remaining_time = (deadline - current_time).total_seconds()  # Convert timedelta to seconds
 
+    remaining_time2=(deadline2-current_time).total_seconds()
 
 
 
 
-
-    return render(request, 'home.html', {'remaining_time': remaining_time,'reg_start_date':reg_start_date,'reg_end_date':reg_end_date,'deadline':deadlinedate,'pref_start_date':pref_start_date,'pref_end_date':pref_end_date,'final_allotment':final_alllotment_date,
+    return render(request, 'home.html', {'remaining_time': remaining_time,'remaining_time2':remaining_time2,'reg_start_date':reg_start_date,'reg_end_date':reg_end_date,'deadline':deadlinedate,'pref_start_date':pref_start_date,'pref_end_date':pref_end_date,'final_allotment':final_alllotment_date,
     'verf_start_date':verf_start_date,'verf_end_date':verf_end_date})
 
 
@@ -269,6 +276,9 @@ def LoginPage(request):
             elif user.groups.filter(name='Admin').exists():
                 login(request, user)
                 return redirect('adminHome')
+            elif user.groups.filter(name='Amenity').exists():
+                login(request, user)
+                return redirect('coepMess')
             else:
                 latest_selected_date = SelectedDates.objects.latest('id')
                 final_date = latest_selected_date.final_room_allotment

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>meal-history</title>
+    <link rel="stylesheet" href="{%static 'style_meal_history.css'%}" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap-grid.min.css'%}" rel="stylesheet">
+    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap.min.css'%}" rel="stylesheet">
+</head>
+
+<body>
+    <div id="interface1" class="interface">
+        <!-- Interface content for the first view -->
+        <h2>Leaves For This Month
+            <div class="crossbtn" style="float: right;">❌</div>
+        </h2>
+        <p>This is the first interface.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam maxime totam at deserunt numquam, harum
+            beatae consectetur facere sequi sunt magni rerum nisi voluptate illum dicta voluptatum esse assumenda.
+            Officia.</p>
+    </div>
+    <div class="container1">
+        <h1 class="badge-pill head" style="display: block;">
+            COEP MESS
+            <a href="meal" class="anchor" style="float: right;">HOME</a>
+        </h1>
+    </div>
+    <div class="container ">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-md-4 mycontainer">
+                <h3><span class="badge badge-pill badge-warning badge1">Check your Leaves History Here</span></h3>
+                <form class="inputForm" action="historyCheck" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="month">Enter Month</label>
+                        <input type="month" class="form-control" id="month" name="month" placeholder="Enter Month"
+                            required>
+                    </div>
+
+                    <button id="toggleButton" type="submit" class="btn btn-primary mybtn">Submit</button>
+                </form>
+            </div>
+            <div class="col"></div>
+        </div>
+        {%if not user.is_authenticated or user.username in adminList%}
+        <div class="alert alert-danger alert1" role="alert" style="display: inline-block;font-size: large;">
+            <strong>Login With Student account</strong>
+        </div>
+        {%elif is_future%}
+        <div class="alert alert-danger alert1" role="alert" style="display: inline-block;font-size: large;">
+            <strong>Trying To access the Future Months! Please Enter a valid month To check history.</strong>
+        </div>
+        {% elif monthLeaves %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mycontainer2">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">{{month_name}}</th>
+                                <th scope="col">Date-Of-Leave</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">Penalty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for leave in monthLeaves %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ leave.date_of_leave }}</td>
+                                {% if leave.is_attending_morning == 0 %}
+                                <td>Morning</td>
+                                {% else %}
+                                <td>Night</td>
+                                {% endif %}
+                                {%if leave.is_penalty == 1%}
+                                <td>20Rs.</td>
+                                {%else%}
+                                <td>0Rs.</td>
+                                {%endif%}
+                            </tr>
+                            {%endfor%}
+                            <tr>
+                                <td class="MoneyOrder">Total Penalty:</td>
+                                <td>{{ totalpenalty }}</td>
+                                {% if is_passed_month %}
+                                <td class="MoneyOrder">Mess Charges of the month:</td>
+                                <td>{{ bill_till_date }}</td>
+                                {%else%}
+                                <td class="MoneyOrder">Mess Charges Till Date:</td>
+                                <td>{{ bill_till_date }}</td>
+                                {%endif%}
+                            </tr>
+                            
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-danger alert1" role="alert" style="display: inline-block;font-size: large;">
+            <div>
+                <strong>
+                    <p>{{month_name}} {{curr_year}}</p>
+                </strong>
+            </div>
+            <strong>
+                <p>No leaves found for the month.</p>
+            </strong>
+            <div>
+                <b>Total Penalty:</b>{{ totalpenalty }}
+            </div>
+            {% if is_passed_month %}
+            <div>
+                <b>Mess Charges of the month:</b>{{ bill_till_date }}
+            </div>
+            {%else%}
+            <div>
+                <b>Mess Charges Till Date:</b>{{ bill_till_date }}
+            </div>
+            {%endif%}
+        </div>
+
+        {% endif %}
+
+
+    </div>
+    <script src="{% static 'meal_history.js'%}"></script>
+</body>
+
+</html>

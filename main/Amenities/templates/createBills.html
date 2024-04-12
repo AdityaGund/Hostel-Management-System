@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>createBills</title>
+    <link href="{% static 'style10.css'%}" rel="stylesheet">
+    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap-grid.min.css'%}" rel="stylesheet">
+    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap.min.css'%}" rel="stylesheet">
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+        <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="container1">
+        <h1 class="badge-pill head" style="display: block;">
+            COEP MESS
+            <a href="/logout" class="anchor" style="float: right;">Logout</a>
+            <a href="/coepMess" class="anchor" style="float: right;">Home</a>
+        </h1>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-md-5 mycontainer">
+                <h3><span class="badge badge-pill badge-warning badge1">Create Bills Here</span></h3>
+                <form class="inputForm" action = 'createdBills' method = 'POST'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="month">Enter Month</label>
+                        <input type="month" class="form-control" id="month" name="month" placeholder="Enter Month"
+                            required>
+                    </div>
+                    <div class="mybtn">
+                        <button id="toggleButton" type="submit" class="btn btn-primary mybtn">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+
+    {%if not user.is_authenticated or user.username != 'coepMess@2024'%}
+    <div class="alert alert-danger alert1" role="alert" style="display: inline-block;font-size: large;">
+        <strong>Login With Student account</strong>
+    </div>
+    {%elif is_future%}
+    <div class="alert alert-danger alert1" role="alert" style="display: inline-block;font-size: large;">
+        <strong>Trying To access the Future Months! Please Enter a valid month To check history.</strong>
+    </div>
+    {%elif messBills_Month%}
+    <div class="container">
+        <div class="col-md-8 mycontainer2">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">{{month_name}}</th>
+                        <th scope="col">Student</th>
+                        <th scope="col">Bill Amount</th>
+                    </tr>
+                    {%for messBill in messBills_Month%}
+                    {%if messBill.name not in adminList%}
+                    <tbody>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{messBill.name}}</td>
+                        <td>{{messBill.bill_amount}}</td>
+                    </tbody>
+                    {%endif%}
+                    {%endfor%}
+                </thead>
+            </table>
+        </div>
+    </div>
+    {%endif%}
+</body>
+</html>

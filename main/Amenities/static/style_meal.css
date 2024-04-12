@@ -1,0 +1,301 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+}
+body{
+  background-image: url("https://img.freepik.com/free-photo/top-view-elegant-plate-with-copy-space_23-2148517997.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+.container1{
+  background-color: #0f0f9b;
+  color: #eee;
+  height: 50px;
+  padding-top: 12px;
+}
+h1 a{
+  color: #eee;
+  text-decoration: none;
+  font-size: 1.8rem;
+  padding-right: 12px;
+}
+h1 a:hover{
+  color:aqua;
+}
+.container.menu{
+  font-size: 20px;
+}
+span.badge.badge-pill.badge-warning.badge1{
+  padding: 7px;
+  font-size: 20px;
+  margin: 8px;
+}
+.colum1{
+  background-color: aliceblue;
+  border: 1px solid #fee2e2;
+  margin: 10px;
+  margin-top: 30px;
+  text-align: center;
+} 
+div.card{
+  /* top: 0; */
+  margin-top: 100px;
+}
+.container2 {
+  max-width: 100%;
+  /* height: 690px; */
+  /* background-color: #12121f; */
+  color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.calendar {
+  max-width: 45rem;
+  height: 52rem;
+  background-color: #222227;
+  box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
+}
+.cal2 {
+  width: 20rem;
+  height: 52rem;
+  background-color: white;
+  box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
+  display: none;
+}
+.date_1 p{
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 20px;
+}
+.cal2 label {
+  color: rgb(11, 11, 11);
+  display: block;
+  height: 10px; 
+  font-weight: bold;
+  margin: 10px;
+  font-size: 15px;
+}
+select#action.form-control.select1{
+  padding: 4px;
+  margin-left:12px ;
+  display: block;
+  width: 85%;
+}
+select#time.form-control.select1{
+  padding: 4px;
+  display: block;
+  margin-left:12px ;
+  width: 85%;
+}
+.submit_button{
+  text-align: center;
+  width: 100%;
+  margin-top: 12px;
+}
+.submit_button button{
+  width: 85%;
+  padding: 5px;
+  background-color: rgb(21, 89, 193);
+  color: white;
+}
+.month {
+  width: 100%;
+  height: 12rem;
+  background-color: #167e56;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  text-align: center;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.month i {
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.month h1 {
+  font-size: 3rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  margin-bottom: 1rem;
+}
+
+.month p {
+  font-size: 1.6rem;
+}
+
+.weekdays {
+  width: 100%;
+  height: 5rem;
+  padding: 0 0.4rem;
+  display: flex;
+  align-items: center;
+}
+span.badge.badge-success.badge2{
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.weekdays div {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.1rem;
+  width: calc(44.2rem / 7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.days {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.2rem;
+  user-select: none; /* Disable text selection for .days elements */
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+div.days {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer */
+  user-select: none; /* Standard syntax */
+}
+.days div {
+  font-size: 1.4rem;
+  margin: 0.3rem;
+  width: calc(40.2rem / 7);
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+  transition: background-color 0.2s;
+}
+
+.days div:hover:not(.today) {
+  background-color: #262626;
+  border: 0.2rem solid #777;
+  cursor: pointer;
+}
+
+.prev-date,
+.next-date {
+  opacity: 0.5;
+}
+
+.today {
+  background-color: #167e56;
+}
+  
+  .credits {
+    /* position: absolute; */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    color: #fff;
+    background-color: #b38add;
+    
+  }
+  .credits a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .credits a:hover {
+    text-decoration: underline;
+  }
+
+  .colum{
+    background-color: #eee;
+    margin: 20px;
+    margin-top: 100px;
+    height: 160px;
+    border: 2px solid rgb(113, 110, 110);
+    border-radius: 8px;
+  }
+  div.col-md-3.colum2{
+    max-width: 100%;
+    display: block;
+  }
+  div.col-md-3.colum2.colum3{
+    background-color: #eee;
+
+    margin-top: 50px;
+  }
+  b#leavestakenThisMonth{
+    /* margin-top: 5px; */
+    font-size: 20px;
+  }
+  p.leavestaken{
+    text-align: center;
+    /* padding: 2px; */
+  }
+  .pad{
+    margin-top: 5px; 
+  }
+
+  p.leavestaken.status_date{
+    font-size: 20px;
+  }
+
+  div.btn1{
+    text-align: center;
+    margin: 4px auto;
+  }
+  button.btn2{
+    background-color: rgb(103, 206, 234);
+    padding: 4px;
+    color:white;
+    font-size: 13px;
+  }
+/* interface animation styling */
+  .interface {
+    position: fixed;
+    top: -100%; /* Initially above the viewport */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: top 0.5s ease; /* Transition for smooth animation */
+    z-index: 1;
+    font-size: medium;
+    }
+
+  .show {
+    top: 10%; /* Move to center of the viewport */
+  }
+
+
+  .MoneyOrder{
+    font-weight: bold;
+    color: #222227;
+  }
+
+  .alert1{
+    font-weight: bold;
+    font-size: 20px;
+  }
