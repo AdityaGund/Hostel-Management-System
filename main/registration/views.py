@@ -50,7 +50,7 @@ def HomePage(request):
     verf_end_date=str(selected_dates.verification_period.split(' ')[-1])
 
     deadline = datetime(year, month, date, 12, 23, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
->   # Get the current time in the same timezone as the deadline
+ # Get the current time in the same timezone as the deadline
 
     deadline2=datetime(year2,month2,date2,12,0,0,tzinfo=pytz.timezone('Asia/Kolkata'))
 
