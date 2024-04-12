@@ -23,6 +23,7 @@ from django.http import JsonResponse
 from .models import SelectedDates
 from django.views.decorators.http import require_POST
 from .models import SelectedDates
+from adminrole.views import *
 
 
 def HomePage(request):
@@ -31,15 +32,9 @@ def HomePage(request):
     selected_dates=SelectedDates.objects.latest('id')
 
     deadlinedate=str(selected_dates.selected_students_list)
-    # print("Hello")
-    # print(deadlinedate)
     year=int(deadlinedate.split('-')[0])
     month=int(deadlinedate.split('-')[1])
     date=int(deadlinedate[-2:])
-    # print(year)
-    # print(month)
-    # print(date)
-    # print("End")
     final_alllotment_date=str(selected_dates.final_room_allotment)
 
 
@@ -53,10 +48,9 @@ def HomePage(request):
 
 
     deadline = datetime(year, month, date, 12, 23, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
-    # Get the current time in the same timezone as the deadline
+    
     current_time = timezone.now()
 
-    # Calculate remaining time
     remaining_time = (deadline - current_time).total_seconds()  # Convert timedelta to seconds
 
 
@@ -67,48 +61,6 @@ def HomePage(request):
     return render(request, 'home.html', {'remaining_time': remaining_time,'reg_start_date':reg_start_date,'reg_end_date':reg_end_date,'deadline':deadlinedate,'pref_start_date':pref_start_date,'pref_end_date':pref_end_date,'final_allotment':final_alllotment_date,
     'verf_start_date':verf_start_date,'verf_end_date':verf_end_date})
 
-
-def AdminHome(request):
-    
-#     checkInusrs = CheckInOut.objects.all()
-#     context={"checkInusrs":checkInusrs}
-    
-#         # if "increase_count" in request.POST:
-#     print("fdfd",request.POST)
-        
-#     if request.method == 'POST':
-        
-#         if "check_out_submit" in request.POST:  
-#             name = request.POST['name']
-#             mis = request.POST['mis']
-#             year = request.POST['year']
-#             reason = request.POST['reason']
-#             check_out_time = request.POST['check_out_time']
-#             obj=CheckInOut(student_name=name,mis=mis,year=year,reason=reason,check_out_time=check_out_time,check_in_time=check_out_time)
-#             obj.save()
-#             return redirect('adminHome')   
-        
-        
-#         # if not checkInusrs:
-#         #     message = f"No entry found for MIS {mis}"
-#         #     return render(request, 'my_template.html', {'message': message})
-#         # context = {'checkInusrs': checkInusrs}
-#         # return render(request, 'my_template.html', context)
-        
-#         if "check_in_submit" in request.POST:
-#             mis=request.POST['mis']
-#             checkInusrs = CheckInOut.objects.filter(mis=mis).last()
-#             if not checkInusrs:
-#                 message = f"No entry found for MIS {mis}"
-#                 return render(request,"checkin.html",{'message': message})
-#             else:
-#                 message = f"Checkout successful found for MIS {mis}"
-#                 checkInusrs.check_out_time=timezone.now()
-#                 checkInusrs.save()
-#                 # context={"name":checkInusrs.student_name,"check_out_time":checkInusrs.check_out_time,"check_in_time":checkInusrs.check_in_time,"mis":checkInusrs.mis}
-#                 return render(request,"checkin.html",{'message': message})
-            
-    return render(request, 'adminHome.html',context)
 
 def SuperAdminHomePage(request):
     
@@ -268,7 +220,7 @@ def LoginPage(request):
             
             elif user.groups.filter(name='Admin').exists():
                 login(request, user)
-                return redirect('adminHome')
+                return redirect('admin_home')
             else:
                 latest_selected_date = SelectedDates.objects.latest('id')
                 final_date = latest_selected_date.final_room_allotment
@@ -305,13 +257,8 @@ def LogoutPage(request):
 
 
 
-
-# views.py
-
 def admin_selected_dates(request):
     if request.method == 'POST':
-        # Process the form data here
-        # Retrieve form data from request.POST dictionary
         reg_start_date = request.POST.get('registrationStartDate')
         reg_end_date = request.POST.get('registrationEndDate')
         reg_period = f'{reg_start_date} to {reg_end_date}'
