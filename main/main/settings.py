@@ -150,3 +150,6 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+RAZORPAY_ID="rzp_test_5K5rgSGFbvmX7k"
+RAZORPAY_SECRET ="0l5vSjdtfVLP4Dlq5HgdT9CT"
