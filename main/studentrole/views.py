@@ -40,4 +40,4 @@ def maintenance_request(request):
 
 def studentrole_index(request):
     latest_notices = Notice.objects.all().order_by('-date')[:5]
-    return render(request, 'studentrole.html',{'latest_notices': latest_notices})
+    return render(request, 'studentrole.html',{'latest_notices': latest_notices[::-1]})

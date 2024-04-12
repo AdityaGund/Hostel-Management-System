@@ -34,7 +34,7 @@
             <td>{{ booking.guest_email }}</td>
             <td>
                 {% if booking.id_proof %}
-                    <embed src="" class="id_proof" data-file-path="{{ booking.id_proof }}" type="application/pdf" width="50%" height="200">
+                    <a href="{{booking.id_proof}}">Download</a>
                 {% else %}
                     No ID Provided
                 {% endif %}

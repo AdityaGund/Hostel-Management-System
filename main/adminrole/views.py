@@ -164,7 +164,7 @@ def notice_create(request):
         form = NoticeForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('notice_create') 
+            return redirect('add_notice') 
     else:
         form = NoticeForm()
-    return render(request, 'notice_form.html', {'form': form,'latest_notices': latest_notices})
+    return render(request, 'notice_form.html', {'form': form,'latest_notices': latest_notices[::-1]})

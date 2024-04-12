@@ -1,0 +1,21 @@
+{% extends 'studentrolebase.html' %}
+{% block title %}Student{% endblock %}
+{% block addcss %}
+<link rel="stylesheet" href="../static/css/studentrole.css">
+{% endblock %}
+{% block header%}Notices{% endblock %}
+{% block content %}
+<div class="list">
+    <ul>
+        {% for notice in latest_notices %}
+        <li>
+            <h4>{{ notice.date }}</h4>
+            <p>{{ notice.message }}</p>
+            {% if notice.file %}
+                <a href="{{ notice.file.url }}">Download File</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
