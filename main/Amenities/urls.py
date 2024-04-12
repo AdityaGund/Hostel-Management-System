@@ -14,4 +14,5 @@ urlpatterns = [
     path('studentBills/checkBill',views.checkBill,name = 'checkBill'),
     path('createBills/',views.createBills,name = "createBills"),
     path('createBills/createdBills',views.createdBills,name = 'createdBills'),
+    path('hospital/',views.hospital,name="hospital"),
 ]
