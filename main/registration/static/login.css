@@ -158,9 +158,27 @@ body {
     justify-content: center;
     align-items: center;
     height: 80vh;
-    margin-left: 0px;    
+    margin-left: 0px;
     border-radius: 10px;
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
     background-color: #fff;
+
+}
+
+@media screen and (max-width: 992px) {
+    body {}
+
+    .form-container {
+
+        /* background-color: blue; */
+        position: relative;
+        z-index: 100;
+        box-shadow: 7px 11px 16px 3px #0000009e;
+    }
+
+
+    .image-container {
+        position: absolute;
+    }
 }
