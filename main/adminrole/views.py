@@ -7,7 +7,9 @@ from .forms import *
 from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import datetime
+from Amenities.models import *
 from django.contrib import messages
+from datetime import date
 
 def maintenance(request):
     # Retrieve all maintenance requests from the database
@@ -168,3 +170,9 @@ def notice_create(request):
     else:
         form = NoticeForm()
     return render(request, 'notice_form.html', {'form': form,'latest_notices': latest_notices[::-1]})
+
+def show_entries(request):
+    entries = SlotBooking.objects.all()
+    today = date.today()
+    entries = SlotBooking.objects.filter(date=today)
+    return render(request, 'clinic.html', {'entries': entries})

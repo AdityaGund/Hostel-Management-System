@@ -41,7 +41,6 @@ class SlotBooking(models.Model):
     slot = models.ForeignKey(ClinicSlot, on_delete=models.CASCADE, related_name='bookings')
     date = models.DateField(null=True)
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f"{self.name} - {self.slot.time} ({self.date})"

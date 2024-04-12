@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="../static/css/adminbase.css">
+    {%block addcss%}
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard">
+            <div class="title"><h1> COEP </h1></div>
+            <div class="options">
+                <div class="option" id="option6">
+                    <div class="icon"><i class="material-icons">logout</i></div>
+                    <div class="text"><a href="{% url 'logout' %}">Logout</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="body">
+            <div class="content">
+                <div class="header">{% block header%}{% endblock %}</div>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    {% block addscript%}
+    {% endblock %}
+</body>
+</html>
+

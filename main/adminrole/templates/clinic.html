@@ -1,0 +1,86 @@
+{% extends 'doctorbase.html' %}
+{% block addcss %}
+<style>
+    .entries-container {
+    margin: 50px auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+.entries-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.entries-table th,
+.entries-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.entries-table th {
+    background-color: #c9cdd2;
+    font-weight: bold;
+    color: #333;
+}
+
+.entries-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.entries-table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.entries-table td {
+    color: #666;
+}
+
+.entries-table td:first-child {
+    text-align: center;
+}
+
+.entries-table td:last-child {
+    text-align: center;
+}
+
+.entries-table td:nth-child(2),
+.entries-table td:nth-child(4) {
+    white-space: nowrap;
+}
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="entries-container">
+    <h1>All Entries</h1>
+    <table class="entries-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Slot ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.date }}</td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.slot.time }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No entries found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

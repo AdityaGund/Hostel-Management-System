@@ -237,9 +237,9 @@ def LoginPage(request):
             # elif user.groups.filter(name='inventory').exists():
             #     login(request, user)
             #     return redirect('coepMess')
-            # elif user.groups.filter(name='clinic').exists():
-            #     login(request, user)
-            #     return redirect('coepMess')
+            elif user.groups.filter(name='clinic').exists():
+                login(request, user)
+                return redirect('show_entries')
             else:
                 latest_selected_date = SelectedDates.objects.latest('id')
                 final_date = latest_selected_date.final_room_allotment
