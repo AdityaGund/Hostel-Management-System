@@ -12,3 +12,41 @@
     font-size: 20px;
     padding-left: 2%;
 }
+.list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.list li {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.list li h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.list li p {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.list li a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.list li a:hover {
+    text-decoration: underline;
+}
