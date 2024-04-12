@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
-from .models import Meal,attendance,MessBills
+from .models import *
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -15,7 +15,7 @@ from django import forms
 from django.contrib.auth.decorators import user_passes_test
 import calendar
 from django.contrib.auth.models import Group
-
+from django.shortcuts import render, redirect
 # def index(request):
 #     features = student.objects.all()
 #     return render(request,'index.html')
@@ -741,6 +741,36 @@ def createBills(request):
 #     return render(request, 'booking_status.html', {'user_bookings': user_bookings})
 
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import ClinicSlot, SlotBooking
+from django.db.models import Q
 
-def hospital(request):
-    return render(request,'hospital.html')
+def book_slot(request):
+    name = request.user.username
+    if request.method == 'POST':
+        booking_date = request.POST.get('booking_date')
+        if 'selected_slot' in request.POST:
+            selected_slot_id = request.POST.get('selected_slot')
+            selected_slot = ClinicSlot.objects.get(id=selected_slot_id)
+            if not SlotBooking.objects.filter(slot=selected_slot, date=booking_date).exists():
+                booking = SlotBooking.objects.create(slot=selected_slot, date=booking_date, name=name)
+                messages.success(request, 'Slot booked successfully!')
+                return redirect('book_slot')
+            else:
+                messages.error(request, 'Sorry, this slot is already booked for the selected date.')
+        else:
+            available_slots = ClinicSlot.objects.exclude(bookings__date=booking_date)
+            booked_slots = SlotBooking.objects.filter(name=name)
+            context = {
+                'available_slots': available_slots,
+                'selected_date': booking_date,
+                'booked_slots': booked_slots,
+            }
+            return render(request, 'clinic_booking.html', context)
+    else:
+        booked_slots = SlotBooking.objects.filter(name=name)
+        context = {
+            'booked_slots': booked_slots,
+        }
+        return render(request, 'clinic_booking.html', context)

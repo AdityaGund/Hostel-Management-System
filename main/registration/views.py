@@ -115,7 +115,7 @@ def AdminSignup(request):
     
 
 def Accommodation(request):
-    return render(request, 'accomodations.html')
+    return render(request, 'accommodations.html')
 
 def LandingPage(request):
     return render(request,'landing.html')

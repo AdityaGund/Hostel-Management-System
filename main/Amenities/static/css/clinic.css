@@ -1,0 +1,61 @@
+/* Original styles from your previous responses */
+
+.clinic-container {
+    margin: 0 auto; /* Center the container horizontally */
+    max-width: 1000px; /* Adjust width as needed */
+    padding: 2rem; /* Add some padding for internal elements */
+    background-color: #c6dcef; /* Light blue background */
+    border-radius: 5px; /* Rounded corners for the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.clinic-container h1 {
+    text-align: center; /* Center the heading */
+    margin-bottom: 1.5rem; /* Adjust spacing after heading */
+    color: #333; /* Darker text for better contrast */
+}
+
+.clinic-container form {
+    text-align: center; /* Center the form elements */
+}
+
+.clinic-container form label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: left; /* Align labels to the left */
+    color: #333; /* Darker text for better contrast */
+}
+
+.clinic-container form input[type="date"],
+.clinic-container form select {
+    width: calc(100% - 22px); /* Subtract padding and border width */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.clinic-container form input[type="submit"] {
+    display: block;
+    margin: 0 auto; /* Center the submit button */
+    background-color: #3897f0; /* Vibrant blue button color */
+    color: #fff; /* White text for button */
+    border: none; /* Remove default button border */
+    padding: 10px 20px; /* Add some padding for the button */
+    border-radius: 5px; /* Rounded corners for the button */
+    cursor: pointer; /* Indicate clickable element */
+}
+
+/* New styles for table (optional, based on previous response) */
+
+table {
+    width: 100%; /* Make table responsive */
+    border-collapse: collapse; /* Remove space between borders */
+}
+
+th,
+td {
+    padding: 10px; /* Padding for table cells */
+    border: 1px solid #ccc; /* Border*/
+}

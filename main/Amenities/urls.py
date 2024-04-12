@@ -14,5 +14,5 @@ urlpatterns = [
     path('studentBills/checkBill',views.checkBill,name = 'checkBill'),
     path('createBills/',views.createBills,name = "createBills"),
     path('createBills/createdBills',views.createdBills,name = 'createdBills'),
-    path('hospital/',views.hospital,name="hospital"),
+    path('book_slot/', views.book_slot, name='book_slot'),
 ]
