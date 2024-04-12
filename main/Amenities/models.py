@@ -21,7 +21,6 @@ class attendance(models.Model):
     is_penalty_night=  models.BooleanField(default=False)
     month = models.IntegerField(default=0)
 
-
 class MessBills(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length = 100)

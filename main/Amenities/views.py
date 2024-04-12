@@ -1,9 +1,5 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
-
-
-
-
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -18,12 +14,7 @@ from datetime import datetime, time
 from django import forms
 from django.contrib.auth.decorators import user_passes_test
 import calendar
-# Create your views here.
-
-
-def amenities(request):
-    return HttpResponse("Amenities Page")
-
+from django.contrib.auth.models import Group
 
 # def index(request):
 #     features = student.objects.all()
@@ -73,100 +64,6 @@ def amenities(request):
 #     auth.logout(request)
 #     return redirect('/')
 
-def services(request):
-    return render(request,'services.html')
-
-def about(request):
-    return render(request,'about.html')
-
-def contact(request):
-    return render(request,'contact.html')
-
-# def check(request):
-#     if(not request.user.is_authenticated):
-#         return render(request,'check.html')
-#     return render(request,'check.html')
-
-
-def mark__night_attendence(request):
-    if(not request.user.is_authenticated):
-        messages.info(request,'Please Login with admin account To get services.')
-        return render(request,'Rector.html')
-    elif request.method == 'POST':
-        now = timezone.now()
-        date = now.date()
-        time1 = timezone.make_aware(datetime.combine(now.date(), time(20, 30, 0)), timezone.get_current_timezone())
-        time2 = timezone.make_aware(datetime.combine(now.date(), time(23, 30, 0)), timezone.get_current_timezone())
-        misno = request.POST['Misno']
-        user = request.user
-        is_mark = False
-        try:
-            student1 = student.objects.get(misno = misno)
-        except student.DoesNotExist:
-            messages.info(request,'Invalid Credentials')
-            return render(request,'Rector.html',{'is_mark':is_mark})
-        try:
-            nightattend = NightAttendence.objects.get(date = date,misno = misno)
-            if(nightattend.is_marked == True):
-                is_mark = True
-                messages.info(request,'You have alredy Marked Attendence For The student')
-                return render(request,'Rector.html',{'is_mark':is_mark})
-            elif(nightattend.is_marked == False and (now>=time1 and now <=time2)):
-                nightattend.is_marked = True
-                nightattend.time = now
-                is_mark = True
-                messages.info(request,'You have successfully Marked Your Attendence For today')
-                return render(request,'Rector.html',{'is_mark':is_mark})
-            else:
-                messages.info(request,'Cant Mark Attendence at the moment. Can be marked only 8.30 p.m. onwards.')
-        except NightAttendence.DoesNotExist:
-            if(now>=time1 and now <=time2):
-                NightAttendence.objects.create(is_marked = True,time = now,misno = misno,date = date)
-                messages.info(request,'You have successfully Marked The Attendence of The student For today')
-                is_mark = True
-            messages.info(request,'Attendence can be marked only after 8.30')
-        return render(request,'Rector.html',{'is_mark':is_mark})
-    else:
-        messages.info(request,'Invalid Request')
-        return render(request,'Rector.html')
-
-
-def AttendenceReport(request):
-    return render(request,'AttendenceReport.html')
-
-
-def getAttendence_report(request):
-    if(not request.user.is_authenticated or request.user.username != 'Rector@2024'):
-        messages.info(request,'Please Login with admin account To get services.')
-        return render(request,'AttendenceReport.html')
-    elif request.method == 'POST':
-        date = request.POST['date']
-        TodaynightAttendence = []
-        try:
-            TodaynightAttendence = NightAttendence.objects.filter(date = date)
-            if not TodaynightAttendence:  # If queryset is empty
-                raise NightAttendence.DoesNotExist
-            len_present = len(TodaynightAttendence)
-            len_absent = 2 - len_present
-            return render(request,'AttendenceReport.html',{'TodaynightAttendence':TodaynightAttendence,'date':date,'len_present':len_present,'len_absent':len_absent})
-        except NightAttendence.DoesNotExist:
-            messages.info(request,'No data Found')
-            return render(request,'AttendenceReport.html')
-    else:
-        messages.info(request,'Invalid Request')
-        return render(request,'AttendenceReport.html')
-
-
-
-
-# mess code starts
-
-
-
-
-
-
-
 def can_take_leave_morning():
     now = timezone.now()
     time1 = timezone.make_aware(datetime.combine(now.date(), time(7, 0, 0)), timezone.get_current_timezone())
@@ -193,15 +90,12 @@ def can_cancel_leave_night():
 
 def convert_to_date(date_string):
     try:
-        # Define the format of your date string
-        date_format = "%Y-%m-%d"  # Example format: YYYY-MM-DD
+        date_format = "%Y-%m-%d"
 
-        # Parse the string into a datetime object
         date_object = datetime.strptime(date_string, date_format)
 
-        return date_object.date()  # Extract the date part from datetime object
+        return date_object.date() 
     except ValueError:
-        # Handle the case where the string is not in the expected format
         return None
  
 def meal_status(request):
@@ -229,7 +123,12 @@ def meal(request):
         user = request.user
         month = timezone.now().strftime("%Y-%m")
         month_value = month.split('-')[1]
-        adminList = ['coepMess@2024','laundry@2024','Rector@2024']
+        # Get the 'mess' group object
+        mess_group = Group.objects.get(name='mess')
+        # Get all users belonging to the 'mess' group
+        mess_users = mess_group.user_set.all()
+        # Extract usernames from the mess_users queryset
+        adminList = [user.username for user in mess_users]
         attendance_count1 = 0
         attendance_count2 = 0
         try:
@@ -241,7 +140,6 @@ def meal(request):
                     attendance_count2 = attendance_count2 + 1
         except attendance.DoesNotExist:
                 attendance_count1 = 0
-        # mymeals = Meal.object.filter(user=user)
         
 
         current_year = timezone.now().year
@@ -253,7 +151,6 @@ def meal(request):
         bill_till_date = 0
         no_of_leaves = 0
         no_of_leaves_till_date = 0
-        # Get the day number
         day_number = today.day
         is_attending_morning = '✅'
         is_attending_night = '✅'
@@ -323,7 +220,12 @@ def historyCheck(request):
         no_of_leaves = 0 
         monthLeavesTilldate1 = 0 
         penaltyno = 0
-        adminList = ['coepMess@2024','laundry@2024','Rector@2024']
+        # Get the 'mess' group object
+        mess_group = Group.objects.get(name='mess')
+        # Get all users belonging to the 'mess' group
+        mess_users = mess_group.user_set.all()
+        # Extract usernames from the mess_users queryset
+        adminList = [user.username for user in mess_users]
         try:
             leaves = attendance.objects.filter(user = user)
             
@@ -369,7 +271,7 @@ def historyCheck(request):
     
 
 def createdBills(request):
-    if not request.user.is_authenticated or request.user.username != 'coepMess@2024':
+    if not request.user.is_authenticated:
         messages.info(request, "Please login with a admin account to access this service.")
         return render(request, 'createBills.html')
     elif request.method == 'POST':
@@ -392,7 +294,12 @@ def createdBills(request):
         monthLeaves = []
         monthLeavesTilldate1 = 0 
         penaltyno = 0
-        adminList = ['coepMess@2024','laundry@2024','Rector@2024']
+        # Get the 'mess' group object
+        mess_group = Group.objects.get(name='mess')
+        # Get all users belonging to the 'mess' group
+        mess_users = mess_group.user_set.all()
+        # Extract usernames from the mess_users queryset
+        adminList = [user.username for user in mess_users]
         if(input_month > timezone.now().month):
             is_future = 1
         elif(input_month < timezone.now().month):
@@ -452,7 +359,7 @@ def createdBills(request):
                 messages.info(request,'Future Month')
             
             messBill.bill_amount = bill_till_date
-            return render(request,'createBills.html',{'messBills_Month':messBills,'month_name':month_name,'adminList':adminList,'is_future':is_future})
+        return render(request,'createBills.html',{'messBills_Month':messBills,'month_name':month_name,'adminList':adminList,'is_future':is_future})
     else:
         messages.info(request,'Invalid Method')
         return render(request,'createBills.html')
@@ -601,7 +508,10 @@ def leave(request):
 
   
 def coepMess(request):
-    if((not request.user.is_authenticated) or request.user.username!='coepMess@2024' ):
+    if((not request.user.is_authenticated)):
+        return redirect('/')
+    mess_group = Group.objects.get(name='mess')
+    if mess_group not in request.user.groups.all():
         return redirect('/')
     today_date =timezone.now().date()
     day = today_date.strftime("%A")
@@ -649,7 +559,7 @@ def studentBills(request):
 
 def checkBill(request):
     
-    if not request.user.is_authenticated or request.user.username != 'coepMess@2024':
+    if not request.user.is_authenticated:
         messages.info(request, "Please login with a admin account to access this service.")
         return redirect('studentBills')
     
@@ -664,7 +574,12 @@ def checkBill(request):
         # Construct the formatted month and year string
         formatted_month = f"{month_name} {year}"
 
-        adminList = ['coepMess@2024','Laundry@2024','Rector@2024']
+        # Get the 'mess' group object
+        mess_group = Group.objects.get(name='mess')
+        # Get all users belonging to the 'mess' group
+        mess_users = mess_group.user_set.all()
+        # Extract usernames from the mess_users queryset
+        adminList = [user.username for user in mess_users]
         month2 = str(month[5:7])
         is_future = 0
 
@@ -691,139 +606,139 @@ def createBills(request):
 
 
 
-def Rector(request):
-    return render(request,'Rector.html')
+# def Rector(request):
+#     return render(request,'Rector.html')
 
-def getdetails(request):
-    Yearofstudy1 = request.POST.get('Yearofstudy')
-    misno = request.POST.get('misno')
-    try:
-        studentInfo = student.objects.get(Yearofstudy = Yearofstudy1,misno = misno)
-        return render(request,'Rector.html',{'studentInfo':studentInfo})
-    except student.DoesNotExist:
-        messages.error(request,'Student Doesnt Exists Please make a valid Entry.')
+# def getdetails(request):
+#     Yearofstudy1 = request.POST.get('Yearofstudy')
+#     misno = request.POST.get('misno')
+#     try:
+#         studentInfo = student.objects.get(Yearofstudy = Yearofstudy1,misno = misno)
+#         return render(request,'Rector.html',{'studentInfo':studentInfo})
+#     except student.DoesNotExist:
+#         messages.error(request,'Student Doesnt Exists Please make a valid Entry.')
 
-    return render(request,'Rector.html')
+#     return render(request,'Rector.html')
 
-def details(request):
-        return render(request,'details.html')
+# def details(request):
+#         return render(request,'details.html')
 
-def details_reg(request):
-    if not request.user.is_authenticated:
-        messages.info(request, 'Please Login to register Your Deatails!')
-        return redirect('login')
-    elif request.method == 'POST':
-        full_name = request.POST.get('fullname')
-        student1 = request.user  # Assuming you have user authentication 
-        Misno = request.POST.get('Misno')
-        college_email = request.POST.get('mail')
-        roomno = request.POST.get('roomno')
-        Adress = request.POST.get('Adress')
-        YearOfstudy = request.POST.get('Yearofstudy')
-        is_applied1 = request.POST.get('app_mess')
-        mess_token = request.POST.get('mess_app1')
-        contactno1 = request.POST.get('contactno')
-        user1 = request.user
-        if is_applied1 == 'Yes':
-            is_app = True
-        else:
-            is_app = False
-        try:
-            student2 = student.objects.get(user =user1)
-            messages.info(request, 'You have already filled your details!')
-            return redirect('details')
-        except student.DoesNotExist:
-            student.objects.create(user=student1, name=full_name, room=roomno, misno=Misno, collegemailid=college_email, address=Adress, Yearofstudy=YearOfstudy, is_applied=is_app, mess_token=mess_token, contactno=contactno1)
-            messages.info(request, "You have filled your details successfully!")
-            return redirect('details')
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-
+# def details_reg(request):
+#     if not request.user.is_authenticated:
+#         messages.info(request, 'Please Login to register Your Deatails!')
+#         return redirect('login')
+#     elif request.method == 'POST':
+#         full_name = request.POST.get('fullname')
+#         student1 = request.user  # Assuming you have user authentication 
+#         Misno = request.POST.get('Misno')
+#         college_email = request.POST.get('mail')
+#         roomno = request.POST.get('roomno')
+#         Adress = request.POST.get('Adress')
+#         YearOfstudy = request.POST.get('Yearofstudy')
+#         is_applied1 = request.POST.get('app_mess')
+#         mess_token = request.POST.get('mess_app1')
+#         contactno1 = request.POST.get('contactno')
+#         user1 = request.user
+#         if is_applied1 == 'Yes':
+#             is_app = True
+#         else:
+#             is_app = False
+#         try:
+#             student2 = student.objects.get(user =user1)
+#             messages.info(request, 'You have already filled your details!')
+#             return redirect('details')
+#         except student.DoesNotExist:
+#             student.objects.create(user=student1, name=full_name, room=roomno, misno=Misno, collegemailid=college_email, address=Adress, Yearofstudy=YearOfstudy, is_applied=is_app, mess_token=mess_token, contactno=contactno1)
+#             messages.info(request, "You have filled your details successfully!")
+#             return redirect('details')
+#     else:
+#         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-def book_laundry(request):
-    user = request.user
-    if not request.user.is_authenticated:
-        messages.info(request,'Please Login To get The service!')
-        return render(request, 'book_laundry.html')
-    elif request.method == 'POST':
-        user = request.user
-        full_name = request.POST.get('full_name')
-        room_number = request.POST.get('room_number')
-        phone_number = request.POST.get('phone_number')
-        kgs_count = int(request.POST.get('kgs_count'))
-        service_type = request.POST.get('service_type')
-        time_slot = request.POST.get('time_slot')
-
-        if service_type == 'Dry Cleaning':
-            total_amount = kgs_count * 10
-        elif service_type == 'Washing':
-            total_amount = kgs_count * 15
-        elif service_type == 'Bleaching':
-            total_amount = kgs_count * 20
-        else:
-            total_amount = 0  
-
-        laundry_booking = LaundryBooking.objects.create(
-            user=user,
-            full_name=full_name,
-            room_number=room_number,
-            phone_number=phone_number,
-            kgs_count=kgs_count,
-            service_type=service_type,
-            time_slot=time_slot,
-            total_amount=total_amount  
-        )
-
-        return redirect('booking_success', booking_id=laundry_booking.id)
-
-    return render(request, 'book_laundry.html')
 
 
-def booking_success(request, booking_id):
-    booking = get_object_or_404(LaundryBooking, id=booking_id)
+# def book_laundry(request):
+#     user = request.user
+#     if not request.user.is_authenticated:
+#         messages.info(request,'Please Login To get The service!')
+#         return render(request, 'book_laundry.html')
+#     elif request.method == 'POST':
+#         user = request.user
+#         full_name = request.POST.get('full_name')
+#         room_number = request.POST.get('room_number')
+#         phone_number = request.POST.get('phone_number')
+#         kgs_count = int(request.POST.get('kgs_count'))
+#         service_type = request.POST.get('service_type')
+#         time_slot = request.POST.get('time_slot')
+
+#         if service_type == 'Dry Cleaning':
+#             total_amount = kgs_count * 10
+#         elif service_type == 'Washing':
+#             total_amount = kgs_count * 15
+#         elif service_type == 'Bleaching':
+#             total_amount = kgs_count * 20
+#         else:
+#             total_amount = 0  
+
+#         laundry_booking = LaundryBooking.objects.create(
+#             user=user,
+#             full_name=full_name,
+#             room_number=room_number,
+#             phone_number=phone_number,
+#             kgs_count=kgs_count,
+#             service_type=service_type,
+#             time_slot=time_slot,
+#             total_amount=total_amount  
+#         )
+
+#         return redirect('booking_success', booking_id=laundry_booking.id)
+
+#     return render(request, 'book_laundry.html')
+
+
+# def booking_success(request, booking_id):
+#     booking = get_object_or_404(LaundryBooking, id=booking_id)
     
-    return render(request, 'booking_success.html', {'laundry_booking': booking})
+#     return render(request, 'booking_success.html', {'laundry_booking': booking})
 
-def is_superuser(user):
-    return user.is_superuser
+# def is_superuser(user):
+#     return user.is_superuser
 
-# @user_passes_test(is_superuser)
-def admin_view(request):
-    non_completed_bookings = LaundryBooking.objects.filter(is_completed=False)
-    return render(request, 'admin_view.html', {'non_completed_bookings': non_completed_bookings})
+# # @user_passes_test(is_superuser)
+# def admin_view(request):
+#     non_completed_bookings = LaundryBooking.objects.filter(is_completed=False)
+#     return render(request, 'admin_view.html', {'non_completed_bookings': non_completed_bookings})
 
-# @user_passes_test(is_superuser)
-def mark_as_completed(request, booking_id):
-    booking = get_object_or_404(LaundryBooking, id=booking_id)
-    booking.is_completed = True
-    booking.save()
-    return redirect('admin_view')
+# # @user_passes_test(is_superuser)
+# def mark_as_completed(request, booking_id):
+#     booking = get_object_or_404(LaundryBooking, id=booking_id)
+#     booking.is_completed = True
+#     booking.save()
+#     return redirect('admin_view')
 
-# @user_passes_test(is_superuser)
-def completed_laundry(request):
-    completed_bookings = LaundryBooking.objects.filter(is_completed=True)
-    return render(request, 'completed_laundry.html', {'completed_bookings': completed_bookings})
-
-
-
-def create_notice(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        notice = Notice.objects.create(title=title, content=content)
-        return redirect('notices')  
-    return render(request, 'create_notice.html')
-
-def notices(request):
-    notices = Notice.objects.all()
-    return render(request, 'notices.html', {'notices': notices})
+# # @user_passes_test(is_superuser)
+# def completed_laundry(request):
+#     completed_bookings = LaundryBooking.objects.filter(is_completed=True)
+#     return render(request, 'completed_laundry.html', {'completed_bookings': completed_bookings})
 
 
-def booking_status(request):
-    user_bookings = LaundryBooking.objects.filter(user=request.user)
-    return render(request, 'booking_status.html', {'user_bookings': user_bookings})
+
+# def create_notice(request):
+#     if request.method == 'POST':
+#         title = request.POST.get('title')
+#         content = request.POST.get('content')
+#         notice = Notice.objects.create(title=title, content=content)
+#         return redirect('notices')  
+#     return render(request, 'create_notice.html')
+
+# def notices(request):
+#     notices = Notice.objects.all()
+#     return render(request, 'notices.html', {'notices': notices})
+
+
+# def booking_status(request):
+#     user_bookings = LaundryBooking.objects.filter(user=request.user)
+#     return render(request, 'booking_status.html', {'user_bookings': user_bookings})
 
 
 
