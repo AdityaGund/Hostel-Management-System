@@ -92,6 +92,31 @@
         .message{
             display: none;
         }
+        @media screen and (max-width:768px) {
+            form{
+                margin-top: 20px;
+                text-align: center;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 30px;
+            }
+
+            #check_in_date{
+                margin-bottom: 10px;
+            }
+            #check_out_date{
+                margin-top: 2px;
+            }
+            .checkout{
+                margin-top: 7px;
+            }
+            .checkin{
+                margin-top: 5px;
+            }
+            .btn{
+                margin-top: 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -99,11 +124,11 @@
         <h1>Guest Room Booking</h1>
         <form id="availability-form" method="post">
             {% csrf_token %}
-            <label for="check_in_date">Check-in Date:</label>
+            <label for="check_in_date" class="checkin">Check-in Date:</label>
             <input type="date" id="check_in_date" name="check_in_date" required min="{{ today }}" onchange="validateCheckInDate(this)">
-            <label for="check_out_date">Check-out Date:</label>
+            <label for="check_out_date" class="checkout">Check-out Date:</label>
             <input type="date" id="check_out_date" name="check_out_date" required onchange="validateCheckOutDate(this)">
-            <button type="submit">Check Availability</button>
+            <button type="submit" class="btn">Check Availability</button>
         </form>
     </div>
 

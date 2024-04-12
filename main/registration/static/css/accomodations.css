@@ -55,3 +55,16 @@ table {
     background-color: #f2f2f2;
   }
   
+.textcontainer{
+  word-wrap:break-word;
+}
+@media (max-width:700px){
+  .container{
+    
+    height: fit-content;
+    padding: 5px;
+  }
+  .head h1{
+    font-size: 2.5rem;
+  }
+}

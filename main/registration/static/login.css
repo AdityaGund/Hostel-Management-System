@@ -10,7 +10,7 @@ body {
 }
 
 .container {
-    display: 'flex';
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -166,19 +166,45 @@ body {
 
 }
 
-@media screen and (max-width: 992px) {
-    body {}
-
-    .form-container {
-
-        /* background-color: blue; */
-        position: relative;
-        z-index: 100;
-        box-shadow: 7px 11px 16px 3px #0000009e;
+/* Media Queries for Responsive Design */
+/* 
+@media screen and (max-width: 768px) {
+    .input {
+        width: 90%; 
+        max-width: 300px; 
     }
 
+    .input img {
+        margin: 0px 15px;
+    }
 
+    .input input {
+        width: 100%; 
+    }
+
+    .forgot-password {
+        padding-left: 20px; 
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .outer-container {
+        flex-direction: column; 
+    }
+
+    .form-container,
     .image-container {
-        position: absolute;
+        width: 100%;
+        max-width: 100%; 
+    }
+} */
+@media screen and (max-width: 480px) {
+    .outer-container {
+        flex-direction: column; 
+    }
+
+    .form-container,
+    .image-container {
+        display: none; 
     }
 }

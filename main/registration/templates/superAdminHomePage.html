@@ -11,6 +11,7 @@
     <title>Super Admin Login</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/offcanvas/">
+    
     <style>
       .dateselection{
         margin: 40px;
@@ -40,7 +41,6 @@
   }
 
 
-
     </style>
 
     <!-- Bootstrap core CSS -->
@@ -57,39 +57,55 @@
 
     <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
       <a class="navbar-brand" href="#">Super Admin</a>
-      <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+  
+      <!-- Navbar toggler for responsive design -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <!-- <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a> -->
-          </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Notifications</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Switch account</a>
-          </li> -->
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li> -->
-        </ul>
-      
+    </button>
+  
+      <!-- Navbar content -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <!-- Align the logout button to the right -->
+          <form class="form-inline" action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-outline-light" type="submit">Logout</button>
+          </form>
+  
+          <!-- Add other navbar links here -->
+          <!-- Example: -->
+          <!-- <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">Link</a>
+              </li>
+          </ul> -->
       </div>
-    </nav>
+  </nav>
+  
+  <!-- Custom JavaScript to collapse sidebar on double-click in responsive mode -->
+  <script>
+    $(document).ready(function() {
+      var clicked = false;
+      $(".navbar-toggler").click(function() {
+          $(".navbar-collapse").collapse("toggle");
+          clicked = !clicked;
+          if (clicked) {
+              setTimeout(function() {
+                  clicked = false;
+              }, 500); // Adjust the delay as needed
+          }
+      });
+    });
+  </script>
+  
+  
+  
+  
 
     <div class="nav-scroller bg-white box-shadow">
-      <nav class="nav nav-underline">
+      <!-- <nav class="nav nav-underline">
         <a class="nav-link active" href="#">Dashboard</a>
         <a class="nav-link" href="#">
           Friends
@@ -102,7 +118,7 @@
         <a class="nav-link" href="#">Link</a>
         <a class="nav-link" href="#">Link</a>
         <a class="nav-link" href="#">Link</a>
-      </nav>
+      </nav> -->
     </div>
 
     <main role="main" class="container">
@@ -321,7 +337,8 @@
 
 <!-- Add similar sections for result declaration dates and choice filling dates -->
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
