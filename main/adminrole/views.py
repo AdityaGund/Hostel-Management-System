@@ -55,8 +55,6 @@ def guest_booking(request):
     booking_requests = Booking.objects.filter(approved=False)
     return render(request, 'guest_booking.html', {'booking_requests': booking_requests})
 
-from django.contrib import messages
-
 def checkinout(request):
     error_messages = []
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import GuestRoom, Booking
 from .forms import BookingForm, AvailabilityForm
 from datetime import datetime
+from django.contrib import messages
 
 def guestroom(request):
     if request.method == 'POST':
@@ -53,6 +54,7 @@ def book_room(request, room_id=None):
             else:
                 booking.charges = days*300
             booking.save()
+            messages.success(request, 'Booking request sent successfully. You will receive booking confirmation on email.')
             return redirect('guestroom')
     else:
         booking_form = BookingForm(initial={'room': room}, request=request)

@@ -12,8 +12,8 @@ def maintenance_request(request):
                 maintenance_request.fulfilled = True
                 maintenance_request.save()
             except MaintenanceRequest.DoesNotExist:
-                raise Http404("Maintenance request does not exist")  # Raise a 404 if the request does not exist
-            return redirect('maintenance_request')  # Redirect to the maintenance request page after marking as fulfilled
+                raise Http404("Maintenance request does not exist")
+            return redirect('maintenance_request')
         else:
             description = request.POST.get('description')
             image = request.FILES.get('image')
