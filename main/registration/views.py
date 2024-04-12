@@ -226,7 +226,7 @@ def LoginPage(request):
             
             elif user.groups.filter(name='Admin').exists():
                 login(request, user)
-                return redirect('adminHome')
+                return redirect('admin_home')
             elif user.groups.filter(name='Amenity').exists():
                 login(request, user)
                 return redirect('coepMess')

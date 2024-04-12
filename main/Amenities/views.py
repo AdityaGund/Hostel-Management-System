@@ -825,3 +825,7 @@ def booking_status(request):
     user_bookings = LaundryBooking.objects.filter(user=request.user)
     return render(request, 'booking_status.html', {'user_bookings': user_bookings})
 
+
+
+def hospital(request):
+    return render(request,'hospital.html')

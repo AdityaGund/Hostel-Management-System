@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Appointment Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('../static/img/Amenities_hospital.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .booking-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            margin-top: 0;
+            color: #333;
+            font-size: 28px;
+        }
+        input[type="date"],
+        input[type="time"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        #check-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        #check-btn:hover {
+            background-color: #0b7dda;
+        }
+        #book-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #book-btn:hover {
+            background-color: #45a049;
+        }
+        #message {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-form">
+        <h1>Book an Appointment</h1>
+        <input type="date" id="date" name="date" required>
+        <input type="time" id="time" name="time" required>
+        <button id="check-btn">Check Availability</button>
+        <button id="book-btn" disabled>Book Slot</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        const checkBtn = document.getElementById('check-btn');
+        const bookBtn = document.getElementById('book-btn');
+        const messageEl = document.getElementById('message');
+        let isAvailable = false;
+        let availabilityChecked = false;
+
+        checkBtn.addEventListener('click', () => {
+            const selectedDate = document.getElementById('date').value;
+            const selectedTime = document.getElementById('time').value;
+
+            // Here, you'll need to send an AJAX request to your Django backend
+            // to check if the selected date and time slot is available
+
+            // For demonstration purposes, let's assume the slot is available
+            messageEl.textContent = 'Slot is available!';
+            bookBtn.disabled = false;
+            isAvailable = true;
+            availabilityChecked = true;
+        });
+        bookBtn.addEventListener('click', () => {
+            if (!availabilityChecked) {
+                alert('Please check the availability first before booking a slot.');
+            } else if (!isAvailable) {
+                alert('No available slots. Please choose another time.');
+            } else {
+                const selectedDate = document.getElementById('date').value;
+                const selectedTime = document.getElementById('time').value;
+                messageEl.textContent = 'Slot booked successfully!';
+                setTimeout(() => {
+                    messageEl.textContent = '';
+                    isAvailable = false;
+                    bookBtn.disabled = true;
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
