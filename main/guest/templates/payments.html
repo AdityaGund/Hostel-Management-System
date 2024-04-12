@@ -1,0 +1,42 @@
+<div class="container">
+    <form action="{% url 'pay_form' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="charges" value="{{ request.GET.charges }}">  <!-- Add a hidden input field to pass charges -->
+        <h2>Pay Now</h2>
+        
+        <button id="rzp-button1">Pay with Razorpay</button>
+    </form>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var charges = "{{ request.GET.charges }}";  // Get charges from the URL parameter
+    
+    var options = {
+        "key": "rzp_test_5K5rgSGFbvmX7k",  
+        "amount": charges * 100,  // Convert charges to the smallest currency unit (paise)
+        "currency": "INR",
+        "name": "Acme Corp",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "handler": function (response) {
+            alert(response.razorpay_payment_id);
+            alert(response.razorpay_order_id);
+            alert(response.razorpay_signature)
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+    });
+    document.getElementById('rzp-button1').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>

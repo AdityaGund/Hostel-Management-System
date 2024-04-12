@@ -24,14 +24,17 @@ def maintenance(request):
 
     return render(request, 'maintenance.html', context)
 
-def send_confirmation_email(email, name, number, CheckIn, CheckOut, capacity):
+def send_confirmation_email(email, name, number, CheckIn, CheckOut, capacity, charges):
     subject = 'Guest Booking Approved'
+    payment_url = f'http://127.0.0.1:8000/pay/?charges={charges}'  # Append charges as a query parameter
     message = f'Your guest room booking request at COEP hostel has been approved!\n\n\
     Booking Details:\n\
         Guest Name: {name}\n\
+        Guest Name: Rs. {charges}\n\
         Room No: {number}\n\
         Dates: {CheckIn} to {CheckOut}\n\
-        No of Guests: {capacity}'
+        No of Guests: {capacity}\n\
+        Payment URL: {payment_url}'  # Include the payment URL with charges
     from_email = 'djangoproject24@gmail.com'
     recipient_list = [email]
     send_mail(subject, message, from_email, recipient_list)
@@ -44,7 +47,7 @@ def guest_booking(request):
         if action == 'approve':
             booking = get_object_or_404(Booking, id=booking_id)
             booking.approved = True
-            send_confirmation_email(booking.guest_email, booking.guest_name, booking.room.room_number, booking.check_in_date, booking.check_out_date, booking.room.capacity)
+            send_confirmation_email(booking.guest_email, booking.guest_name, booking.room.room_number, booking.check_in_date, booking.check_out_date, booking.room.capacity, booking.charges)
             booking.save()
         elif action == 'reject':
             booking = get_object_or_404(Booking, id=booking_id)

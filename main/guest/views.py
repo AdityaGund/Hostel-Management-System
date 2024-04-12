@@ -3,6 +3,8 @@ from .models import GuestRoom, Booking
 from .forms import BookingForm, AvailabilityForm
 from datetime import datetime
 from django.contrib import messages
+import razorpay
+from django.conf import settings
 
 def guestroom(request):
     if request.method == 'POST':
@@ -64,3 +66,19 @@ def book_room(request, room_id=None):
         'room': room,
     }
     return render(request, 'book_room.html', context)
+
+def pay_form(request):
+    if request.method == 'POST':
+        client = razorpay.Client(auth=(settings.RAZORPAY_ID, settings.RAZORPAY_SECRET))  
+        charges = request.GET.get('charges')  # Get the charges from the query parameters
+        amount = int(float(charges) * 100)  # Convert charges to the smallest currency unit (paise)
+        payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': 1})
+        context = {'payment': payment}
+        return render(request, 'payments.html', context)
+    else:
+        return render(request, 'payments.html')
+
+
+
+
+    
