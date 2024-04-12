@@ -10,6 +10,8 @@ class FirstYear(models.Model):
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
     branch = models.CharField(max_length=100)
+    caste = models.CharField(max_length=10, null=True)
+    payment_done = models.BooleanField(default=False)
 
 class SecondYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -20,6 +22,8 @@ class SecondYear(models.Model):
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
     branch = models.CharField(max_length=100)
+    caste = models.CharField(max_length=10, null=True)
+    payment_done = models.BooleanField(default=False)
 
 class ThirdYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -30,6 +34,8 @@ class ThirdYear(models.Model):
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
     branch = models.CharField(max_length=100)
+    caste = models.CharField(max_length=10, null=True)
+    payment_done = models.BooleanField(default=False)
 
 class FinalYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
@@ -40,6 +46,8 @@ class FinalYear(models.Model):
     verified = models.BooleanField(default=False)
     selected = models.BooleanField(default=False)
     branch = models.CharField(max_length=100)
+    caste = models.CharField(max_length=10, null=True)
+    payment_done = models.BooleanField(default=False)
     
 class SelectedDates(models.Model):
     registration_period = models.CharField(max_length=100)
