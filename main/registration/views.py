@@ -26,8 +26,6 @@ from .models import SelectedDates
 
 
 def HomePage(request):
-
-
     selected_dates=SelectedDates.objects.latest('id')
 
     deadlinedate=str(selected_dates.selected_students_list)
@@ -41,16 +39,12 @@ def HomePage(request):
     # print(date)
     # print("End")
     final_alllotment_date=str(selected_dates.final_room_allotment)
-
-
     reg_start_date=str(selected_dates.registration_period.split(' ')[0])
     reg_end_date=str(selected_dates.registration_period.split(' ')[-1])
     pref_start_date=str(selected_dates.preference_selection_date.split(' ')[0])
     pref_end_date=str(selected_dates.preference_selection_date.split(' ')[-1])
-
     verf_start_date=str(selected_dates.verification_period.split(' ')[0])
     verf_end_date=str(selected_dates.verification_period.split(' ')[-1])
-
 
     deadline = datetime(year, month, date, 12, 23, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
     # Get the current time in the same timezone as the deadline
@@ -58,11 +52,6 @@ def HomePage(request):
 
     # Calculate remaining time
     remaining_time = (deadline - current_time).total_seconds()  # Convert timedelta to seconds
-
-
-
-
-
 
     return render(request, 'home.html', {'remaining_time': remaining_time,'reg_start_date':reg_start_date,'reg_end_date':reg_end_date,'deadline':deadlinedate,'pref_start_date':pref_start_date,'pref_end_date':pref_end_date,'final_allotment':final_alllotment_date,
     'verf_start_date':verf_start_date,'verf_end_date':verf_end_date})
@@ -303,15 +292,8 @@ def LogoutPage(request):
     logout(request)
     return redirect('login')
 
-
-
-
-# views.py
-
 def admin_selected_dates(request):
     if request.method == 'POST':
-        # Process the form data here
-        # Retrieve form data from request.POST dictionary
         reg_start_date = request.POST.get('registrationStartDate')
         reg_end_date = request.POST.get('registrationEndDate')
         reg_period = f'{reg_start_date} to {reg_end_date}'
@@ -319,20 +301,12 @@ def admin_selected_dates(request):
         verf_start_date = request.POST.get('offlineverificationStartDate')
         verf_end_date = request.POST.get('offlineverificationEndDate')
         verf_period = f'{verf_start_date} to {verf_end_date}'
-
-
-
-
         pdf_date = request.POST.get('pdfgenerationdate')
 
         pref_start_date = request.POST.get('roommakingprocessStartDate')
         pref_end_date = request.POST.get('roommakingprocessEndDate')
-
         final_result_date = request.POST.get('finalresultdeclaration')
-        
 
-
-        # Save selected dates to the database
         selected_dates = SelectedDates.objects.create(
             registration_period=reg_period,
             selected_students_list=pdf_date,
@@ -341,7 +315,6 @@ def admin_selected_dates(request):
             verification_period=verf_period,
         )
 
-        # Return a JSON response with the processed data, including selected dates
         response_data = {
             'Registration': selected_dates.registration_period,
             'Selected Students List': selected_dates.selected_students_list,
@@ -352,8 +325,6 @@ def admin_selected_dates(request):
         }
         return JsonResponse(response_data)
     else:
-        # Handle GET requests or other HTTP methods
-        # Retrieve selected dates from the database
         try:
             selected_dates = SelectedDates.objects.latest('id')
             response_data = {
@@ -367,8 +338,6 @@ def admin_selected_dates(request):
         except SelectedDates.DoesNotExist:
             return JsonResponse({})
         
-
-
 @require_POST
 @login_required
 def remove_admin(request):
