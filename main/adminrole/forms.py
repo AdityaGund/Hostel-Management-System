@@ -1,5 +1,5 @@
 from django import forms
-from .models import CheckInOut
+from .models import CheckInOut, Notice
 
 class CheckOutForm(forms.ModelForm):
     YEAR_CHOICES = [
@@ -19,3 +19,11 @@ class CheckInForm(forms.ModelForm):
     class Meta:
         model = CheckInOut
         fields = ['mis']
+
+class NoticeForm(forms.ModelForm):
+    class Meta:
+        model = Notice
+        fields = ['date', 'message', 'file']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'})
+        }

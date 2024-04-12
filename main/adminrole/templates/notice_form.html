@@ -1,0 +1,41 @@
+{% extends 'adminbase.html' %}
+
+{% block title %}
+    <title>Admin Home</title>
+{% endblock %}
+
+{% block addcss %}
+<link rel="stylesheet" href="../static/css/notice.css">
+{% endblock %}
+
+{% block header %}
+    <h1>Notices</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="main-content">
+        <h3>Create New Notice</h3>
+        <br>
+        <div class="notice-form">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <br>
+        <h3>Latest Notices:</h3>
+        <br>
+        <div class="notice-list">
+            {% for notice in latest_notices %}
+                <div class="notice-item">
+                    <h4>{{ notice.date }}</h4>
+                    <p>{{ notice.message }}</p>
+                    {% if notice.file %}
+                        <a href="{{ notice.file.url }}">Download File</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

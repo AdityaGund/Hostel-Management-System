@@ -154,3 +154,14 @@ def admin_home(request):
         }
 
     return render(request, 'adminhome.html', context)
+
+def notice_create(request):
+    latest_notices = Notice.objects.all().order_by('-date')[:5]
+    if request.method == 'POST':
+        form = NoticeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('notice_create') 
+    else:
+        form = NoticeForm()
+    return render(request, 'notice_form.html', {'form': form,'latest_notices': latest_notices})
