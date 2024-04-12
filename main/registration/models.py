@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class FirstYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.IntegerField()
+    cgpa = models.IntegerField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
@@ -15,7 +15,7 @@ class FirstYear(models.Model):
 
 class SecondYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.FloatField()
+    cgpa = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
@@ -27,7 +27,7 @@ class SecondYear(models.Model):
 
 class ThirdYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.FloatField()
+    cgpa = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
@@ -39,7 +39,7 @@ class ThirdYear(models.Model):
 
 class FinalYear(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    rank = models.FloatField()
+    cgpa = models.FloatField()
     application_id = models.CharField(max_length=10)
     email = models.EmailField()
     name = models.CharField(max_length=100)
