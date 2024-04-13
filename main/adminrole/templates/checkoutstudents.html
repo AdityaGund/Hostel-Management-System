@@ -1,0 +1,70 @@
+<!-- checkoutstudents.html -->
+{% extends 'adminbase.html' %}
+{% block addcss %}
+<style>
+    /* Custom table styles */
+    .custom-table {
+        width: 80%;
+        /* Adjust the width as needed */
+        margin: 0 auto;
+        /* Center the table */
+        border-collapse: collapse;
+        border-spacing: 0;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .custom-table th {
+        background-color: #f8f8f8;
+        font-weight: bold;
+    }
+
+    .custom-table tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    /* Center the heading */
+    h2 {
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Checked Out Students</h2>
+    <div class="table-responsive">
+        <table class="table custom-table">
+            <thead>
+                <tr>
+                    <th>MIS</th>
+                    <th>Year</th>
+                    <th>Reason</th>
+                    <th>Check-Out Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in checked_out_students %}
+                <tr>
+                    <td>{{ student.mis }}</td>
+                    <td>{{ student.year }}</td>
+                    <td>{{ student.reason }}</td>
+                    <td>{{ student.check_out_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block addscript %}
+{% endblock %}
