@@ -1,3 +1,41 @@
+<style>
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    h2 {
+        text-align: center;
+    }
+    
+    button#rzp-button1 {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    /* Responsive CSS */
+    @media screen and (max-width: 600px) {
+        .container {
+            padding: 0 10px;
+        }
+    }
+    
+    @media screen and (max-width: 400px) {
+        button#rzp-button1 {
+            font-size: 14px;
+        }
+    }
+    
+</style>
+
 <div class="container">
     <form action="{% url 'pay_form' %}" method="post">
         {% csrf_token %}

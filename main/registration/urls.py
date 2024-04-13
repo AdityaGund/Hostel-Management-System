@@ -12,5 +12,6 @@ urlpatterns = [
     path('',views.LandingPage,name="landing"),
     path('submitDates/', views.admin_selected_dates, name='submitDates'),
     path('remove_admin/', views.remove_admin, name='remove_admin'),
+    path('getintouch/',views.getintouch,name='getintouch'),
 
 ]

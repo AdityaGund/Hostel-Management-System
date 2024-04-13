@@ -2,6 +2,12 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 from .models import *
 from adminrole.models import Notice
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import *
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
 
 def maintenance_request(request):
     if request.method == 'POST':
@@ -41,3 +47,32 @@ def maintenance_request(request):
 def studentrole_index(request):
     latest_notices = Notice.objects.all().order_by('-date')[:5]
     return render(request, 'studentrole.html',{'latest_notices': latest_notices[::-1]})
+
+@login_required
+def bonafied_request(request):
+    if request.method == 'POST':
+        form = BonafiedRequestForm(request.POST, request.FILES)
+        if form.is_valid():
+            bonafied_request = form.save()
+            return redirect('bonafied_request_list')
+    else:
+        form = BonafiedRequestForm()
+    return render(request, 'bonafied_request.html', {'form': form})
+
+@login_required
+def bonafied_request_list(request):
+    bonafied_requests = BonafiedRequest.objects.all()
+    return render(request, 'bonafied_request_list.html', {'bonafied_requests': bonafied_requests})
+
+@login_required
+def download_bonafied_certificate(request, pk):
+    bonafied_request = BonafiedRequest.objects.get(pk=pk)
+    if bonafied_request.approved:
+        html_string = render_to_string('bonafied_certificate.html', {'bonafied_request': bonafied_request})
+        html = HTML(string=html_string)
+        pdf_file = html.write_pdf()
+        response = HttpResponse(pdf_file, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="bonafied_certificate.pdf"'
+        return response
+    else:
+        return redirect('bonafied_request_list')

@@ -462,31 +462,29 @@
         </p>
       </div>
       <div class="contact-form">
-        <form action="getintouch" method="post">
+        <form action="{% url 'getintouch' %}" method="post">
+          {% csrf_token %}
           <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group contact-forms">
-              <input type="text" class="form-control" placeholder="First Name" required="">
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group contact-forms">
-              <input type="text" class="form-control" placeholder="Last Name" required="">
-            </div>
+            <input type="text" class="form-control" placeholder="First Name" name="first_name" required="">
+            <input type="text" class="form-control" placeholder="Last Name" name="last_name" required="">
           </div>
           <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group contact-forms">
-              <input type="text" class="form-control" placeholder="Phone" required="">
+            <input type="text" class="form-control" placeholder="Phone" name="phone" required="">
+            <input type="email" class="form-control" placeholder="Email" name="email" required="">
+            <textarea class="form-control" placeholder="Message" name="message" required=""></textarea>
+          </div>
 
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group contact-forms">
-              <input type="email" class="form-control" placeholder="Email" required="">
-            </div>
-          </div>
-          <div class="form-group contact-forms">
-            <textarea class="form-control" placeholder="Meassage" required=""></textarea>
-          </div>
           <button type="submit" class="btn sent-butnn btn-lg">Send</button>
         </form>
       </div>
     </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
   </section>
 
 

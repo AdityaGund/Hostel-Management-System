@@ -1,0 +1,99 @@
+{% extends 'studentrolebase.html' %}
+{% load static %}
+{% block title %}
+  Bonafied Application
+{% endblock %}
+{% block header%}
+  Apply for Bonafied
+{% endblock %}
+{% block addcss %}
+<style>
+  .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+  }
+
+  form {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    padding-right: 4%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="file"],
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-group input[type="text"]:focus,
+  .form-group input[type="file"]:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  .btn-container {
+    text-align: center;
+  }
+
+  form button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  form button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+    </div>
+    <div class="form-group">
+      {{ form.id_proof.label_tag }}
+      {{ form.id_proof }}
+    </div>
+    <div class="form-group">
+      {{ form.reason.label_tag }}
+      {{ form.reason }}
+    </div>
+    <div class="btn-container">
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
