@@ -1,124 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hostel Room Allotment</title>
+{% extends 'studenthomebase.html' %}
+{% block addcss %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="../static/room_preferences.css">
     <script src="../static/room_preferences.js"></script>
-    <style>
-        /* Add your custom CSS styles here */
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo">Hostel Room Allotment</div>
-        <div class="nav-menu">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="main-box">
-            <h1>Choose Your Room</h1>
-            <div class="floor-box">
-                <div class="floor">
-                    <div class="room-row">
-                        <div class="room-numbers">
-                            <div class="number">101</div>
-                            <div class="number">102</div>
-                            <div class="number">103</div>
-                            <div class="number">104</div>
-                            <div class="number">105</div>
-                        </div>
-                        <div class="corridor"></div>
-                        <div class="room-numbers">
-                            <div class="number">106</div>
-                            <div class="number">107</div>
-                            <div class="number">108</div>
-                            <div class="number">109</div>
-                            <div class="number">110</div>
-                        </div>
+{% endblock %}
+{% block content %}
+<div class="preference-container">
+    <div class="main-box">
+        <h1>Choose Your Room</h1>
+        <div class="floor-box">
+            <div class="floor">
+                <div class="room-row">
+                    <div class="room-numbers">
+                        <div class="number">101</div>
+                        <div class="number">102</div>
+                        <div class="number">103</div>
+                        <div class="number">104</div>
+                        <div class="number">105</div>
                     </div>
-                    <div class="room-row">
-                        <div class="room-numbers">
-                            <div class="number">120</div>
-                            <div class="number">119</div>
-                            <div class="number">118</div>
-                            <div class="number">117</div>
-                            <div class="number">116</div>
-                        </div>
-                        <div class="corridor"></div>
-                        <div class="room-numbers">
-                            <div class="number">115</div>
-                            <div class="number">114</div>
-                            <div class="number">113</div>
-                            <div class="number">112</div>
-                            <div class="number">111</div>
-                        </div>
+                    <div class="corridor"></div>
+                    <div class="room-numbers">
+                        <div class="number">106</div>
+                        <div class="number">107</div>
+                        <div class="number">108</div>
+                        <div class="number">109</div>
+                        <div class="number">110</div>
                     </div>
                 </div>
-                <div class="floor">
-                    <div class="room-row">
-                        <div class="room-numbers">
-                            <div class="number">201</div>
-                            <div class="number">202</div>
-                            <div class="number">203</div>
-                            <div class="number">204</div>
-                            <div class="number">205</div>
-                        </div>
-                        <div class="corridor"></div>
-                        <div class="room-numbers">
-                            <div class="number">206</div>
-                            <div class="number">207</div>
-                            <div class="number">208</div>
-                            <div class="number">209</div>
-                            <div class="number">210</div>
-                        </div>
+                <div class="room-row">
+                    <div class="room-numbers">
+                        <div class="number">120</div>
+                        <div class="number">119</div>
+                        <div class="number">118</div>
+                        <div class="number">117</div>
+                        <div class="number">116</div>
                     </div>
-                    <div class="room-row">
-                        <div class="room-numbers">
-                            <div class="number">220</div>
-                            <div class="number">219</div>
-                            <div class="number">218</div>
-                            <div class="number">217</div>
-                            <div class="number">216</div>
-                        </div>
-                        <div class="corridor"></div>
-                        <div class="room-numbers">
-                            <div class="number">215</div>
-                            <div class="number">214</div>
-                            <div class="number">213</div>
-                            <div class="number">212</div>
-                            <div class="number">211</div>
-                        </div>
+                    <div class="corridor"></div>
+                    <div class="room-numbers">
+                        <div class="number">115</div>
+                        <div class="number">114</div>
+                        <div class="number">113</div>
+                        <div class="number">112</div>
+                        <div class="number">111</div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="side-box">
-            <h2>Preference List</h2>
-            <div class="table-box">
-                <div class="table-header">
-                    <span>Pref. No.</span>
-                    <span>Room No.</span>
-                    <span></span>
+            <div class="floor">
+                <div class="room-row">
+                    <div class="room-numbers">
+                        <div class="number">201</div>
+                        <div class="number">202</div>
+                        <div class="number">203</div>
+                        <div class="number">204</div>
+                        <div class="number">205</div>
+                    </div>
+                    <div class="corridor"></div>
+                    <div class="room-numbers">
+                        <div class="number">206</div>
+                        <div class="number">207</div>
+                        <div class="number">208</div>
+                        <div class="number">209</div>
+                        <div class="number">210</div>
+                    </div>
                 </div>
-                <ul id="preferenceList">
-                    <li style="display: none;">
-                        <span class="pref-no">1</span>
-                        <span class="room-no">Room No.</span>
-                        <button class="remove-btn" onclick="removeRoom(this)"><i class="fas fa-times"></i></button>
-                    </li>
-                </ul>
+                <div class="room-row">
+                    <div class="room-numbers">
+                        <div class="number">220</div>
+                        <div class="number">219</div>
+                        <div class="number">218</div>
+                        <div class="number">217</div>
+                        <div class="number">216</div>
+                    </div>
+                    <div class="corridor"></div>
+                    <div class="room-numbers">
+                        <div class="number">215</div>
+                        <div class="number">214</div>
+                        <div class="number">213</div>
+                        <div class="number">212</div>
+                        <div class="number">211</div>
+                    </div>
+                </div>
             </div>
-            <button class="submit-button" id="submitBtn" onclick="submitForm()">Submit Preferences</button>
         </div>
     </div>
-</body>
-</html>
+    <div class="side-box">
+        <h2>Preference List</h2>
+        <div class="table-box">
+            <div class="table-header">
+                <span>Pref. No.</span>
+                <span>Room No.</span>
+                <span></span>
+            </div>
+            <ul id="preferenceList">
+                <li style="display: none;">
+                    <span class="pref-no">1</span>
+                    <span class="room-no">Room No.</span>
+                    <button class="remove-btn" onclick="removeRoom(this)"><i class="fas fa-times"></i></button>
+                </li>
+            </ul>
+        </div>
+        <button class="submit-button" id="submitBtn" onclick="submitForm()">Submit Preferences</button>
+    </div>
+</div>
+{% endblock %}

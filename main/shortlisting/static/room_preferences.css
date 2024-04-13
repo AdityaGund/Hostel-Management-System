@@ -1,57 +1,13 @@
 /* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* General styles */
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
-}
-
-/* Navbar styles */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.nav-menu ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.nav-menu li {
-    margin-left: 20px;
-}
-
-.nav-menu a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.nav-menu a:hover {
-    color: #ccc;
-}
-
 /* Container styles */
-.container {
+.preference-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     margin-top: 40px;
+    margin-right: 1%;
 }
 
 /* Main box styles */
@@ -61,7 +17,7 @@ body {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    /* position: fixed; */
+    background-color: aliceblue;
 }
 
 .main-box h1 {
@@ -88,6 +44,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #f1f1f1;
+    padding-left: 1%;
+    padding-right: 1%;
 }
 
 .room-row {
@@ -141,7 +99,7 @@ body {
     width: 30%;
     margin-left: 40px;
     padding: 20px;
-    background-color: #fff;
+    background-color: aliceblue;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: scroll;
