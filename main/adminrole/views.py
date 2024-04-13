@@ -176,3 +176,111 @@ def show_entries(request):
     today = date.today()
     entries = SlotBooking.objects.filter(date=today)
     return render(request, 'clinic.html', {'entries': entries})
+
+
+def checkoutstudents(request):
+    checked_out_students = CheckInOut.objects.filter(check_out_time__isnull=False, check_in_time__isnull=True)
+    
+    return render(request, 'checkoutstudents.html', {'checked_out_students': checked_out_students})
+
+def security_home(request):
+    error_messages = []
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'checkout':
+            form = CheckOutForm(request.POST)
+            if form.is_valid():
+                mis = form.cleaned_data['mis']
+                year = form.cleaned_data['year']
+                year_model = None
+                if year == 'FirstYear':
+                    year_model = FirstYear
+                elif year == 'SecondYear':
+                    year_model = SecondYear
+                elif year == 'ThirdYear':
+                    year_model = ThirdYear
+                else:
+                    year_model = FinalYear
+
+                student = year_model.objects.filter(application_id=mis, selected=True)
+                if student.exists():
+                    if CheckInOut.objects.filter(mis=mis, check_in_time=None).exists():
+                        error_messages.append('This user is already checked out and has not checked in yet.')
+                    else:
+                        checkout = form.save(commit=False)
+                        checkout.check_out_time = timezone.localtime(timezone.now())
+                        checkout.save()
+                        error_messages.append('User checked out successfully')
+                else:
+                    error_messages.append('No student found with the provided details.')
+
+        elif action == 'checkin':
+            form = CheckInForm(request.POST)
+            if form.is_valid():
+                mis = form.cleaned_data['mis']
+                try:
+                    student = CheckInOut.objects.get(mis=mis, check_in_time=None)
+                    student.check_in_time = timezone.localtime(timezone.now())
+                    student.save()
+                    error_messages.append('User checked in successfully')
+                except CheckInOut.DoesNotExist:
+                    error_messages.append('This user is not checked out. Please check out first before checking in.')
+
+    entries = CheckInOut.objects.all()
+    checkinform = CheckInForm()
+    checkoutform = CheckOutForm()
+    return render(request, 'checkinout.html', {
+        'checkinform': checkinform,
+        'checkoutform': checkoutform,
+        'entries': entries,
+        'error_messages': error_messages
+    })
+
+
+# views.py
+from shortlisting.models import Room
+from registration.models import FirstYear, SecondYear, ThirdYear, FinalYear
+from django.core.exceptions import ObjectDoesNotExist
+def roomdetails(request):
+    if request.method == 'POST':
+        room_number = request.POST.get('room_number')
+        year = request.POST.get('year')
+        print(year)
+        print(room_number)
+        if room_number and year:
+            try:
+                # Query the Room table based on selected room number and year
+                print("inside try")
+                room_details = Room.objects.get(alloted_room=room_number, year=year)
+                print(room_details)
+                # Retrieve student names based on the year
+                student_names = []
+                if year == 'FirstYear':
+                    student_names = [FirstYear.objects.get(id=room_details.student1).name,
+                                     FirstYear.objects.get(id=room_details.student2).name,
+                                     FirstYear.objects.get(id=room_details.student3).name,
+                                     FirstYear.objects.get(id=room_details.student4).name]
+                elif year == 'SecondYear':
+                    student_names = [SecondYear.objects.get(application_id=room_details.student1).name,
+                                     SecondYear.objects.get(application_id=room_details.student2).name,
+                                     SecondYear.objects.get(application_id=room_details.student3).name,
+                                     SecondYear.objects.get(application_id=room_details.student4).name]
+                elif year == 'ThirdYear':
+                    student_names = [ThirdYear.objects.get(id=room_details.student1).name,
+                                     ThirdYear.objects.get(id=room_details.student2).name,
+                                     ThirdYear.objects.get(id=room_details.student3).name,
+                                     ThirdYear.objects.get(id=room_details.student4).name]
+                elif year == 'FinalYear':
+                    student_names = [FinalYear.objects.get(id=room_details.student1).name,
+                                     FinalYear.objects.get(id=room_details.student2).name,
+                                     FinalYear.objects.get(id=room_details.student3).name,
+                                     FinalYear.objects.get(id=room_details.student4).name]
+
+                return render(request, 'roomdetails.html', {'room_details': [room_details], 'student_names': student_names})
+            except ObjectDoesNotExist:
+                return render(request, 'roomdetails.html', {'error_message': f'No room found for room number {room_number} and year {year}.'})
+        else:
+            return render(request, 'roomdetails.html', {'error_message': 'Please select both the fields.'})
+    else:
+        return render(request, 'roomdetails.html')

@@ -231,12 +231,15 @@ def LoginPage(request):
             elif user.groups.filter(name='mess').exists():
                 login(request, user)
                 return redirect('coepMess')
-            # elif user.groups.filter(name='warden').exists():
-            #     login(request, user)
-            #     return redirect('coepMess')
+            elif user.groups.filter(name='warden').exists():
+                login(request, user)
+                return redirect('admin_home')
             # elif user.groups.filter(name='inventory').exists():
             #     login(request, user)
             #     return redirect('coepMess')
+            elif user.groups.filter(name='security').exists():
+                login(request,user)
+                return redirect('security_home')
             elif user.groups.filter(name='clinic').exists():
                 login(request, user)
                 return redirect('show_entries')
