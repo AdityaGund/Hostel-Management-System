@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Bonafied Certificate</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      h1 {
+        margin-top: 50px;
+      }
+      .signature {
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bonafied Certificate</h1>
+    <p>This is to certify that {{ bonafied_request.name }} is a bonafide student of our institution.</p>
+    <div class="signature">
+      <p>Signature of Admin</p>
+      <img src="{% static 'signature.png' %}" alt="Admin Signature">
+    </div>
+  </body>
+</html>

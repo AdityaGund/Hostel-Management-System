@@ -1,0 +1,89 @@
+{% extends 'studentrolebase.html' %}
+{% load static %}
+
+{% block addcss %}
+<style>
+  .table-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  table {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
+
+  th, td {
+    padding: 12px;
+  }
+
+  th {
+    background-color: #333;
+    color: #fff;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #e6e6e6;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #3c94f3;
+    transition: background-color 0.3s ease;
+  }
+  .b{
+    text-align: center;
+    text-decoration: none;
+    margin-top: 5%;
+  }
+
+  .btn:hover {
+    background-color: #126fd3;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>ID Proof</th>
+        <th>Reason</th>
+        <th>Approved</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bonafied_request in bonafied_requests %}
+      <tr>
+        <td>{{ bonafied_request.name }}</td>
+        <td><a href="{{ bonafied_request.id_proof.url }}" class="btn">View ID</a></td>
+        <td>{{ bonafied_request.reason }}</td>
+        <td>{{ bonafied_request.approved }}</td>
+        <td>
+          {% if bonafied_request.approved %}
+          <a href="{% url 'download_bonafied_certificate' bonafied_request.pk %}" class="btn">Download Certificate</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="b"><a href="{% url 'bonafied_request' %}" class="btn">Apply bonafide</a></div>
+{% endblock %}

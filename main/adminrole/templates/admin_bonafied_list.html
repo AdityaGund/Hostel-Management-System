@@ -1,0 +1,87 @@
+{% extends 'adminbase.html' %}
+
+{% block addcss %}
+  <style>
+    /* Add CSS styles here */
+    .table-container {
+      margin-top: 20px;
+      width: 80%; /* Set the desired width for the table container */
+      margin: 0 auto; /* Center the table container */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd; /* Add right border to create column lines */
+    }
+
+    th:last-child, td:last-child {
+      border-right: none; /* Remove right border for the last column */
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .action-button {
+      display: inline-block;
+      padding: 8px 16px;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .action-button:hover {
+      background-color: #f2f2f2;
+      border-color: #007bff;
+    }
+
+    .approve-button {
+      color: #28a745;
+      border-color: #28a745;
+    }
+
+    .reject-button {
+      color: #dc3545;
+      border-color: #dc3545;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <h1>Bonafied Requests</h1>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>ID Proof</th>
+          <th>Reason</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bonafied_request in bonafied_requests %}
+          <tr>
+            <td>{{ bonafied_request.name }}</td>
+            <td><a href="{{ bonafied_request.id_proof.url }}">View ID Proof</a></td>
+            <td>{{ bonafied_request.reason }}</td>
+            <td>
+              <a href="{% url 'approve_bonafied_request' bonafied_request.pk %}" class="action-button approve-button">Approve</a>
+              <a href="{% url 'reject_bonafied_request' bonafied_request.pk %}" class="action-button reject-button">Reject</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

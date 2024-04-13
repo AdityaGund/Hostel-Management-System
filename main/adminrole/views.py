@@ -176,3 +176,18 @@ def show_entries(request):
     today = date.today()
     entries = SlotBooking.objects.filter(date=today)
     return render(request, 'clinic.html', {'entries': entries})
+
+def bonafied_request_list(request):
+    bonafied_requests = BonafiedRequest.objects.filter(approved=False)
+    return render(request, 'admin_bonafied_list.html', {'bonafied_requests': bonafied_requests})
+
+def approve_bonafied_request(request, pk):
+    bonafied_request = get_object_or_404(BonafiedRequest, pk=pk)
+    bonafied_request.approved = True
+    bonafied_request.save()
+    return redirect('approve_bonafied_request')
+
+def reject_bonafied_request(request, pk):
+    bonafied_request = get_object_or_404(BonafiedRequest, pk=pk)
+    bonafied_request.delete()
+    return redirect('approve_bonafied_request')
