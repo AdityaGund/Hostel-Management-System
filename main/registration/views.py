@@ -23,7 +23,7 @@ from .models import SelectedDates
 from django.views.decorators.http import require_POST
 from .models import SelectedDates
 from adminrole.views import *
-
+from .models import Contact
 
 def HomePage(request):
     selected_dates=SelectedDates.objects.latest('id')
@@ -335,3 +335,33 @@ def remove_admin(request):
     except User.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'User not found'})
 
+def getintouch(request):
+    if request.method == 'POST':
+        # Retrieve form data from the POST request
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        time = timezone.localtime(timezone.now(), timezone=timezone.get_current_timezone())
+
+        # Create a new Contact object
+        contact = Contact(
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone,
+            email=email,
+            message=message,
+            time= time,
+        )
+
+        # Save the Contact object to the database
+        contact.save()
+
+        messages.success(request, 'Your message has been sent successfully!')
+
+        # Render the same page with a success message
+        return redirect('landing')
+
+    # Render the form template if the request method is not POST
+    return render(request, 'landing.html')

@@ -79,6 +79,9 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# settings.py
+APPEND_SLASH = False
+
 
 DATABASES = {
     'default': {
