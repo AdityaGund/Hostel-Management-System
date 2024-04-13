@@ -16,53 +16,6 @@ from django.contrib.auth.decorators import user_passes_test
 import calendar
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
-# def index(request):
-#     features = student.objects.all()
-#     return render(request,'index.html')
-
-# def register(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         email = request.POST['email']
-#         password = request.POST['password']
-#         password2 = request.POST['password2']
-#         if password == password2:
-#             if User.objects.filter(username = username).exists():
-#                 messages.info(request,'Username already exists..')
-#                 return redirect('register')
-#             else:
-#                 user = User.objects.create_user(username = username,password = password,email=email)
-#                 user.save();
-#                 return redirect('/details')
-#         else:
-#             messages.info(request,'Invalid password!')
-#             return redirect('register')
-#     else:
-#         return render(request,'register.html')
-    
-# def login(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         email = request.POST['email']
-#         if(username == 'coepMess@2024' or username == 'Laundry@2024' or username == 'Rector@2024'):
-#             messages.info(request,'Invalid Credentials!')
-#             return redirect('login') 
-#         else:
-#             user = auth.authenticate(username = username,password = password,email=email)
-
-#         if user is not None:
-#             auth.login(request,user)
-#             return redirect('/')
-#         else :
-#             messages.info(request,'Invalid Credentials!')
-#             return redirect('login')
-#     else :
-#         return render(request,'login.html')
-
-# def logout(request):
-#     auth.logout(request)
-#     return redirect('/')
 
 def can_take_leave_morning():
     now = timezone.now()
@@ -597,150 +550,6 @@ def checkBill(request):
 def createBills(request):
     return render(request,'createBills.html')
 
-   
-
-
-
-# Mess Code ends
-
-
-
-
-# def Rector(request):
-#     return render(request,'Rector.html')
-
-# def getdetails(request):
-#     Yearofstudy1 = request.POST.get('Yearofstudy')
-#     misno = request.POST.get('misno')
-#     try:
-#         studentInfo = student.objects.get(Yearofstudy = Yearofstudy1,misno = misno)
-#         return render(request,'Rector.html',{'studentInfo':studentInfo})
-#     except student.DoesNotExist:
-#         messages.error(request,'Student Doesnt Exists Please make a valid Entry.')
-
-#     return render(request,'Rector.html')
-
-# def details(request):
-#         return render(request,'details.html')
-
-# def details_reg(request):
-#     if not request.user.is_authenticated:
-#         messages.info(request, 'Please Login to register Your Deatails!')
-#         return redirect('login')
-#     elif request.method == 'POST':
-#         full_name = request.POST.get('fullname')
-#         student1 = request.user  # Assuming you have user authentication 
-#         Misno = request.POST.get('Misno')
-#         college_email = request.POST.get('mail')
-#         roomno = request.POST.get('roomno')
-#         Adress = request.POST.get('Adress')
-#         YearOfstudy = request.POST.get('Yearofstudy')
-#         is_applied1 = request.POST.get('app_mess')
-#         mess_token = request.POST.get('mess_app1')
-#         contactno1 = request.POST.get('contactno')
-#         user1 = request.user
-#         if is_applied1 == 'Yes':
-#             is_app = True
-#         else:
-#             is_app = False
-#         try:
-#             student2 = student.objects.get(user =user1)
-#             messages.info(request, 'You have already filled your details!')
-#             return redirect('details')
-#         except student.DoesNotExist:
-#             student.objects.create(user=student1, name=full_name, room=roomno, misno=Misno, collegemailid=college_email, address=Adress, Yearofstudy=YearOfstudy, is_applied=is_app, mess_token=mess_token, contactno=contactno1)
-#             messages.info(request, "You have filled your details successfully!")
-#             return redirect('details')
-#     else:
-#         return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-
-
-
-# def book_laundry(request):
-#     user = request.user
-#     if not request.user.is_authenticated:
-#         messages.info(request,'Please Login To get The service!')
-#         return render(request, 'book_laundry.html')
-#     elif request.method == 'POST':
-#         user = request.user
-#         full_name = request.POST.get('full_name')
-#         room_number = request.POST.get('room_number')
-#         phone_number = request.POST.get('phone_number')
-#         kgs_count = int(request.POST.get('kgs_count'))
-#         service_type = request.POST.get('service_type')
-#         time_slot = request.POST.get('time_slot')
-
-#         if service_type == 'Dry Cleaning':
-#             total_amount = kgs_count * 10
-#         elif service_type == 'Washing':
-#             total_amount = kgs_count * 15
-#         elif service_type == 'Bleaching':
-#             total_amount = kgs_count * 20
-#         else:
-#             total_amount = 0  
-
-#         laundry_booking = LaundryBooking.objects.create(
-#             user=user,
-#             full_name=full_name,
-#             room_number=room_number,
-#             phone_number=phone_number,
-#             kgs_count=kgs_count,
-#             service_type=service_type,
-#             time_slot=time_slot,
-#             total_amount=total_amount  
-#         )
-
-#         return redirect('booking_success', booking_id=laundry_booking.id)
-
-#     return render(request, 'book_laundry.html')
-
-
-# def booking_success(request, booking_id):
-#     booking = get_object_or_404(LaundryBooking, id=booking_id)
-    
-#     return render(request, 'booking_success.html', {'laundry_booking': booking})
-
-# def is_superuser(user):
-#     return user.is_superuser
-
-# # @user_passes_test(is_superuser)
-# def admin_view(request):
-#     non_completed_bookings = LaundryBooking.objects.filter(is_completed=False)
-#     return render(request, 'admin_view.html', {'non_completed_bookings': non_completed_bookings})
-
-# # @user_passes_test(is_superuser)
-# def mark_as_completed(request, booking_id):
-#     booking = get_object_or_404(LaundryBooking, id=booking_id)
-#     booking.is_completed = True
-#     booking.save()
-#     return redirect('admin_view')
-
-# # @user_passes_test(is_superuser)
-# def completed_laundry(request):
-#     completed_bookings = LaundryBooking.objects.filter(is_completed=True)
-#     return render(request, 'completed_laundry.html', {'completed_bookings': completed_bookings})
-
-
-
-# def create_notice(request):
-#     if request.method == 'POST':
-#         title = request.POST.get('title')
-#         content = request.POST.get('content')
-#         notice = Notice.objects.create(title=title, content=content)
-#         return redirect('notices')  
-#     return render(request, 'create_notice.html')
-
-# def notices(request):
-#     notices = Notice.objects.all()
-#     return render(request, 'notices.html', {'notices': notices})
-
-
-# def booking_status(request):
-#     user_bookings = LaundryBooking.objects.filter(user=request.user)
-#     return render(request, 'booking_status.html', {'user_bookings': user_bookings})
-
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import ClinicSlot, SlotBooking
@@ -774,3 +583,64 @@ def book_slot(request):
             'booked_slots': booked_slots,
         }
         return render(request, 'clinic_booking.html', context)
+
+def show_product(request):
+    avail_products = Product.objects.filter(stock=True)
+    nonavail_products = Product.objects.filter(stock=False)
+
+    user_belongs_to_inventory_group = False 
+    user = request.user
+    if request.user.is_authenticated:
+        user_belongs_to_inventory_group = request.user.groups.filter(name='inventory').exists()
+    context = {
+        'avail_products':avail_products,
+        'nonavail_products':nonavail_products,
+        'user_belongs_to_inventory_group': user_belongs_to_inventory_group
+    }
+    if request.method == 'POST':
+        if user.is_authenticated:
+            form_name = request.POST.get('form_name')
+            print(form_name)
+            if form_name == "addproduct":
+                name = request.POST.get('name')
+                price = request.POST.get('price')
+                description = request.POST.get('description')
+                stock = request.POST.get('stock')
+                if name and price and description and stock:
+                    print(stock)
+                    new_product = Product.objects.create(name=name, price=int(price), description=description, stock= True if  stock == "In stock" else 0)
+                    messages.success(request, 'New product added successfully')
+                else:
+                    messages.error(request, 'Please fill all details of product')
+                return redirect('show_product')
+            elif form_name == "deleteproduct":
+                sel_prod = request.POST.get('delproductid')
+                product_to_delete = Product.objects.filter(id=int(sel_prod)).first()
+                if product_to_delete:
+                    product_to_delete.delete()
+                    messages.success(request, 'Product deleted successfully')
+                return redirect('show_product')
+            elif form_name == "updateproduct":
+                upd_product_id = request.POST.get('updproductid')
+                product_to_update = Product.objects.filter(id=int(upd_product_id)).first()
+                print(product_to_update.name)
+                if product_to_update:
+                    price = request.POST.get('price')
+                    stock = request.POST.get('stock')
+                    if price or stock:
+                        print(stock)
+                        if price:
+                            product_to_update.price = float(price)
+                            product_to_update.save()
+                        if stock == "In stock":
+                            product_to_update.stock = 1
+                            product_to_update.save()
+                        else:
+                            print('here')
+                            product_to_update.stock = 0
+                            product_to_update.save()
+                        messages.success(request, 'Product updated successfully')
+                    else:
+                        messages.error(request, 'Please enter details to update')
+                    return redirect('show_product')
+    return render(request, 'products.html', context)

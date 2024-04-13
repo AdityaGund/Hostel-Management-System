@@ -1,0 +1,169 @@
+{% extends 'studentrolebase.html' %}
+{% block title %}Products{% endblock %}
+
+{% block header %}
+Inventory
+{% endblock%}
+{% block addcss %}
+<link rel="stylesheet" href="../static/css/products.css">
+{% endblock%}
+
+{% block content %}
+<div class="prods">
+    {% for product in avail_products %}
+    <div class="prod" id="{{product.id}}">
+        {% if user_belongs_to_inventory_group %}
+        <div class="drop-container">
+            <div class="trigger">...</div>
+            <ul class="menu">
+                <li id="delete-option">Delete</li>
+                <li id="update-option">Update</li>
+            </ul>
+        </div>
+        {% endif %}
+        <div class="name">
+            <h3>{{ product.name }}</h3>
+        </div>
+        <div class="box">
+                Price : &#8377; {{product.price}}
+                <br>
+                Description: {{ product.description }}
+        </div>
+        <div class="stock" id="In-stock">
+            In-stock
+        </div>
+    </div>
+    {% endfor %}
+    {% for product in nonavail_products %}
+    <div class="prod" id="{{product.id}}">
+        {% if user_belongs_to_inventory_group %}
+        <div class="drop-container">
+            <div class="trigger">...</div>
+            <ul class="menu">
+                <li id="delete-option">Delete</li>
+                <li id="update-option">Update</li>
+            </ul>
+        </div>
+        {% endif %}
+        <div class="name">
+            <h3>{{ product.name }}</h3>
+        </div>
+        <div class="box">
+                Price : &#8377; {{product.price}}
+                <br>
+                Description: {{ product.description }}
+        </div>
+        <div class="stock" id="Out-of-stock">
+            Out-of-stock
+        </div>
+    </div>
+    {% endfor %}
+    {% if user_belongs_to_inventory_group %}
+    <div class="update show">
+        <form method="post" action="{% url 'show_product' %}">
+            {% csrf_token %}
+            <div class="close-update">&times;</div>
+            <input type="hidden" name="form_name" value="updateproduct">
+            <input type="hidden" id="updproductid" name="updproductid">
+            <label for="price">Price : </label>
+            <input type="text" id="price" name="price"><br>
+            <label for="stock">stock : </label>
+            <input type="radio" id="Instock" name="stock" value="In stock">In stock<br>
+            <input type="radio" id="outofstock" name="stock" value="Outofstock">Out of stock<br>
+            <button type="submit" id="updatebtn">Update</button>
+        </form>
+    </div>
+    <div class="delete show">
+        <form method="POST" action="{% url 'show_product' %}">
+            {% csrf_token %}
+            <input type="hidden" name="form_name" value="deleteproduct">
+            <input type="hidden" id="delproductid" name="delproductid">
+            <div class="close-delete">&times;</div>
+            <div class="deletetext">
+                Are you sure, you want to delete the product?
+            </div>
+            <button type="submit" id="deletebtn">Delete</button>
+        </form>
+    </div>
+    <div class="add">Add Product</div>
+    <div class="form open">
+        <div class="close-add">&times;</div>
+        <br>
+        <form method="POST" action="{% url 'show_product' %}">
+            {% csrf_token %}
+            <input type="hidden" name="form_name" value="addproduct">
+            <label for="name">Name : </label>
+            <input type="text" id="name" name="name"><br>
+            <label for="price">Price : </label>
+            <input type="text" id="price" name="price"><br>
+            <label for="description">Description : </label>
+            <input type= "text" id="description" name="description"><br>
+            <label for="stock">stock : </label>
+            <input type="radio" id="Instock" name="stock" value="In stock">In stock<br>
+            <input type="radio" id="outofstock" name="stock" value="Outofstock">Out of stock<br>
+            <button type="submit" id="addbtn">Add</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block addscript %}
+<script>
+    const addbtn = document.querySelector('.add');
+const conatiner = document.querySelector('.form');
+const products = document.querySelectorAll('.prod');
+const delopt = document.querySelectorAll("#delete-option");
+const triggers = document.querySelectorAll('.trigger');
+const delcontainer = document.querySelector('.delete');
+const closedel = document.querySelector('.close-delete');
+const updconatiner = document.querySelector('.update');
+const closeupd = document.querySelector('.close-update');
+const updptn = document.querySelectorAll("#update-option");
+const closeadd = document.querySelector('.close-add');
+
+var parent, grandparent;
+
+updptn.forEach( btn =>{
+    btn.addEventListener('click', ()=>{
+        updconatiner.classList.remove('show');
+    })
+})
+closeupd.addEventListener('click', ()=>{
+    updconatiner.classList.add('show');
+})
+
+triggers.forEach(trigger => {
+    trigger.addEventListener('click', function() {
+        const menu = this.nextElementSibling;
+        parent = this.parentNode;
+        grandparent = parent.parentNode;
+        document.getElementById('updproductid').value = grandparent.id;
+        document.getElementById('delproductid').value = grandparent.id;
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'block';
+        }
+    });
+});
+
+addbtn.addEventListener("click",()=>{
+    conatiner.classList.remove('open');
+})
+closeadd.addEventListener("click", ()=>{
+    conatiner.classList.add('open');
+})
+
+delopt.forEach( btn =>{
+    btn.addEventListener('click', ()=>{
+        delcontainer.classList.remove('show');
+    })
+})
+
+closedel.addEventListener('click', () => {
+    delcontainer.classList.add('show');
+})
+
+
+</script>
+{% endblock %}

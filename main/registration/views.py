@@ -234,9 +234,9 @@ def LoginPage(request):
             # elif user.groups.filter(name='warden').exists():
             #     login(request, user)
             #     return redirect('coepMess')
-            # elif user.groups.filter(name='inventory').exists():
-            #     login(request, user)
-            #     return redirect('coepMess')
+            elif user.groups.filter(name='inventory').exists():
+                login(request, user)
+                return redirect('show_product')
             elif user.groups.filter(name='clinic').exists():
                 login(request, user)
                 return redirect('show_entries')

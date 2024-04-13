@@ -44,3 +44,9 @@ class SlotBooking(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.slot.time} ({self.date})"
+
+class Product(models.Model):
+    name= models.CharField(max_length=50)
+    price = models.FloatField()
+    description = models.CharField(max_length=300)
+    stock = models.BooleanField(default=False)

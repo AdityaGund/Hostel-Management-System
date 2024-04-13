@@ -15,4 +15,5 @@ urlpatterns = [
     path('createBills/',views.createBills,name = "createBills"),
     path('createBills/createdBills',views.createdBills,name = 'createdBills'),
     path('book_slot/', views.book_slot, name='book_slot'),
+    path('products/', views.show_product, name='show_product')
 ]
