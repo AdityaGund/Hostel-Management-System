@@ -10,7 +10,7 @@ body {
 }
 
 .container {
-    display: 'flex';
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -158,9 +158,53 @@ body {
     justify-content: center;
     align-items: center;
     height: 80vh;
-    margin-left: 0px;    
+    margin-left: 0px;
     border-radius: 10px;
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
     background-color: #fff;
+
+}
+
+/* Media Queries for Responsive Design */
+/* 
+@media screen and (max-width: 768px) {
+    .input {
+        width: 90%; 
+        max-width: 300px; 
+    }
+
+    .input img {
+        margin: 0px 15px;
+    }
+
+    .input input {
+        width: 100%; 
+    }
+
+    .forgot-password {
+        padding-left: 20px; 
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .outer-container {
+        flex-direction: column; 
+    }
+
+    .form-container,
+    .image-container {
+        width: 100%;
+        max-width: 100%; 
+    }
+} */
+@media screen and (max-width: 480px) {
+    .outer-container {
+        flex-direction: column; 
+    }
+
+    .form-container,
+    .image-container {
+        display: none; 
+    }
 }

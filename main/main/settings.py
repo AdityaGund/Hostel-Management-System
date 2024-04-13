@@ -79,13 +79,16 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# settings.py
+APPEND_SLASH = False
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'studentapplication',
         'USER': 'root',
-        'PASSWORD': '612203061',
+        'PASSWORD': '2005',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -150,3 +153,6 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+RAZORPAY_ID="rzp_test_5K5rgSGFbvmX7k"
+RAZORPAY_SECRET ="0l5vSjdtfVLP4Dlq5HgdT9CT"

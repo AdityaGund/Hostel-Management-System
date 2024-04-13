@@ -8,7 +8,6 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth.models import Group
-# from registration.models import CheckInOut
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -24,7 +23,7 @@ from .models import SelectedDates
 from django.views.decorators.http import require_POST
 from .models import SelectedDates
 from adminrole.views import *
-
+from .models import Contact
 
 def HomePage(request):
     selected_dates=SelectedDates.objects.latest('id')
@@ -37,11 +36,6 @@ def HomePage(request):
     year2=int(final_alllotment_date.split('-')[0])
     month2=int(final_alllotment_date.split('-')[1])
     date2=int(final_alllotment_date[-2:])
-
-    year2=int(final_alllotment_date.split('-')[0])
-    month2=int(final_alllotment_date.split('-')[1])
-    date2=int(final_alllotment_date[-2:])
-
     reg_start_date=str(selected_dates.registration_period.split(' ')[0])
     reg_end_date=str(selected_dates.registration_period.split(' ')[-1])
     pref_start_date=str(selected_dates.preference_selection_date.split(' ')[0])
@@ -49,8 +43,9 @@ def HomePage(request):
     verf_start_date=str(selected_dates.verification_period.split(' ')[0])
     verf_end_date=str(selected_dates.verification_period.split(' ')[-1])
 
+
     deadline = datetime(year, month, date, 12, 23, 0, tzinfo=pytz.timezone('Asia/Kolkata'))  # March 6, 2024, 19:00 IST
- # Get the current time in the same timezone as the deadline
+    # Get the current time in the same timezone as the deadline
 
     deadline2=datetime(year2,month2,date2,12,0,0,tzinfo=pytz.timezone('Asia/Kolkata'))
 
@@ -59,35 +54,44 @@ def HomePage(request):
 
     remaining_time = (deadline - current_time).total_seconds()  # Convert timedelta to seconds
 
+    remaining_time2=(deadline2-current_time).total_seconds()
 
     remaining_time2=(deadline2-current_time).total_seconds()
 
 
 
+    return render(request, 'home.html', {'remaining_time': remaining_time,'remaining_time2':remaining_time2,'reg_start_date':reg_start_date,'reg_end_date':reg_end_date,'deadline':deadlinedate,'pref_start_date':pref_start_date,'pref_end_date':pref_end_date,'final_allotment':final_alllotment_date,'verf_start_date':verf_start_date,'verf_end_date':verf_end_date})
 
     return render(request, 'home.html', {'remaining_time': remaining_time,'remaining_time2':remaining_time2,'reg_start_date':reg_start_date,'reg_end_date':reg_end_date,'deadline':deadlinedate,'pref_start_date':pref_start_date,'pref_end_date':pref_end_date,'final_allotment':final_alllotment_date,'verf_start_date':verf_start_date,'verf_end_date':verf_end_date})
 
 
 def SuperAdminHomePage(request):
     
-    admin_group = Group.objects.get(name='Admin')
-    admin_users = admin_group.user_set.all()
+    group_names = ['Admin', 'warden', 'inventory', 'laundry', 'mess', 'clinic'] 
     
-    context={
-        "admin_users":admin_users
+    all_users = []
+    
+    for group_name in group_names:
+        group = Group.objects.get(name=group_name)
+        
+        all_users.extend(group.user_set.all())
+    
+    context = {
+        "admin_users": all_users
     }
-    
     return render(request,'superAdminHomePage.html',context)
 
 def AdminSignup(request):
     
     if request.method == 'POST':
-        if all(field in request.POST for field in ['username', 'email', 'password1', 'password2']):
+        if all(field in request.POST for field in ['username', 'email', 'type' ,'password1', 'password2']):
             username = request.POST['username']
             email = request.POST['email']
+            group = request.POST['type']
             password = request.POST['password1']
             re_password = request.POST['password2']
             
+            print(group)
             
             if not (username and email and password and re_password):
                 messages.error(request, "All fields are required!")
@@ -98,7 +102,7 @@ def AdminSignup(request):
                 return redirect('superAdminHome')  
             
             new_user = User.objects.create_user(username=username, email=email, password=password)
-            admin_group = Group.objects.get(name='Admin')
+            admin_group = Group.objects.get(name=group)
             admin_group.user_set.add(new_user)
             new_user.save()
             
@@ -111,13 +115,10 @@ def AdminSignup(request):
     
 
 def Accommodation(request):
-    return render(request, 'accommodation_landing.html')
+    return render(request, 'accommodations.html')
 
 def LandingPage(request):
     return render(request,'landing.html')
-
-def Accommodation_reg(request):
-    return render(request,'accommodation_reg.html')
 
 def send_verification_email(email, verification_code):
     subject = 'Verification Code'
@@ -227,9 +228,18 @@ def LoginPage(request):
             elif user.groups.filter(name='Admin').exists():
                 login(request, user)
                 return redirect('admin_home')
-            elif user.groups.filter(name='Amenity').exists():
+            elif user.groups.filter(name='mess').exists():
                 login(request, user)
                 return redirect('coepMess')
+            # elif user.groups.filter(name='warden').exists():
+            #     login(request, user)
+            #     return redirect('coepMess')
+            # elif user.groups.filter(name='inventory').exists():
+            #     login(request, user)
+            #     return redirect('coepMess')
+            elif user.groups.filter(name='clinic').exists():
+                login(request, user)
+                return redirect('show_entries')
             else:
                 latest_selected_date = SelectedDates.objects.latest('id')
                 final_date = latest_selected_date.final_room_allotment
@@ -263,6 +273,7 @@ def LoginPage(request):
 def LogoutPage(request):
     logout(request)
     return redirect('login')
+
 
 
 
@@ -324,3 +335,33 @@ def remove_admin(request):
     except User.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'User not found'})
 
+def getintouch(request):
+    if request.method == 'POST':
+        # Retrieve form data from the POST request
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        time = timezone.localtime(timezone.now(), timezone=timezone.get_current_timezone())
+
+        # Create a new Contact object
+        contact = Contact(
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone,
+            email=email,
+            message=message,
+            time= time,
+        )
+
+        # Save the Contact object to the database
+        contact.save()
+
+        messages.success(request, 'Your message has been sent successfully!')
+
+        # Render the same page with a success message
+        return redirect('landing')
+
+    # Render the form template if the request method is not POST
+    return render(request, 'landing.html')

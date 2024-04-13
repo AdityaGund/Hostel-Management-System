@@ -7,7 +7,9 @@ from .forms import *
 from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import datetime
+from Amenities.models import *
 from django.contrib import messages
+from datetime import date
 
 def maintenance(request):
     # Retrieve all maintenance requests from the database
@@ -24,14 +26,17 @@ def maintenance(request):
 
     return render(request, 'maintenance.html', context)
 
-def send_confirmation_email(email, name, number, CheckIn, CheckOut, capacity):
+def send_confirmation_email(email, name, number, CheckIn, CheckOut, capacity, charges):
     subject = 'Guest Booking Approved'
+    payment_url = f'http://127.0.0.1:8000/pay/?charges={charges}'  # Append charges as a query parameter
     message = f'Your guest room booking request at COEP hostel has been approved!\n\n\
     Booking Details:\n\
         Guest Name: {name}\n\
+        Guest Name: Rs. {charges}\n\
         Room No: {number}\n\
         Dates: {CheckIn} to {CheckOut}\n\
-        No of Guests: {capacity}'
+        No of Guests: {capacity}\n\
+        Payment URL: {payment_url}'  # Include the payment URL with charges
     from_email = 'djangoproject24@gmail.com'
     recipient_list = [email]
     send_mail(subject, message, from_email, recipient_list)
@@ -44,7 +49,7 @@ def guest_booking(request):
         if action == 'approve':
             booking = get_object_or_404(Booking, id=booking_id)
             booking.approved = True
-            send_confirmation_email(booking.guest_email, booking.guest_name, booking.room.room_number, booking.check_in_date, booking.check_out_date, booking.room.capacity)
+            send_confirmation_email(booking.guest_email, booking.guest_name, booking.room.room_number, booking.check_in_date, booking.check_out_date, booking.room.capacity, booking.charges)
             booking.save()
         elif action == 'reject':
             booking = get_object_or_404(Booking, id=booking_id)
@@ -154,3 +159,20 @@ def admin_home(request):
         }
 
     return render(request, 'adminhome.html', context)
+
+def notice_create(request):
+    latest_notices = Notice.objects.all().order_by('-date')[:5]
+    if request.method == 'POST':
+        form = NoticeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('add_notice') 
+    else:
+        form = NoticeForm()
+    return render(request, 'notice_form.html', {'form': form,'latest_notices': latest_notices[::-1]})
+
+def show_entries(request):
+    entries = SlotBooking.objects.all()
+    today = date.today()
+    entries = SlotBooking.objects.filter(date=today)
+    return render(request, 'clinic.html', {'entries': entries})

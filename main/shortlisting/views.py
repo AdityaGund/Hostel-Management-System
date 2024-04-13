@@ -36,11 +36,6 @@ def studentHome(request):
     return render(request, 'studentHome.html')
 
 def generate_pdf(request):
-    current_user = request.user
-    if not current_user.is_authenticated:
-        return HttpResponse("User not authenticated")
-
-    username = current_user.username
 
     all_years = [FirstYear, SecondYear, ThirdYear, FinalYear]
 
@@ -55,9 +50,9 @@ def generate_pdf(request):
         elements.append(Paragraph(heading, styles['Heading1']))
         elements.append(Spacer(1, 12)) 
 
-        data = [['Name', 'Rank', 'Application ID', 'Email']]
+        data = [['Name', 'cgpa', 'Application ID', 'Email', 'Caste']]
         for student in queryset:
-            row = [student.name, str(student.rank), student.application_id, student.email]
+            row = [student.name, str(student.cgpa), student.application_id, student.email, student.caste]
             data.append(row)
 
         table_data = []
@@ -139,38 +134,172 @@ def generate_pdf2(reqeust):
 def select_students(request):
     for year_model in [FirstYear, SecondYear, ThirdYear, FinalYear]:
         selected_students = []
+        all_students = year_model.objects.all()
 
-        mech_students = year_model.objects.filter(branch="MechanicalEngineering", verified=True).order_by('rank')[:20]
-        selected_students.extend(mech_students)
+        if year_model == FirstYear:
+            # For FirstYear, sort in ascending order by rank
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering", verified=True).order_by('cgpa')[:20]  
+            selected_students.extend(mech_students)
 
-        comp_students = year_model.objects.filter(branch="ComputerEngineering", verified=True).order_by('rank')[:20]
-        selected_students.extend(comp_students)
+            obc_count=0
+            sc_count=0
+            ews_count=0
 
-        other_students = []
+            for stud in mech_students:
+                if(stud.caste== "OBC"):
+                    obc_count=obc_count+1
+                elif(stud.caste == "SC"):
+                    sc_count=sc_count+1
+                else:
+                    ews_count=ews_count+1
+                    
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering",caste="OBC", verified=True).order_by('cgpa')[obc_count:obc_count+8]   
+            selected_students.extend(mech_students)
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering",caste="SC", verified=True).order_by('cgpa')[sc_count:sc_count+6]   
+            selected_students.extend(mech_students)
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering",caste="EWS", verified=True).order_by('cgpa')[ews_count:ews_count+6]   
+            selected_students.extend(mech_students)
+
+            comp_students = year_model.objects.filter(branch="ComputerEngineering", verified=True).order_by('cgpa')[:20]
+            selected_students.extend(comp_students)
+
+            obc_count=0
+            sc_count=0
+            ews_count=0
+
+            for stud in comp_students:
+                if(stud.caste == "OBC"):
+                    obc_count=obc_count+1
+                elif(stud.caste == "SC"):
+                    sc_count=sc_count+1
+                else:
+                    ews_count=ews_count+1
+
+            comp_students = year_model.objects.filter(branch="ComputerEngineering",caste="OBC", verified=True).order_by('cgpa')[obc_count:obc_count+8]
+            selected_students.extend(comp_students)
+            comp_students = year_model.objects.filter(branch="ComputerEngineering",caste="SC", verified=True).order_by('cgpa')[sc_count:sc_count+6]
+            selected_students.extend(comp_students)
+            comp_students = year_model.objects.filter(branch="ComputerEngineering",caste="EWS", verified=True).order_by('cgpa')[ews_count:ews_count+6]
+            selected_students.extend(comp_students)
+        else:
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering", verified=True).order_by('-cgpa')[:20] 
+            selected_students.extend(mech_students)
+
+            obc_count=0
+            sc_count=0
+            ews_count=0
+
+            for stud in mech_students:
+                if(stud.caste == "OBC"):
+                    obc_count=obc_count+1
+                elif(stud.caste == "SC"):
+                    sc_count=sc_count+1
+                else:
+                    ews_count=ews_count+1
+
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering",caste="OBC", verified=True).order_by('-cgpa')[obc_count:obc_count+8]  
+            selected_students.extend(mech_students)
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering",caste="SC", verified=True).order_by('-cgpa')[sc_count:sc_count+6]    
+            selected_students.extend(mech_students)
+            mech_students = year_model.objects.filter(branch="MechanicalEngineering",caste="EWS", verified=True).order_by('-cgpa')[ews_count:ews_count+6] 
+            selected_students.extend(mech_students)
+
+            comp_students = year_model.objects.filter(branch="ComputerEngineering",caste="OPEN", verified=True).order_by('-cgpa')[:20]
+            selected_students.extend(comp_students)
+
+            obc_count=0
+            sc_count=0
+            ews_count=0
+
+            for stud in mech_students:
+                if(stud.caste == "OBC"):
+                    obc_count=obc_count+1
+                elif(stud.caste == "SC"):
+                    sc_count=sc_count+1
+                else:
+                    ews_count=ews_count+1
+
+            comp_students = year_model.objects.filter(branch="ComputerEngineering",caste="OBC", verified=True).order_by('-cgpa')[obc_count:obc_count+8]
+            selected_students.extend(comp_students)
+            comp_students = year_model.objects.filter(branch="ComputerEngineering",caste="SC", verified=True).order_by('-cgpa')[sc_count:sc_count+6]
+            selected_students.extend(comp_students)
+            comp_students = year_model.objects.filter(branch="ComputerEngineering",caste="EWS", verified=True).order_by('-cgpa')[ews_count:ews_count+6]
+            selected_students.extend(comp_students)
+        
         branches = ["CivilEngineering", "ElectricalEngineering", "InstrumentationEngineering", "ManufacturingEngineering"]
 
         for branch in branches:
-            branch_students = year_model.objects.filter(branch=branch, verified=True).order_by('rank')[:10]
-            other_students.extend(branch_students)
+            if year_model == FirstYear:
+                branch_students = year_model.objects.filter(branch=branch,verified=True).order_by('cgpa')[:10]
+                selected_students.extend(branch_students)
 
-        selected_students.extend(other_students)
+                obc_count=0
+                sc_count=0
+                ews_count=0
 
-        remaining_seats = 80 - len(selected_students)
+                for stud in branch_students:
+                    if(stud.caste == "OBC"):
+                        obc_count=obc_count+1
+                    elif(stud.caste == "SC"):
+                        sc_count=sc_count+1
+                    else:
+                        ews_count=ews_count+1
 
-        if remaining_seats > 0:
-            top_verified_students = (year_model.objects.filter(branch="CivilEngineering", verified=True) |
-                            year_model.objects.filter(branch="ElectricalEngineering", verified=True) |
-                            year_model.objects.filter(branch="InstrumentationEngineering", verified=True) |
-                            year_model.objects.filter(branch="ManufacturingEngineering", verified=True) |
-                            year_model.objects.filter(branch="ComputerEngineering", verified=True) |
-                            year_model.objects.filter(branch="MechanicalEngineering", verified=True)).order_by('rank')[:remaining_seats]
+                branch_students = year_model.objects.filter(branch=branch,caste="OBC",verified=True).order_by('cgpa')[obc_count:obc_count+4]
+                selected_students.extend(branch_students)
+                branch_students = year_model.objects.filter(branch=branch,caste="SC",verified=True).order_by('cgpa')[sc_count:sc_count+3]
+                selected_students.extend(branch_students)
+                branch_students = year_model.objects.filter(branch=branch,caste="EWS",verified=True).order_by('cgpa')[:3]
+                selected_students.extend(branch_students)
+            else:
+                branch_students = year_model.objects.filter(branch=branch,verified=True).order_by('-cgpa')[:10]
+                selected_students.extend(branch_students)
+                
+                obc_count=0
+                sc_count=0
+                ews_count=0
 
+                for stud in branch_students:
+                    if(stud.caste == "OBC"):
+                        obc_count=obc_count+1
+                    elif(stud.caste == "SC"):
+                        sc_count=sc_count+1
+                    else:
+                        ews_count=ews_count+1
 
-            selected_students.extend(top_verified_students)
+                branch_students = year_model.objects.filter(branch=branch,caste="OBC",verified=True).order_by('-cgpa')[obc_count:obc_count+4]
+                selected_students.extend(branch_students)
+                branch_students = year_model.objects.filter(branch=branch,caste="SC",verified=True).order_by('-cgpa')[sc_count:sc_count+3]
+                selected_students.extend(branch_students)
+                branch_students = year_model.objects.filter(branch=branch,caste="EWS",verified=True).order_by('-cgpa')[ews_count:ews_count+3]
+                selected_students.extend(branch_students)
+
+        remaining_seats = 160 - len(selected_students)  
+        if year_model == FirstYear:
+            if remaining_seats > 0:
+                remaining_students = []
+                for i in all_students:
+                    if i not in selected_students:
+                        remaining_students.append(i)
+                sorted_remaining_students = sorted(remaining_students, key=lambda x: x.cgpa)
+                other_students = sorted_remaining_students[:remaining_seats]
+                selected_students.extend(other_students)
+        else:
+            if remaining_seats > 0:
+                remaining_students = []
+                for i in all_students:
+                    if i not in selected_students:
+                        remaining_students.append(i)
+                sorted_remaining_students = sorted(remaining_students, key=lambda x: x.cgpa, reverse=True)
+                other_students = sorted_remaining_students[:remaining_seats]
+                selected_students.extend(other_students)
         
+        print(len(selected_students))
+
         for student in selected_students:
-                student.selected = True
-                student.save()
+                    student.selected = True
+                    student.save()
+
     return redirect('generate_pdf')
 
 @login_required

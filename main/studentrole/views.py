@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from .models import MaintenanceRequest
+from .models import *
+from adminrole.models import Notice
 
 def maintenance_request(request):
     if request.method == 'POST':
@@ -36,3 +37,7 @@ def maintenance_request(request):
     }
 
     return render(request, 'maintenance_request.html', context)
+
+def studentrole_index(request):
+    latest_notices = Notice.objects.all().order_by('-date')[:5]
+    return render(request, 'studentrole.html',{'latest_notices': latest_notices[::-1]})

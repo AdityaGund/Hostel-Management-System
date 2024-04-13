@@ -21,7 +21,6 @@ class attendance(models.Model):
     is_penalty_night=  models.BooleanField(default=False)
     month = models.IntegerField(default=0)
 
-
 class MessBills(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length = 100)
@@ -29,3 +28,19 @@ class MessBills(models.Model):
     bill_status_is_paid = models.BooleanField(default = False)
     bill_amount = models.IntegerField(default=0)
     month_name = models.CharField(max_length = 20,default='abc')
+
+from django.db import models
+
+class ClinicSlot(models.Model):
+    time = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.time
+
+class SlotBooking(models.Model):
+    slot = models.ForeignKey(ClinicSlot, on_delete=models.CASCADE, related_name='bookings')
+    date = models.DateField(null=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name} - {self.slot.time} ({self.date})"

@@ -8,5 +8,7 @@ urlpatterns = [
     path('guest_booking/', guest_booking, name='guest_booking'),
     path('adminHome/', admin_home, name='admin_home'),
     path('checkinout/', checkinout, name='checkinout'),
+    path('add_notice/', notice_create, name='add_notice'),
+    path('entries/', show_entries, name='show_entries'),
     re_path(r'^guest_booking/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

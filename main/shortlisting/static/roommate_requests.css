@@ -1,93 +1,101 @@
 body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.status-container {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 2%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.request-columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.request-column {
+  width: 30%;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.column-heading {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.request-type {
+  margin-bottom: 30px;
+}
+
+.request-heading {
+  color: #555;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.request-item {
+  list-style-type: none;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.request-section{
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-accept {
+  background-color: #4CAF50;
+}
+
+.btn-reject {
+  background-color: #f44336;
+}
+
+.room-details {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
   .request-columns {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .request-column {
-    width: 30%;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .column-heading {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .request-type {
-    margin-bottom: 30px;
-  }
-  
-  .request-heading {
-    color: #555;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .request-item {
-    list-style-type: none;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  
-  .btn {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    color: #fff;
-    cursor: pointer;
-    margin-right: 5px;
-  }
-  
-  .btn-accept {
-    background-color: #4CAF50;
-  }
-  
-  .btn-reject {
-    background-color: #f44336;
-  }
-  
-  .room-details {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  @media (max-width: 768px) {
-    .request-columns {
       flex-direction: column;
-    }
-  
-    .request-column {
+  }
+
+  .request-column {
       width: 100%;
       margin-bottom: 20px;
-    }
   }
+}

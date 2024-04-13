@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Home</title>
+    <title>{% block title %}{% endblock %}</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="../static/css/adminbase.css">
@@ -15,7 +15,7 @@
             <div class="title"><h1> COEP </h1></div>
             <div class="options">
                 <div class="option" id="option1">
-                    <div class="icon"><i class="material-icons">computer</i></div>
+                    <div class="icon"><i class="material-icons">bar_chart</i></div>
                     <div class="text"><a href="{% url 'admin_home' %}">Reports</a></div>
                 </div>
                 <div class="option" id="option2">
@@ -31,6 +31,10 @@
                     <div class="text"><a href="{% url 'checkinout' %}">Check In /Out</a></div>
                 </div>
                 <div class="option" id="option5">
+                    <div class="icon"><i class="material-icons">notification_important</i></div>
+                    <div class="text"><a href="{% url 'add_notice' %}">Notice</a></div>
+                </div>
+                <div class="option" id="option6">
                     <div class="icon"><i class="material-icons">logout</i></div>
                     <div class="text"><a href="{% url 'logout' %}">Logout</a></div>
                 </div>

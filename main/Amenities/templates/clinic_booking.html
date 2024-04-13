@@ -1,0 +1,51 @@
+{% extends 'studentrolebase.html' %}
+{% block addcss %}
+    <link rel="stylesheet" href="../static/css/clinic.css">
+{% endblock %}
+
+{% block content %}
+    <div class="clinic-container">
+        <h1>Clinic Slot Booking</h1>
+        <form method="post" action="{% url 'book_slot' %}">
+            {% csrf_token %}
+            <label for="booking_date">Select Date:</label>
+            <input type="date" id="booking_date" name="booking_date" required>
+            <input type="submit" value="Check Availability">
+        </form>
+
+        {% if available_slots %}
+            <h2>Available Slots:</h2>
+            <form method="post" action="{% url 'book_slot' %}">
+                {% csrf_token %}
+                <input type="hidden" name="booking_date" value="{{ selected_date }}">
+                <label for="selected_slot">Select Slot:</label>
+                <select id="selected_slot" name="selected_slot" required>
+                    {% for slot in available_slots %}
+                        <option value="{{ slot.id }}">{{ slot.time }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Book Slot">
+            </form>
+        {% endif %}
+
+        {% if booked_slots %}
+            <h2>Booked Slots:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Slot Time</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in booked_slots %}
+                        <tr>
+                            <td>{{ slot.slot.time }}</td>
+                            <td>{{ slot.date }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
