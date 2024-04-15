@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  {%load static%}
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calendar</title>
-  <link rel="stylesheet" href="{%static 'style_meal.css'%}" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet" />
-  <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap-grid.min.css'%}" rel="stylesheet">
-  <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap.min.css'%}" rel="stylesheet">
-
-</head>
-
-<body>
+{% extends 'studentrolebase.html'%}
+{%load static%}
+{% block addcss %}
+<link rel="stylesheet" href="../static/style_meal.css"/>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" /> -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+rel="stylesheet" />
+{% endblock %}
+  
+{% block header%}
+{%if user.is_authenticated %}
+      {{user.username}}     
+      {%else%}
+      Coep Mess
+      {%endif%}
+{% endblock %}
+{% block content %}
   <div id="interface1" class="interface">
     <!-- Interface content for the first view -->
     <h2>Leaves Taken This Month!
@@ -26,7 +25,7 @@
       <strong>Login With Admin account</strong>
     </div>
     {% elif monthLeaves and user.username not in adminList %}
-    <div class="container">
+    <div class="mycontainer">
       <div class="row">
         <div class="col-md-10 mycontainer2">
           <table class="table">
@@ -87,13 +86,8 @@
   </div>
   <div class="container1">
     <h1 class="badge-pill head" style="display: block;">
-      {%if user.is_authenticated %}
-      {{user.username}}
-      {%else%}
-      Coep Mess
-      {%endif%}
       <a href="/" class="anchor" style="float: right;">HOME</a>
-      <a href="/meal_history" class="anchor" style="float: right;">CHECK HISTORY</a>
+      <a href="/meal_history/" class="anchor" style="float: right;">CHECK HISTORY</a>
     </h1>
   </div>
 
@@ -109,10 +103,10 @@
     <strong>Please Login with a student account to avail services</strong>
   </div>
   {%endif%}
-  <div class="container menu">
+  <div class="mycontainer menu">
     <div class="row">
       <div class="col-md-8 colum1">
-        <span class="badge badge-pill badge-warning badge1">Coep Mess</span>
+        <!-- <span class="badge badge-pill badge-warning badge1">Coep Mess</span> -->
         <table class="table">
           <thead>
             <tr>
@@ -134,7 +128,7 @@
       </div>
     </div>
   </div>
-  <div class="container">
+  <div class="mycontainer">
     <div class="row">
       <div class="col"></div>
       {% if user.is_authenticated and user.username not in adminList%}
@@ -231,9 +225,6 @@
     </p>
   </div>
 
-
   <script src="{% static 'meal_script.js'%}"></script>
 
-</body>
-
-</html>
+{% endblock %}

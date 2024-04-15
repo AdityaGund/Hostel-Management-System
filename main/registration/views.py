@@ -224,10 +224,6 @@ def LoginPage(request):
             if user.is_superuser:
                 login(request, user)
                 return redirect('superAdminHome')
-            
-            elif user.groups.filter(name='Admin').exists():
-                login(request, user)
-                return redirect('admin_home')
             elif user.groups.filter(name='mess').exists():
                 login(request, user)
                 return redirect('coepMess')

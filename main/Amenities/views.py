@@ -569,7 +569,7 @@ def book_slot(request):
             else:
                 messages.error(request, 'Sorry, this slot is already booked for the selected date.')
         else:
-            available_slots = ClinicSlot.objects.exclude(bookings__date=booking_date)
+            available_slots = ClinicSlot.objects.exclude(clinic_bookings__date=booking_date)  # Updated to clinic_bookings
             booked_slots = SlotBooking.objects.filter(name=name)
             context = {
                 'available_slots': available_slots,
@@ -644,3 +644,32 @@ def show_product(request):
                         messages.error(request, 'Please enter details to update')
                     return redirect('show_product')
     return render(request, 'products.html', context)
+    
+def book_laundry(request):
+    name = request.user.username
+    if request.method == 'POST':
+        booking_date = request.POST.get('booking_date')
+        if 'selected_slot' in request.POST:
+            selected_slot_id = request.POST.get('selected_slot')
+            selected_slot = LaundrySlot.objects.get(id=selected_slot_id)  # Changed to LaundrySlot
+            if not LaundryBooking.objects.filter(slot=selected_slot, date=booking_date).exists():
+                booking = LaundryBooking.objects.create(slot=selected_slot, date=booking_date, name=name)
+                messages.success(request, 'Slot booked successfully!')
+                return redirect('book_laundry')  # Changed to book_laundry
+            else:
+                messages.error(request, 'Sorry, this slot is already booked for the selected date.')
+        else:
+            available_slots = LaundrySlot.objects.exclude(laundry_bookings__date=booking_date)  # Updated to laundry_bookings
+            booked_slots = LaundryBooking.objects.filter(name=name)
+            context = {
+                'available_slots': available_slots,
+                'selected_date': booking_date,
+                'booked_slots': booked_slots,
+            }
+            return render(request, 'laundry_booking.html', context)
+    else:
+        booked_slots = LaundryBooking.objects.filter(name=name)
+        context = {
+            'booked_slots': booked_slots,
+        }
+        return render(request, 'laundry_booking.html', context)

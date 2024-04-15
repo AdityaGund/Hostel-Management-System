@@ -1,14 +1,14 @@
-body {
+/* body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-}
+} */
 
-.container {
+/* .container {
     display: flex;
     justify-content: space-between;
     height: 100vh;
-}
+} */
 
 .branch-list {
     width: 30%;

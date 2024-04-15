@@ -1,36 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'studentrolebase.html' %}
+{%load static%}
+{%block title %}Meal History{% endblock %}
+{%block addcss %}
+<link rel="stylesheet" href="../static/style_meal_history.css" />
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+rel="stylesheet" />
+{% endblock %}
 
-<head>
-    {%load static%}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>meal-history</title>
-    <link rel="stylesheet" href="{%static 'style_meal_history.css'%}" />
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
-    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap-grid.min.css'%}" rel="stylesheet">
-    <link href="{%static 'bootsrap/bootstrap-4.0.0-dist/css/bootstrap.min.css'%}" rel="stylesheet">
-</head>
+{% block header %}
+Meal History
+{% endblock %}
 
-<body>
+{% block content %}
     <div id="interface1" class="interface">
         <!-- Interface content for the first view -->
         <h2>Leaves For This Month
-            <div class="crossbtn" style="float: right;">❌</div>
+            <!-- <div class="crossbtn" style="float: right;">❌</div> -->
         </h2>
-        <p>This is the first interface.</p>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam maxime totam at deserunt numquam, harum
-            beatae consectetur facere sequi sunt magni rerum nisi voluptate illum dicta voluptatum esse assumenda.
-            Officia.</p>
     </div>
     <div class="container1">
         <h1 class="badge-pill head" style="display: block;">
-            COEP MESS
-            <a href="meal" class="anchor" style="float: right;">HOME</a>
+            <a href="/meal/" class="anchor" style="float: right;">HOME</a>
         </h1>
     </div>
-    <div class="container ">
+    <div class="mycontainer ">
         <div class="row">
             <div class="col"></div>
             <div class="col-md-4 mycontainer">
@@ -57,9 +50,9 @@
             <strong>Trying To access the Future Months! Please Enter a valid month To check history.</strong>
         </div>
         {% elif monthLeaves %}
-        <div class="container">
+        <div class="mycontainer">
             <div class="row">
-                <div class="col-md-8 mycontainer2">
+                <div class="col-md-8 mymycontainer2">
                     <table class="table">
                         <thead>
                             <tr>
@@ -132,7 +125,7 @@
 
 
     </div>
-    <script src="{% static 'meal_history.js'%}"></script>
+{% endblock %}
 </body>
 
 </html>

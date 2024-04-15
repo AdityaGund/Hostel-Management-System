@@ -1,4 +1,4 @@
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -7,16 +7,8 @@
   
   html {
     font-size: 62.5%;
-  }
-  body{
-    background-image: url("https://img.freepik.com/free-photo/top-view-elegant-plate-with-copy-space_23-2148517997.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
-    width: 100%;
-  }
+  } 
   .container1{
-    background-color: #e0eca8;
     color: black;
     height: 50px;
     padding-top: 12px;
@@ -48,7 +40,7 @@
   .mycontainer2{
     background-color: aliceblue;
     margin: 20px;
-    /* margin-top: 100px; */
+    
     padding: 50px;
     font-size: large;
   }
@@ -62,21 +54,140 @@
 
 
 
-/* interface animation styling */
+
 
   .interface {
     position: fixed;
-    top: -100%; /* Initially above the viewport */
+    top: -100%; 
     left: 50%;
     transform: translateX(-50%);
     background-color: #fff;
     padding: 20px;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    transition: top 0.5s ease; /* Transition for smooth animation */
+    transition: top 0.5s ease;
     z-index: 1;
     }
 
   .show {
-    top: 10%; /* Move to center of the viewport */
+    top: 10%; 
+  } */
+
+  /* Overall Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.mycontainer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Row Styles */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.col {
+  padding-right: 15px;
+  padding-left: 15px;
+  flex: 0 0 auto;
+  width: 100%; /* Default width for all columns on small screens */
+}
+
+/* Responsive Breakpoints (Adjust as needed) */
+@media (min-width: 768px) {
+  .col {
+    flex: 1 0 33.3333%; /* Adjust for desired column layout on medium screens */
   }
+}
+
+@media (min-width: 992px) {
+  .col {
+    flex: 1 0 25%; /* Adjust for desired column layout on large screens */
+  }
+}
+
+@media (min-width: 1200px) {
+  .col {
+    flex: 1 0 20%; /* Adjust for desired column layout on extra large screens */
+  }
+}
+
+/* Specific Element Styles */
+.mycontainer {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.alert {
+  margin-top: 20px;
+  /* Additional styles for alerts can be added here, e.g., padding, font weight */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table thead th {
+  background-color: #f5f5f5;
+}
+
+.MoneyOrder {
+  font-weight: bold;
+}
+
+/* Forms and Buttons */
+.inputForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Badges */
+.badge {
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+.anchor{
+  text-decoration: none;
+  position: fixed;
+  top:2%;
+  right:2%;
+  font-size: 24px;
+}
+

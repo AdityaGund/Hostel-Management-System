@@ -38,7 +38,7 @@ class ClinicSlot(models.Model):
         return self.time
 
 class SlotBooking(models.Model):
-    slot = models.ForeignKey(ClinicSlot, on_delete=models.CASCADE, related_name='bookings')
+    slot = models.ForeignKey(ClinicSlot, on_delete=models.CASCADE, related_name='clinic_bookings')
     date = models.DateField(null=True)
     name = models.CharField(max_length=100)
 
@@ -50,3 +50,17 @@ class Product(models.Model):
     price = models.FloatField()
     description = models.CharField(max_length=300)
     stock = models.BooleanField(default=False)
+    
+class LaundrySlot(models.Model):
+    time = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.time
+
+class LaundryBooking(models.Model):
+    slot = models.ForeignKey(LaundrySlot, on_delete=models.CASCADE, related_name='laundry_bookings')  # Changed related_name
+    date = models.DateField(null=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.name} - {self.slot.time} ({self.date})"

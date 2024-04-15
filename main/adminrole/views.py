@@ -177,6 +177,12 @@ def show_entries(request):
     entries = SlotBooking.objects.filter(date=today)
     return render(request, 'clinic.html', {'entries': entries})
 
+def show_laundry(request):
+    entries = LaundryBooking.objects.all()
+    today = date.today()
+    entries = LaundryBooking.objects.filter(date=today)
+    return render(request, 'laundry.html', {'entries': entries})
+
 def bonafied_request_list(request):
     bonafied_requests = BonafiedRequest.objects.filter(approved=False)
     return render(request, 'admin_bonafied_list.html', {'bonafied_requests': bonafied_requests})
@@ -298,3 +304,63 @@ def roomdetails(request):
             return render(request, 'roomdetails.html', {'error_message': 'Please select both the fields.'})
     else:
         return render(request, 'roomdetails.html')
+def show_product(request):
+    avail_products = Product.objects.filter(stock=True)
+    nonavail_products = Product.objects.filter(stock=False)
+
+    user_belongs_to_inventory_group = False 
+    user = request.user
+    if request.user.is_authenticated:
+        user_belongs_to_inventory_group = request.user.groups.filter(name='inventory').exists()
+    context = {
+        'avail_products':avail_products,
+        'nonavail_products':nonavail_products,
+        'user_belongs_to_inventory_group': user_belongs_to_inventory_group
+    }
+    if request.method == 'POST':
+        if user.is_authenticated:
+            form_name = request.POST.get('form_name')
+            print(form_name)
+            if form_name == "addproduct":
+                name = request.POST.get('name')
+                price = request.POST.get('price')
+                description = request.POST.get('description')
+                stock = request.POST.get('stock')
+                if name and price and description and stock:
+                    print(stock)
+                    new_product = Product.objects.create(name=name, price=int(price), description=description, stock= True if  stock == "In stock" else 0)
+                    messages.success(request, 'New product added successfully')
+                else:
+                    messages.error(request, 'Please fill all details of product')
+                return redirect('admin_product')
+            elif form_name == "deleteproduct":
+                sel_prod = request.POST.get('delproductid')
+                product_to_delete = Product.objects.filter(id=int(sel_prod)).first()
+                if product_to_delete:
+                    product_to_delete.delete()
+                    messages.success(request, 'Product deleted successfully')
+                return redirect('admin_product')
+            elif form_name == "updateproduct":
+                upd_product_id = request.POST.get('updproductid')
+                product_to_update = Product.objects.filter(id=int(upd_product_id)).first()
+                print(product_to_update.name)
+                if product_to_update:
+                    price = request.POST.get('price')
+                    stock = request.POST.get('stock')
+                    if price or stock:
+                        print(stock)
+                        if price:
+                            product_to_update.price = float(price)
+                            product_to_update.save()
+                        if stock == "In stock":
+                            product_to_update.stock = 1
+                            product_to_update.save()
+                        else:
+                            print('here')
+                            product_to_update.stock = 0
+                            product_to_update.save()
+                        messages.success(request, 'Product updated successfully')
+                    else:
+                        messages.error(request, 'Please enter details to update')
+                    return redirect('admin_product')
+    return render(request, 'adminproducts.html', context)

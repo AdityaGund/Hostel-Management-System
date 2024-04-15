@@ -241,27 +241,27 @@ header .navlinks span {
 
 
 .parallax2 {
-  background: url("../Images//hostel1.jpeg");
+  background: url("../images/hostel1.jpeg");
   min-height: 60%;
 }
 
 .parallax3 {
   min-height: 80%;
-  background: url("../Images/hostel3.jpeg");
+  background: url("../images/hostel3.jpeg");
 }
 
 .parallax4 {
-  background: url("../Images/hostel2.jpeg");
+  background: url("../images/hostel2.jpeg");
   min-height: 80%;
 }
 
 .parallax5 {
-  background: url("../Images/hostel0.jpeg");
+  background: url("../images/hostel0.jpeg");
   min-height: 70%;
 }
 
 .parallax6 {
-  background: url("../Images/hostel2.png");
+  background: url("../images/hostel2.png");
   /* background: url("https://www.upr.org/sites/upr/files/styles/medium/public/201804/0_12.jpg"); */
   min-height: 100%;
 }
