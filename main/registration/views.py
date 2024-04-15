@@ -67,7 +67,7 @@ def HomePage(request):
 
 def SuperAdminHomePage(request):
     
-    group_names = ['Admin', 'warden', 'inventory', 'laundry', 'mess', 'clinic'] 
+    group_names = ['Admin', 'warden', 'inventory', 'laundry', 'mess', 'clinic', 'security'] 
     
     all_users = []
     
